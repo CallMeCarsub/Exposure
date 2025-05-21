@@ -77,7 +77,7 @@ public interface CaptureAction {
         return new SetCameraEntityAction(viewEntity);
     }
 
-    static CaptureAction setFov(double fov) {
+    static CaptureAction setFov(float fov) {
         return new SetFovAction(fov);
     }
 

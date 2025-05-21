@@ -31,12 +31,12 @@ public class PhotographClientTooltip implements ClientTooltipComponent {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(@NotNull Font font) {
         return SIZE + 2; // 2px bottom margin
     }
 
     @Override
-    public void renderImage(@NotNull Font font, int mouseX, int mouseY, GuiGraphics guiGraphics) {
+    public void renderImage(@NotNull Font font, int mouseX, int mouseY, int width, int height, GuiGraphics guiGraphics) {
         int photographsCount = photographs.size();
         int additionalPhotographs = Math.min(2, photographsCount - 1);
 

@@ -1,8 +1,10 @@
 package io.github.mortuusars.exposure.client.gui.toast;
 
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
-import net.minecraft.client.gui.components.toasts.ToastComponent;
+import net.minecraft.client.gui.components.toasts.ToastManager;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -56,21 +58,28 @@ public class BetterTutorialToast implements Toast {
     }
 
     @Override
-    public @NotNull Visibility render(GuiGraphics guiGraphics, ToastComponent toastComponent, long timeSinceLastVisible) {
+    public void update(ToastManager toastManager, long visibilityTime) {
         if (visibility == Visibility.SHOW && hideIf.get() || (showDurationMs > 0 && System.currentTimeMillis() > shownAt + showDurationMs)) {
             hide();
             onHide.run();
         }
+    }
 
-        guiGraphics.blitSprite(backgroundSprite, 0, 0, this.width(), this.height());
+    @Override
+    public void render(GuiGraphics guiGraphics, Font font, long timeSinceLastVisible) {
+        guiGraphics.blitSprite(RenderType::guiTextured, backgroundSprite, 0, 0, this.width(), this.height());
         this.icon.render(guiGraphics, 6, 6);
         if (this.message == null) {
-            guiGraphics.drawString(toastComponent.getMinecraft().font, this.title, 30, 12, 0xFF500050, false);
+            guiGraphics.drawString(font, this.title, 30, 12, 0xFF500050, false);
         } else {
-            guiGraphics.drawString(toastComponent.getMinecraft().font, this.title, 30, 7, 0xFF500050, false);
-            guiGraphics.drawString(toastComponent.getMinecraft().font, this.message, 30, 18, 0xFF000000, false);
+            guiGraphics.drawString(font, this.title, 30, 7, 0xFF500050, false);
+            guiGraphics.drawString(font, this.message, 30, 18, 0xFF000000, false);
         }
 
+    }
+
+    @Override
+    public @NotNull Visibility getWantedVisibility() {
         return this.visibility;
     }
 }

@@ -1,6 +1,6 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 
 in vec2 texCoord;
 in vec2 oneTexel;
@@ -14,7 +14,7 @@ out vec4 fragColor;
 
 // This shader is a duplicate of minecraft:color_convolve but with Contrast and without InSize to stop the warnings about not finding uniform InSize.
 void main() {
-    vec4 InTexel = texture(DiffuseSampler, texCoord);
+    vec4 InTexel = texture(InSampler, texCoord);
 
     vec3 RGB = InTexel.rgb * Mul + Add;
 

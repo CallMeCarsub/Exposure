@@ -25,8 +25,9 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -212,8 +213,11 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             RenderSystem.defaultBlendFunc();
             for (Slot slot : getMenu().slots) {
                 if (!slot.getItem().isEmpty() && !(slot.getItem().getItem() instanceof PhotographItem)) {
-                    guiGraphics.blit(AlbumGUI.TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1, 350, 176, 188,
+                    guiGraphics.pose().pushPose();
+                    guiGraphics.pose().translate(0.0f, 0.0f, 350.0f);
+                    guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1, 176, 188,
                             18, 18, 512, 512);
+                    guiGraphics.pose().popPose();
                 }
             }
             RenderSystem.disableBlend();
@@ -299,15 +303,15 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        guiGraphics.blit(AlbumGUI.TEXTURE, leftPos, topPos, 0, 0, 0,
+        guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos, topPos, 0, 0,
                 imageWidth, imageHeight, 512, 512);
 
         if (enterSignModeButton != null && enterSignModeButton.visible) {
-            guiGraphics.blit(AlbumGUI.TEXTURE, leftPos - 27, topPos + 14, 447, 0,
+            guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos - 27, topPos + 14, 447, 0,
                     27, 28, 512, 512);
         }
 
@@ -318,12 +322,15 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             AlbumPlayerInventorySlot firstSlot = getMenu().getPlayerInventorySlots().getFirst();
             int x = firstSlot.x - 8;
             int y = firstSlot.y - 18;
-            guiGraphics.blit(AlbumGUI.TEXTURE, leftPos + x, topPos + y, 10, 0, 188, 176, 100, 512, 512);
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().translate(0.0f, 0.0f, 10.0f);
+            guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos + x, topPos + y, 0, 188, 176, 100, 512, 512);
+            guiGraphics.pose().popPose();
 
             @Nullable Side pageBeingAddedTo = getMenu().getSideBeingAddedTo();
             for (Page page : pages) {
                 if (page.side == pageBeingAddedTo) {
-                    guiGraphics.blitSprite(PhotographSlotWidget.EMPTY_SPRITES.enabledFocused(),
+                    guiGraphics.blitSprite(RenderType::guiTextured, PhotographSlotWidget.EMPTY_SPRITES.enabledFocused(),
                             page.photoArea.getX(), page.photoArea.getY(), page.photoArea.getWidth(), page.photoArea.getHeight());
                 }
             }

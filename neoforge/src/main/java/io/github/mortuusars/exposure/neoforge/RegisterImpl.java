@@ -12,7 +12,9 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -27,12 +29,14 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class RegisterImpl {
@@ -54,8 +58,8 @@ public class RegisterImpl {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, Exposure.ID);
     public static final DeferredRegister<ResourceLocation> CUSTOM_STATS = DeferredRegister.create(Registries.CUSTOM_STAT, Exposure.ID);
 
-    public static <T extends Block> Supplier<T> block(String id, Supplier<T> supplier) {
-        return BLOCKS.register(id, supplier);
+    public static <T extends Block> Supplier<T> block(String id, Function< BlockBehaviour.Properties, T> blockFactory, Supplier<BlockBehaviour.Properties> supplier) {
+        return BLOCKS.register(id, () -> blockFactory.apply(supplier.get().setId(ResourceKey.create(Registries.BLOCK, Exposure.resource(id)))));
     }
 
     public static <T extends BlockEntityType<E>, E extends BlockEntity> Supplier<T> blockEntityType(String id, Supplier<T> sup) {
@@ -63,11 +67,11 @@ public class RegisterImpl {
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> newBlockEntityType(Register.BlockEntitySupplier<T> blockEntitySupplier, Block... validBlocks) {
-        return BlockEntityType.Builder.of(blockEntitySupplier::create, validBlocks).build(null);
+        return new BlockEntityType<T>(blockEntitySupplier::create, validBlocks);
     }
 
-    public static <T extends Item> Supplier<T> item(String id, Supplier<T> supplier) {
-        return ITEMS.register(id, supplier);
+    public static <T extends Item> Supplier<T> item(String id, Function<Item.Properties, T> factory, Supplier<Item.Properties> propertiesSupplier) {
+        return ITEMS.register(id, () -> factory.apply(propertiesSupplier.get().setId(ResourceKey.create(Registries.ITEM, Exposure.resource(id)))));
     }
 
     public static <T extends CreativeModeTab> Supplier<T> creativeTab(String id, Supplier<T> supplier) {
@@ -81,7 +85,7 @@ public class RegisterImpl {
                 .clientTrackingRange(clientTrackingRange)
                 .setShouldReceiveVelocityUpdates(velocityUpdates)
                 .updateInterval(updateInterval)
-                .build(id));
+                .build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), Exposure.resource(id))));
     }
 
     public static <T extends Entity> Supplier<EntityType<T>> entityType(String id, EntityType.EntityFactory<T> factory, MobCategory category, boolean receiveVelocityUpdates, Consumer<EntityType.Builder<T>> typeBuilder) {
@@ -89,7 +93,7 @@ public class RegisterImpl {
             EntityType.Builder<T> builder = EntityType.Builder.of(factory, category);
             builder.setShouldReceiveVelocityUpdates(receiveVelocityUpdates);
             typeBuilder.accept(builder);
-            return builder.build(id);
+            return builder.build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), Exposure.resource(id)));
         });
     }
 

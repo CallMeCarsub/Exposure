@@ -8,7 +8,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -42,11 +42,11 @@ public class SignedAlbumItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+    public @NotNull InteractionResult use(Level level, Player player, InteractionHand usedHand) {
         if (level.isClientSide()) {
             ClientGUI.openAlbumViewScreen(player.getItemInHand(usedHand));
         }
-        return InteractionResultHolder.success(player.getItemInHand(usedHand));
+        return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(usedHand));
     }
 
     @Override

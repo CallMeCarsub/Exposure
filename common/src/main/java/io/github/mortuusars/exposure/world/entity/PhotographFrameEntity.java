@@ -19,6 +19,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -68,7 +69,7 @@ public class PhotographFrameEntity extends HangingEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         ItemStack item = getItem();
         return !item.isEmpty() ? item.getHoverName() : CommonComponents.EMPTY;
     }
@@ -354,45 +355,44 @@ public class PhotographFrameEntity extends HangingEntity {
     }
 
     @Override
-    public boolean hurt(@NotNull DamageSource damageSource, float amount) {
-        if (isInvulnerableTo(damageSource))
+    public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
+        if (isInvulnerableToBase(damageSource))
             return false;
 
         if (!damageSource.is(DamageTypeTags.IS_EXPLOSION) && !getItem().isEmpty()) {
-            if (!level().isClientSide) {
-                dropItem(damageSource.getEntity(), false);
-                gameEvent(GameEvent.BLOCK_CHANGE, damageSource.getEntity());
-                playSound(getRemoveItemSound(), 1.0f, 1.0f);
-            }
+            dropItem(level, damageSource.getEntity(), false);
+            gameEvent(GameEvent.BLOCK_CHANGE, damageSource.getEntity());
+            playSound(getRemoveItemSound(), 1.0f, 1.0f);
+
             return true;
         }
 
-        return super.hurt(damageSource, amount);
+        return super.hurtServer(level, damageSource, amount);
     }
 
     @Override
-    public void dropItem(@Nullable Entity brokenEntity) {
+    public void dropItem(ServerLevel level, @Nullable Entity brokenEntity) {
         playSound(getBreakSound(), 1.0f, 1.0f);
-        dropItem(brokenEntity, true);
+        dropItem(level, brokenEntity, true);
         gameEvent(GameEvent.BLOCK_CHANGE, brokenEntity);
     }
 
-    protected void dropItem(@Nullable Entity entity, boolean dropSelf) {
+    protected void dropItem(ServerLevel level, @Nullable Entity entity, boolean dropSelf) {
         ItemStack itemStack = getItem();
         setItem(ItemStack.EMPTY);
 
-        if (!level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) return;
+        if (!level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) return;
         if (entity instanceof Player player && player.isCreative()) return;
 
         // Prevent item phasing through the block when placed on the ceiling (pointing DOWN)
         float yOffset = getDirection() == Direction.DOWN ? -0.3f : 0f;
 
         if (dropSelf) {
-            spawnAtLocation(getFrameItem(), yOffset);
+            spawnAtLocation(level, getFrameItem(), yOffset);
         }
 
         if (!itemStack.isEmpty()) {
-            spawnAtLocation(itemStack.copy(), yOffset);
+            spawnAtLocation(level, itemStack.copy(), yOffset);
         }
     }
 
@@ -410,7 +410,7 @@ public class PhotographFrameEntity extends HangingEntity {
         super.tick();
         if (level().isClientSide && isGlowing() && level().getRandom().nextFloat() < 0.003f) {
             AABB bb = getBoundingBox();
-            Vec3i normal = getDirection().getNormal();
+            Vec3i normal = getDirection().getUnitVec3i();
             level().addParticle(ParticleTypes.END_ROD,
                     position().x + (level().getRandom().nextFloat() * (bb.getXsize() * 0.75f) - bb.getXsize() * 0.75f / 2),
                     position().y + (level().getRandom().nextFloat() * (bb.getYsize() * 0.75f) - bb.getYsize() * 0.75f / 2),

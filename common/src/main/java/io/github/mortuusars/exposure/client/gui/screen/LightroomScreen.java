@@ -32,12 +32,9 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -190,12 +187,12 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
 
     @Override
     protected void renderBg(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        guiGraphics.blit(MAIN_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
-        guiGraphics.blit(MAIN_TEXTURE, leftPos - 27, topPos + 35, 0, 209, 28, 31);
+        guiGraphics.blit(RenderType::guiTextured, MAIN_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, MAIN_TEXTURE, leftPos - 27, topPos + 35, 0, 209, 28, 31, 256, 256);
 
         renderSlotPlaceholders(guiGraphics, mouseX, mouseY, partialTick);
 
@@ -203,12 +200,12 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
             int progress = getMenu().getData().get(LightroomBlockEntity.CONTAINER_DATA_PROGRESS_ID);
             int time = getMenu().getData().get(LightroomBlockEntity.CONTAINER_DATA_PRINT_TIME_ID);
             int width = progress != 0 && time != 0 ? progress * 24 / time : 0;
-            guiGraphics.blit(MAIN_TEXTURE, leftPos + 116, topPos + 91, 176, 0, width, 17);
+            guiGraphics.blit(RenderType::guiTextured, MAIN_TEXTURE, leftPos + 116, topPos + 91, 176, 0, width, 17, 256, 256);
         }
 
         List<Frame> frames = getMenu().getExposedFrames();
         if (frames.isEmpty()) {
-            guiGraphics.blit(FILM_OVERLAYS_TEXTURE, leftPos + 4, topPos + 15, 0, 136, 168, 68);
+            guiGraphics.blit(RenderType::guiTextured, FILM_OVERLAYS_TEXTURE, leftPos + 4, topPos + 15, 0, 136, 168, 68, 256, 256);
             return;
         }
 
@@ -227,13 +224,13 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
         RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
 
         // Left film part
-        guiGraphics.blit(FILM_OVERLAYS_TEXTURE, leftPos + 1, topPos + 15, 0, leftFrame != null ? 68 : 0, 54, 68);
+        guiGraphics.blit(RenderType::guiTextured, FILM_OVERLAYS_TEXTURE, leftPos + 1, topPos + 15, 0, leftFrame != null ? 68 : 0, 54, 68, 256, 256);
         // Center film part
-        guiGraphics.blit(FILM_OVERLAYS_TEXTURE, leftPos + 55, topPos + 15, 55, rightFrame != null ? 0 : 68, 64, 68);
+        guiGraphics.blit(RenderType::guiTextured, FILM_OVERLAYS_TEXTURE, leftPos + 55, topPos + 15, 55, rightFrame != null ? 0 : 68, 64, 68, 256, 256);
         // Right film part
         if (rightFrame != null) {
             boolean hasMoreFrames = selectedFrame + 2 < frames.size();
-            guiGraphics.blit(FILM_OVERLAYS_TEXTURE, leftPos + 119, topPos + 15, 120, hasMoreFrames ? 68 : 0, 56, 68);
+            guiGraphics.blit(RenderType::guiTextured, FILM_OVERLAYS_TEXTURE, leftPos + 119, topPos + 15, 120, hasMoreFrames ? 68 : 0, 56, 68, 256, 256);
         }
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -254,10 +251,10 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
 
             if (selectedFrame < getMenu().getTotalFramesCount() - 1) {
                 // Advance Arrow
-                guiGraphics.blit(MAIN_TEXTURE, leftPos + 111, topPos + 44, 200, 0, 10, 10);
+                guiGraphics.blit(RenderType::guiTextured, MAIN_TEXTURE, leftPos + 111, topPos + 44, 200, 0, 10, 10, 256, 256);
             } else {
                 // Eject Arrow
-                guiGraphics.blit(MAIN_TEXTURE, leftPos + 111, topPos + 44, 210, 0, 10, 10);
+                guiGraphics.blit(RenderType::guiTextured, MAIN_TEXTURE, leftPos + 111, topPos + 44, 210, 0, 10, 10, 256, 256);
             }
 
             poseStack.popPose();
@@ -271,8 +268,8 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
             Slot slot = getMenu().getSlot(slotIndex);
             if (!slot.hasItem()) {
                 Rect2i placeholder = slotPlaceholders.get(slotIndex);
-                guiGraphics.blit(MAIN_TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1,
-                        placeholder.getX(), placeholder.getY(), placeholder.getWidth(), placeholder.getHeight());
+                guiGraphics.blit(RenderType::guiTextured, MAIN_TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1,
+                        placeholder.getX(), placeholder.getY(), placeholder.getWidth(), placeholder.getHeight(), 256, 256);
             }
         }
     }
@@ -387,7 +384,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
             if (!hasShownDevelopingToast && !filmSlot.hasItem()
                     && isHovering(filmSlot.x, filmSlot.y, 16, 16, mouseX, mouseY)
                     && getMenu().getCarried().getItem() instanceof FilmRollItem) {
-                Minecrft.get().getToasts().addToast(new BetterTutorialToast(ToastIcon.HEADS_UP,
+                Minecrft.get().getToastManager().addToast(new BetterTutorialToast(ToastIcon.HEADS_UP,
                         Component.translatable("gui.exposure.lightroom.toast.develop_film.title"),
                         null, BetterTutorialToast.DEFAULT_SHOW_DURATION_MS));
                 hasShownDevelopingToast = true;

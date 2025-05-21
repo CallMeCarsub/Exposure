@@ -51,7 +51,6 @@ public class ExposureFabricClient implements ClientModInitializer {
 
         ModelLoadingPlugin.register(pluginContext ->
                 pluginContext.addModels(
-                        ExposureClient.Models.CAMERA_GUI.id(),
                         ExposureClient.Models.PHOTOGRAPH_FRAME_SMALL.id(),
                         ExposureClient.Models.PHOTOGRAPH_FRAME_MEDIUM.id(),
                         ExposureClient.Models.PHOTOGRAPH_FRAME_LARGE.id(),

@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -29,17 +28,19 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Register {
     @ExpectPlatform
-    public static <T extends Block> Supplier<T> block(String id, Supplier<T> supplier) {
+    public static <T extends Block> Supplier<T> block(String id, Function<BlockBehaviour.Properties, T> blockFactory, Supplier<BlockBehaviour.Properties> supplier) {
         throw new AssertionError();
     }
 
@@ -60,7 +61,7 @@ public class Register {
     }
 
     @ExpectPlatform
-    public static <T extends Item> Supplier<T> item(String id, Supplier<T> supplier) {
+    public static <T extends Item> Supplier<T> item(String id, Function<Item.Properties, T> factory, Supplier<Item.Properties> propertiesSupplier) {
         throw new AssertionError();
     }
 

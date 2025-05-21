@@ -389,8 +389,9 @@ public class Config {
                 FORCE_DIRECT_CAPTURE = builder
                         .comment("Force legacy (pre 1.21) capturing method for taking images. Enable if you experiencing issues with resulting images.",
                                 "Direct method will be used regardless of this setting if mods defined in 'mods_needing_direct_capture' is installed.",
-                                "Default: false")
-                        .define("force_direct_capture", false);
+                                "1.21.3+ port note: new method does not work yet, so this should be true unless you want empty photos.",
+                                "Default: true")
+                        .define("force_direct_capture", true);
                 FORCE_DIRECT_CAPTURE_MODS = builder
                         .comment("Direct capture will be used if any of these mods is installed.",
                                 "Format: '[\"mod_id\", \"mod_id\"]'. Default: [" + String.join(", ", Exposure.MODS_REQUIRING_DIRECT_CAPTURE) + "]")

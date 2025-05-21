@@ -9,9 +9,7 @@
   "mixins": [
     "AlbumItemNeoForgeMixin",
     "CameraItemNeoForgeMixin",
-    "KeyMappingExtensionNeoForgeMixin",
-    ,
-    "create.FillingBySpoutMixin"
+    "KeyMappingExtensionNeoForgeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

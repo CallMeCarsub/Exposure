@@ -46,7 +46,7 @@ public class ExposureRepository {
 
     public List<String> getAllIds() {
         // Save exposures that are in cache and waiting to be saved:
-        dataStorage.save();
+        dataStorage.saveAndJoin();
 
         File folder = exposuresFolderPath.toFile();
 

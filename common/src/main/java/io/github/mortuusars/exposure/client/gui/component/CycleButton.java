@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
@@ -150,7 +151,7 @@ public class CycleButton<T> extends Button {
         ResourceLocation spriteLocation = sprites != null
                 ? sprites.get(isActive(), isHoveredOrFocused())
                 : TextureManager.INTENTIONAL_MISSING_TEXTURE;
-        guiGraphics.blitSprite(spriteLocation, getX(), getY(), getWidth(), getHeight());
+        guiGraphics.blitSprite(RenderType::guiTextured, spriteLocation, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override

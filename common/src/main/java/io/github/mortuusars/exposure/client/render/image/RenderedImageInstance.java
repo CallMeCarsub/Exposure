@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceMetadata;
+import net.minecraft.util.TriState;
 import org.joml.Matrix4f;
 
 import java.util.function.Function;
@@ -35,7 +36,7 @@ public class RenderedImageInstance implements AutoCloseable {
             true,
             RenderType.CompositeState.builder()
                     .setShaderState(RenderType.RENDERTYPE_TEXT_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(texture, false, true))
+                    .setTextureState(new RenderStateShard.TextureStateShard(texture, TriState.FALSE, true))
                     .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
                     .setLightmapState(RenderType.LIGHTMAP)
                     .createCompositeState(false)));
@@ -80,7 +81,7 @@ public class RenderedImageInstance implements AutoCloseable {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int ARGB = this.image.getPixelARGB(x, y);
-                this.texture.getPixels().setPixelRGBA(x, y, Color.ABGRtoARGB(ARGB)); // Texture is in ABGR format
+                this.texture.getPixels().setPixel(x, y, Color.ABGRtoARGB(ARGB)); // Texture is in ABGR format
             }
         }
 

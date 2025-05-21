@@ -4,20 +4,16 @@ import com.google.common.base.Preconditions;
 import io.github.mortuusars.exposure.Config;
 import io.github.mortuusars.exposure.Exposure;
 import io.github.mortuusars.exposure.PlatformHelper;
-import io.github.mortuusars.exposure.data.ColorPalette;
-import io.github.mortuusars.exposure.data.ColorPalettes;
 import io.github.mortuusars.exposure.world.camera.ExposureType;
 import io.github.mortuusars.exposure.client.gui.ClientGUI;
-import io.github.mortuusars.exposure.world.camera.film.properties.FilmProperties;
 import io.github.mortuusars.exposure.world.camera.frame.Frame;
 import io.github.mortuusars.exposure.world.inventory.ItemRenameMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -33,8 +29,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class FilmRollItem extends Item implements SensitiveFilmItem {
-    public static final int BAR_BLACK_AND_WHITE = Mth.color(0.8F, 0.8F, 0.9F);
-    public static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
+    public static final int BAR_BLACK_AND_WHITE = ARGB.colorFromFloat(1.0F, 0.8F, 0.8F, 0.9F);
+    public static final int BAR_COLOR = ARGB.colorFromFloat(1.0F, 0.4F, 0.4F, 1.0F);
 
     protected final ExposureType type;
     protected final int barColor;
@@ -95,7 +91,7 @@ public class FilmRollItem extends Item implements SensitiveFilmItem {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+    public @NotNull InteractionResult use(Level level, Player player, InteractionHand usedHand) {
         if (!Config.Server.FILM_ROLL_EASY_RENAMING.get() || !(player instanceof ServerPlayer serverPlayer)) {
             return super.use(level, player, usedHand);
         }
@@ -113,7 +109,7 @@ public class FilmRollItem extends Item implements SensitiveFilmItem {
             }
         };
         PlatformHelper.openMenu(serverPlayer, menuProvider, buffer -> buffer.writeInt(slot));
-        return InteractionResultHolder.success(player.getItemInHand(usedHand));
+        return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(usedHand));
     }
 
     // -- Bar

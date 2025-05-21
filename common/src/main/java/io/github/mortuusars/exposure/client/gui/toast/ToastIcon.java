@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.mortuusars.exposure.Exposure;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 public interface ToastIcon {
@@ -29,7 +30,7 @@ public interface ToastIcon {
 
         public void render(GuiGraphics guiGraphics, int x, int y) {
             RenderSystem.enableBlend();
-            guiGraphics.blitSprite(this.sprite, x, y, 20, 20);
+            guiGraphics.blitSprite(RenderType::guiTextured, this.sprite, x, y, 20, 20);
         }
     }
 

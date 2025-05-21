@@ -12,7 +12,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -204,14 +204,14 @@ public class StackedPhotographsItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
 
         if (player.isSecondaryUseActive() && cyclePhotographs(itemInHand)) {
             player.level().playSound(player, player, Exposure.SoundEvents.PHOTOGRAPH_RUSTLE.get(), SoundSource.PLAYERS, 0.6f,
                     player.level().getRandom().nextFloat() * 0.2f + 1.2f);
             player.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-            return InteractionResultHolder.success(itemInHand);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(itemInHand);
         }
 
         List<ItemAndStack<PhotographItem>> photographs = getPhotographs(itemInHand);
@@ -221,10 +221,10 @@ public class StackedPhotographsItem extends Item {
                 ClientGUI.openPhotographsScreenFromItem(slot);
                 player.playSound(Exposure.SoundEvents.PHOTOGRAPH_RUSTLE.get(), 0.6f, 1.1f);
             }
-            return InteractionResultHolder.success(itemInHand);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(itemInHand);
         }
 
-        return InteractionResultHolder.fail(itemInHand);
+        return InteractionResult.FAIL;
     }
 
     public boolean cyclePhotographs(ItemStack stack) {

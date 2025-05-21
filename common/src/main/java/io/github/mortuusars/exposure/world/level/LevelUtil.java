@@ -24,7 +24,7 @@ public class LevelUtil {
     }
 
     public static List<ResourceLocation> getStructuresAt(ServerLevel level, BlockPos pos) {
-        Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        Registry<Structure> registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
 
         return level.structureManager().getAllStructuresAt(pos).keySet().stream()
                 .filter(structure -> {

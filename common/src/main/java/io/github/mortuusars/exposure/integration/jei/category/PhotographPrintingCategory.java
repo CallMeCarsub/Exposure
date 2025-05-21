@@ -50,7 +50,7 @@ public class PhotographPrintingCategory implements IRecipeCategory<PhotographPri
                 .setSlotName("Film");
 
 
-        List<ItemStack> papers = BuiltInRegistries.ITEM.getTag(Exposure.Tags.Items.PHOTO_PAPERS)
+        List<ItemStack> papers = BuiltInRegistries.ITEM.get(Exposure.Tags.Items.PHOTO_PAPERS)
                 .map(holders -> holders.stream()
                         .map(itemHolder -> new ItemStack(itemHolder.value())).collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
@@ -60,7 +60,7 @@ public class PhotographPrintingCategory implements IRecipeCategory<PhotographPri
                 .setSlotName("Paper");
 
         if (recipe.getExposureType() == ExposureType.COLOR) {
-            List<ItemStack> cyanDyes = BuiltInRegistries.ITEM.getTag(Exposure.Tags.Items.CYAN_PRINTING_DYES)
+            List<ItemStack> cyanDyes = BuiltInRegistries.ITEM.get(Exposure.Tags.Items.CYAN_PRINTING_DYES)
                     .map(holders -> holders.stream()
                             .map(itemHolder -> new ItemStack(itemHolder.value())).collect(Collectors.toList()))
                     .orElse(Collections.emptyList());
@@ -69,7 +69,7 @@ public class PhotographPrintingCategory implements IRecipeCategory<PhotographPri
                     .addItemStacks(cyanDyes)
                     .setSlotName("Cyan");
 
-            List<ItemStack> magentaDyes = BuiltInRegistries.ITEM.getTag(Exposure.Tags.Items.MAGENTA_PRINTING_DYES)
+            List<ItemStack> magentaDyes = BuiltInRegistries.ITEM.get(Exposure.Tags.Items.MAGENTA_PRINTING_DYES)
                     .map(holders -> holders.stream()
                             .map(itemHolder -> new ItemStack(itemHolder.value())).collect(Collectors.toList()))
                     .orElse(Collections.emptyList());
@@ -78,7 +78,7 @@ public class PhotographPrintingCategory implements IRecipeCategory<PhotographPri
                     .addItemStacks(magentaDyes)
                     .setSlotName("Magenta");
 
-            List<ItemStack> yellowDyes = BuiltInRegistries.ITEM.getTag(Exposure.Tags.Items.YELLOW_PRINTING_DYES)
+            List<ItemStack> yellowDyes = BuiltInRegistries.ITEM.get(Exposure.Tags.Items.YELLOW_PRINTING_DYES)
                     .map(holders -> holders.stream()
                             .map(itemHolder -> new ItemStack(itemHolder.value())).collect(Collectors.toList()))
                     .orElse(Collections.emptyList());
@@ -88,7 +88,7 @@ public class PhotographPrintingCategory implements IRecipeCategory<PhotographPri
                     .setSlotName("Yellow");
         }
 
-        List<ItemStack> blackDyes = BuiltInRegistries.ITEM.getTag(Exposure.Tags.Items.BLACK_PRINTING_DYES)
+        List<ItemStack> blackDyes = BuiltInRegistries.ITEM.get(Exposure.Tags.Items.BLACK_PRINTING_DYES)
                 .map(holders -> holders.stream()
                         .map(itemHolder -> new ItemStack(itemHolder.value())).collect(Collectors.toList()))
                 .orElse(Collections.emptyList());

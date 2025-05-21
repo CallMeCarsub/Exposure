@@ -103,7 +103,7 @@ subprojects {
             parchment("org.parchmentmc.data:parchment-${parchment_version}@zip")
         }
 
-        modCompileOnlyApi("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+        modCompileOnlyApi("mezz.jei:jei-1.21.1-common-api:${jei_version}")
         modCompileOnlyApi("curse.maven:jade-324717:${jade_neoforge_id}")
     }
 

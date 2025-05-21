@@ -21,13 +21,14 @@ import net.minecraft.SharedConstants;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -89,7 +90,7 @@ public class ViewfinderOverlay {
 
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         recalculateOpening();
-        scale = Mth.lerp((float) scaleAnimation.getValue(), initialScale, 1f);
+        scale = Mth.lerp(scaleAnimation.getValue(), initialScale, 1f);
 
         // opening and scale is updated even if overlay is not rendered - other classes may depend on them.
 
@@ -186,7 +187,7 @@ public class ViewfinderOverlay {
         int y = yCenter;
 
         int sadFaceSize = font.lineHeight * 5;
-        guiGraphics.blit(BSOD_SAD_FACE_TEXTURE, x, y - sadFaceSize - margin, 0, 0, sadFaceSize, sadFaceSize, sadFaceSize, sadFaceSize);
+        guiGraphics.blit(RenderType::guiTextured, BSOD_SAD_FACE_TEXTURE, x, y - sadFaceSize - margin, 0, 0, sadFaceSize, sadFaceSize, sadFaceSize, sadFaceSize, 42, 42);
 
         MutableComponent message = Component.translatable("item.exposure.broken_interplanar_projector.viewfinder.message");
         List<FormattedCharSequence> messageLines = font.split(message, (int) (opening.width * 0.75f));
@@ -204,7 +205,7 @@ public class ViewfinderOverlay {
             case 2 -> qrCodeTextureSize * 2;
             default -> qrCodeTextureSize;
         };
-        guiGraphics.blit(BSOD_QR_CODE_TEXTURE, x, y, 0, 0, qrCodeSize, qrCodeSize, qrCodeSize, qrCodeSize);
+        guiGraphics.blit(RenderType::guiTextured, BSOD_QR_CODE_TEXTURE, x, y, 0, 0, qrCodeSize, qrCodeSize, qrCodeSize, qrCodeSize, qrCodeTextureSize, qrCodeTextureSize);
 
         MutableComponent errorCode = Component.translatable("item.exposure.broken_interplanar_projector.viewfinder.error_code");
         guiGraphics.drawString(font, errorCode, x + qrCodeSize + margin, y, 0xFFFFFFFF, false);
@@ -214,7 +215,7 @@ public class ViewfinderOverlay {
     }
 
     public void bobView(PoseStack poseStack, DeltaTracker deltaTracker) {
-        if (Minecrft.get().getCameraEntity() instanceof Player pl) {
+        if (Minecrft.get().getCameraEntity() instanceof AbstractClientPlayer pl) {
             float walkDist = Mth.lerp(deltaTracker.getGameTimeDeltaTicks(), pl.walkDistO, pl.walkDist);
             float strength = Mth.lerp(deltaTracker.getGameTimeDeltaTicks(), pl.oBob, pl.bob);
             float x = Mth.sin(walkDist * (float) Math.PI) * strength;

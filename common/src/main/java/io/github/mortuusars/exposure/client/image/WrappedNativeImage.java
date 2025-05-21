@@ -22,7 +22,7 @@ public class WrappedNativeImage implements Image {
 
     @Override
     public int getPixelARGB(int x, int y) {
-        return Color.ABGRtoARGB(nativeImage.getPixelRGBA(x, y));
+        return Color.ABGRtoARGB(nativeImage.getPixel(x, y));
     }
 
     @Override

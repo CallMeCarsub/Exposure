@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -98,7 +99,7 @@ public class AlbumSigningScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         renderTransparentBackground(guiGraphics);
-        guiGraphics.blit(AlbumGUI.TEXTURE, leftPos, topPos, 0, 298,
+        guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos, topPos, 298,
                 0, imageWidth, imageHeight, 512, 512);
     }
 

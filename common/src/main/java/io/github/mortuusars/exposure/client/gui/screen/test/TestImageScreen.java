@@ -378,7 +378,7 @@ public class TestImageScreen extends Screen {
 
         guiGraphics.pose().pushPose();
         float size = height * 0.8f * scale;
-        guiGraphics.pose().translate(width / 2f - size / 2f, height / 2f - size / 2f, -100);
+        guiGraphics.pose().translate(width / 2f - size / 2f, height / 2f - size / 2f, 100);
 
         float borderPercent = 0.02f;
         guiGraphics.fill(Mth.floor(-size * borderPercent), Mth.floor(-size * borderPercent),
@@ -445,11 +445,13 @@ public class TestImageScreen extends Screen {
     }
 
     private void fillHorizontalGradient(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int colorFrom, int colorTo) {
-        VertexConsumer consumer = guiGraphics.bufferSource().getBuffer(RenderType.gui());
-        Matrix4f matrix4f = guiGraphics.pose().last().pose();
-        consumer.addVertex(matrix4f, (float) x1, (float) y1, 0).setColor(colorFrom);
-        consumer.addVertex(matrix4f, (float) x1, (float) y2, 0).setColor(colorFrom);
-        consumer.addVertex(matrix4f, (float) x2, (float) y2, 0).setColor(colorTo);
-        consumer.addVertex(matrix4f, (float) x2, (float) y1, 0).setColor(colorTo);
+        guiGraphics.drawSpecial(multiBufferSource -> {
+            VertexConsumer consumer = multiBufferSource.getBuffer(RenderType.gui());
+            Matrix4f matrix4f = guiGraphics.pose().last().pose();
+            consumer.addVertex(matrix4f, (float) x1, (float) y1, 0).setColor(colorFrom);
+            consumer.addVertex(matrix4f, (float) x1, (float) y2, 0).setColor(colorFrom);
+            consumer.addVertex(matrix4f, (float) x2, (float) y2, 0).setColor(colorTo);
+            consumer.addVertex(matrix4f, (float) x2, (float) y1, 0).setColor(colorTo);
+        });
     }
 }

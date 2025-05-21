@@ -57,7 +57,8 @@ public class ResourceImage extends SimpleTexture implements RenderableImage {
     @Override
     public int getPixelARGB(int x, int y) {
         @Nullable NativeImage image = getNativeImage();
-        return image != null ? Color.ABGRtoARGB(image.getPixelRGBA(x, y)) : 0x00000000;
+        return image != null ? Color.ABGRtoARGB(image.getPixel(x, y)) : 0x00000000;
+        //return image != null ? image.getPixel(x, y) : 0x00000000;
     }
 
     public @Nullable NativeImage getNativeImage() {

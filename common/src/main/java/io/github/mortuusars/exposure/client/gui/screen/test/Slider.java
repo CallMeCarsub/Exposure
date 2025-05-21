@@ -17,6 +17,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -191,11 +192,11 @@ public class Slider extends AbstractWidget {
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Minecraft minecraft = Minecraft.getInstance();
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, alpha);
+
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        guiGraphics.blitSprite(getSprite(), getX(), getY(), getWidth(), getHeight());
+        guiGraphics.blitSprite(RenderType::guiTextured, getSprite(), getX(), getY(), getWidth(), getHeight(), ARGB.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
 
         if (active && horizontalGradient != null) {
             fillHorizontalGradient(guiGraphics, getX() + 1, getY() + 1, getX() + getWidth() - 1,
@@ -205,20 +206,21 @@ public class Slider extends AbstractWidget {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0, 0, 50);
 
-        guiGraphics.blitSprite(getHandleSprite(), getX() + (int)(position * (double)(width - HANDLE_WIDTH)), getY(), HANDLE_WIDTH, getHeight());
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        guiGraphics.blitSprite(RenderType::guiTextured, getHandleSprite(), getX() + (int)(position * (double)(width - HANDLE_WIDTH)), getY(), HANDLE_WIDTH, getHeight());
         int textColor = (active ? 0xFFFFFF : 0xA0A0A0) | Mth.ceil(alpha * 255.0F) << 24;
         renderScrollingString(guiGraphics, minecraft.font, TEXT_MARGIN, textColor);
         guiGraphics.pose().popPose();
     }
 
     private void fillHorizontalGradient(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int colorFrom, int colorTo) {
-        VertexConsumer consumer = guiGraphics.bufferSource().getBuffer(RenderType.gui());
-        Matrix4f matrix4f = guiGraphics.pose().last().pose();
-        consumer.addVertex(matrix4f, (float)x1, (float)y1, 0).setColor(colorFrom);
-        consumer.addVertex(matrix4f, (float)x1, (float)y2, 0).setColor(colorFrom);
-        consumer.addVertex(matrix4f, (float)x2, (float)y2, 0).setColor(colorTo);
-        consumer.addVertex(matrix4f, (float)x2, (float)y1, 0).setColor(colorTo);
+        guiGraphics.drawSpecial(multiBufferSource -> {
+            VertexConsumer consumer = multiBufferSource.getBuffer(RenderType.gui());
+            Matrix4f matrix4f = guiGraphics.pose().last().pose();
+            consumer.addVertex(matrix4f, (float) x1, (float) y1, 0).setColor(colorFrom);
+            consumer.addVertex(matrix4f, (float) x1, (float) y2, 0).setColor(colorFrom);
+            consumer.addVertex(matrix4f, (float) x2, (float) y2, 0).setColor(colorTo);
+            consumer.addVertex(matrix4f, (float) x2, (float) y1, 0).setColor(colorTo);
+        });
     }
 
     // --

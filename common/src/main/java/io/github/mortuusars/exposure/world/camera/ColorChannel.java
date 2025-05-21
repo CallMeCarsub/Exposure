@@ -73,6 +73,6 @@ public enum ColorChannel implements StringRepresentable {
     }
 
     public ResourceLocation getShader() {
-        return Exposure.resource("shaders/" + getSerializedName() + "_filter.json");
+        return Exposure.resource("post/" + getSerializedName() + "_filter");
     }
 }

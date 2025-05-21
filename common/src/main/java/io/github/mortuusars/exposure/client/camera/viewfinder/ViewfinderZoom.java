@@ -20,8 +20,8 @@ public class ViewfinderZoom {
 
     protected FocalRange focalRange;
     protected Animation animation;
-    protected double targetFov;
-    protected double currentFov;
+    protected float targetFov;
+    protected float currentFov;
 
     public ViewfinderZoom(Camera camera, Viewfinder viewfinder) {
         this.camera = camera;
@@ -31,30 +31,30 @@ public class ViewfinderZoom {
                 .orElse(FocalRange.getDefault());
         animation = new Animation(300, EasingFunction.EASE_OUT_EXPO);
 
-        double defaultFov = Minecrft.options().fov().get();
+        float defaultFov = Minecrft.options().fov().get();
         currentFov = defaultFov;
         targetFov = camera.map(CameraSettings.ZOOM::getOrDefault)
                 .map(focalRange::fovFromZoom)
                 .orElse(defaultFov);
     }
 
-    public double getCurrentFov() {
+    public float getCurrentFov() {
         return Mth.lerp(animation.getValue(), currentFov, targetFov);
     }
 
     public void zoom(ZoomDirection direction, boolean precise) {
         currentFov = getCurrentFov();
 
-        double step = ZOOM_STEP * (1f - Mth.clamp((focalRange.min() - currentFov) / focalRange.min(), 0.3f, 1f));
-        double inertia = Math.abs(targetFov - currentFov) * 0.8f; // Faster zoom if mouse scrolled rapidly.
-        double change = step + inertia;
+        float step = ZOOM_STEP * (1f - Mth.clamp((focalRange.min() - currentFov) / focalRange.min(), 0.3f, 1f));
+        float inertia = Math.abs(targetFov - currentFov) * 0.8f; // Faster zoom if mouse scrolled rapidly.
+        float change = step + inertia;
         if (precise) {
             change *= ZOOM_PRECISE_MODIFIER;
         }
 
-        double prevFov = targetFov;
+        float prevFov = targetFov;
 
-        double fov = focalRange.clampFov(targetFov + (direction == ZoomDirection.IN ? -change : +change));
+        float fov = focalRange.clampFov(targetFov + (direction == ZoomDirection.IN ? -change : +change));
 
         if (!Mth.equal(prevFov, fov)) {
             targetFov = fov;

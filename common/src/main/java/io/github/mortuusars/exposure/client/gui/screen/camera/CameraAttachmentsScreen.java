@@ -23,14 +23,17 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -81,7 +84,7 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
 
     protected void showTutorialToasts() {
         if (Config.Client.ATTACHMENTS_SHOW_INFO_TOAST.get()) {
-            Minecrft.get().getToasts().addToast(new BetterTutorialToast(ToastIcon.HOVER,
+            Minecrft.get().getToastManager().addToast(new BetterTutorialToast(ToastIcon.HOVER,
                     Component.translatable("gui.exposure.camera_attachments.mouse_over_toast.title"),
                     Component.translatable("gui.exposure.camera_attachments.mouse_over_toast.message"),
                     () -> {
@@ -97,7 +100,7 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
             Config.Client.SPEC.save();
         }
         if (Config.Client.ATTACHMENTS_SHOW_WIKI_TOAST.get()) {
-            Minecrft.get().getToasts().addToast(new BetterTutorialToast(ToastIcon.F1,
+            Minecrft.get().getToastManager().addToast(new BetterTutorialToast(ToastIcon.F1,
                     Component.translatable("gui.exposure.camera_attachments.wiki_toast.title"),
                     Component.translatable("gui.exposure.camera_attachments.wiki_toast.message"),
                     BetterTutorialToast.DEFAULT_SHOW_DURATION_MS, () -> {
@@ -131,8 +134,12 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
                 guiGraphics.renderItem(slot.getItem(), leftPos + slot.x, topPos + slot.y);
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
-                guiGraphics.blit(TEXTURE, leftPos + slot.x - 2, topPos + slot.y - 2, 350, 236, 92, 20, 20, 256, 256);
+
+                guiGraphics.pose().pushPose();
+                guiGraphics.pose().translate(0, 0, 350);
+                guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + slot.x - 2, topPos + slot.y - 2, 236, 92, 20, 20, 256, 256);
                 RenderSystem.disableBlend();
+                guiGraphics.pose().popPose();
             }
         }
 
@@ -141,11 +148,11 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
 
     @Override
     protected void renderBg(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        guiGraphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
         renderSlotPlaceholders(guiGraphics, mouseX, mouseY, partialTick);
 
@@ -153,7 +160,7 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
 
         for (Slot slot : getMenu().slots) {
             if (!slot.mayPickup(player)) {
-                guiGraphics.blit(TEXTURE, leftPos + slot.x - 2, topPos + slot.y - 2, 236, 72, 20, 20);
+                guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + slot.x - 2, topPos + slot.y - 2, 236, 72, 20, 20, 256, 256);
             }
         }
 
@@ -163,15 +170,15 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
     protected void renderAttachments(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         if (getMenu().getSlot(1).hasItem()) {
             int vOffset = isMouseOver(flash, mouseX, mouseY) ? 28 : 0;
-            guiGraphics.blit(TEXTURE, leftPos + 96, topPos + 11, 176, vOffset, 28, 28);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 96, topPos + 11, 176, vOffset, 28, 28, 256, 256);
         }
 
         boolean hasLens = getMenu().getSlot(2).hasItem();
         if (hasLens) {
             int vOffset = isMouseOver(lens, mouseX, mouseY) && !isMouseOver(filterOnLens, mouseX, mouseY) ? 37 : 0;
-            guiGraphics.blit(TEXTURE, leftPos + 93, topPos + 47, 176, 56 + vOffset, 35, 37);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 93, topPos + 47, 176, 56 + vOffset, 35, 37, 256, 256);
         } else if (isMouseOver(lensBuiltIn, mouseX, mouseY) && !isMouseOver(filter, mouseX, mouseY)) {
-            guiGraphics.blit(TEXTURE, leftPos + 93, topPos + 47, 176, 130, 31, 35);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 93, topPos + 47, 176, 130, 31, 35, 256, 256);
         }
 
         Slot filterSlot = getMenu().getSlot(3);
@@ -184,19 +191,19 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
         } else if (isMouseOver(filterOnLens, mouseX, mouseY)) {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            guiGraphics.blit(TEXTURE, leftPos + 110, topPos + 58, 176, 165, 15, 23);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 110, topPos + 58, 176, 165, 15, 23, 256, 256);
         } else if (isMouseOver(filter, mouseX, mouseY)) {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            guiGraphics.blit(TEXTURE, leftPos + 106, topPos + 56, 176, 165, 15, 23);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 106, topPos + 56, 176, 165, 15, 23, 256, 256);
         } else if (isMouseOver(viewfinder, mouseX, mouseY) && !isMouseOver(flash, mouseX, mouseY)) {
-            guiGraphics.blit(TEXTURE, leftPos + 65, topPos + 24, 42, 185, 49, 26);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 65, topPos + 24, 42, 185, 49, 26, 256, 256);
         } else if (isMouseOver(film, mouseX, mouseY)) {
-            guiGraphics.blit(TEXTURE, leftPos + 47, topPos + 20, 0, 185, 42, 52);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 47, topPos + 20, 0, 185, 42, 52, 256, 256);
         } else if (isMouseOver(shutterSpeedKnob, mouseX, mouseY)) {
-            guiGraphics.blit(TEXTURE, leftPos + 68, topPos + 49, 148, 185, 21, 26);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 68, topPos + 49, 148, 185, 21, 26, 256, 256);
         } else if (isMouseOver(selfTimer, mouseX, mouseY)) {
-            guiGraphics.blit(TEXTURE, leftPos + 93, topPos + 78, 169, 185, 4, 5);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + 93, topPos + 78, 169, 185, 4, 5, 256, 256);
         }
     }
 
@@ -207,18 +214,15 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
         float b = tint.getBF();
 
         if (isMouseOver(filterOnLens, mouseX, mouseY) || isMouseOver(this.filter, mouseX, mouseY)) {
-            r *= 1.35f;
-            g *= 1.35f;
-            b *= 1.35f;
+            r = Mth.clamp(r * 1.35f, 0.0f, 1.0f);
+            g = Mth.clamp(g * 1.35f, 0.0f, 1.0f);
+            b = Mth.clamp(b * 1.35f, 0.0f, 1.0f);
         }
 
-        RenderSystem.setShaderColor(r, g, b, 1.0F);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        int color = ARGB.colorFromFloat(1.0F, r, g, b);
 
         ResourceLocation filterTexture = filter.attachmentTexture();
-        guiGraphics.blit(filterTexture, leftPos + filterX, topPos + filterY, 0, 0, 32, 32, 32, 32);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        guiGraphics.blit(RenderType::guiTextured, filterTexture, leftPos + filterX, topPos + filterY, 0, 0, 32, 32, 32, 32, color);
     }
 
     protected boolean isMouseOver(HoveredElement element, int mouseX, int mouseY) {
@@ -244,8 +248,8 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
             Slot slot = getMenu().getSlot(slotIndex);
             if (!slot.hasItem()) {
                 Rect2i placeholder = slotPlaceholders.get(slotIndex);
-                guiGraphics.blit(TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1,
-                        placeholder.getX(), placeholder.getY(), placeholder.getWidth(), placeholder.getHeight());
+                guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1,
+                        placeholder.getX(), placeholder.getY(), placeholder.getWidth(), placeholder.getHeight(), 256, 256);
             }
         }
     }

@@ -33,13 +33,14 @@ public class CameraStandTooltip {
                     .withStyle(ChatFormatting.RED), 230);
             guiGraphics.renderTooltip(minecraft.font, lines, x, y + 12);
         } else {
-            TooltipRenderUtil.renderTooltipBackground(guiGraphics, x, y, 18, 18, 400);
+            TooltipRenderUtil.renderTooltipBackground(guiGraphics, x, y, 18, 18, 400, null);
 
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(0, 0, 400);
             guiGraphics.renderItem(stand.getCamera(), x + 1, y + 1);
             guiGraphics.pose().popPose();
 
+            // TODO: rendered weird?
             guiGraphics.renderTooltip(minecraft.font, stand.getCamera(), x + 16, y + 12);
         }
     }

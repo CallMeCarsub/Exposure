@@ -173,7 +173,7 @@ public class LightroomBlockEntity extends BaseContainerBlockEntity implements Wo
         Direction facing = level.getBlockState(pos).getValue(LightroomBlock.FACING);
         ItemStack filmStack = removeItem(Lightroom.FILM_SLOT, 1);
 
-        Vec3i normal = facing.getNormal();
+        Vec3i normal = facing.getUnitVec3i();
         Vec3 point = Vec3.atCenterOf(pos).add(normal.getX() * 0.75f, normal.getY() * 0.75f, normal.getZ() * 0.75f);
         ItemEntity itemEntity = new ItemEntity(level, point.x, point.y, point.z, filmStack);
         itemEntity.setDeltaMovement(normal.getX() * 0.05f, normal.getY() * 0.05f + 0.15f, normal.getZ() * 0.05f);

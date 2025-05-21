@@ -6,7 +6,7 @@ import io.github.mortuusars.exposure.util.Rect2f;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -49,7 +49,8 @@ public class GuiUtil {
         }
 
         Matrix4f matrix = poseStack.last().pose();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferBuilder.addVertex(matrix, minX, maxY, zOffset).setUv(minU, maxV);
         bufferBuilder.addVertex(matrix, maxX, maxY, zOffset).setUv(maxU, maxV);
@@ -82,7 +83,7 @@ public class GuiUtil {
         }
 
         Matrix4f matrix = poseStack.last().pose();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(CoreShaders.POSITION_COLOR);
         BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         bufferBuilder.addVertex(matrix, minX, maxY, 0).setColor(color);
         bufferBuilder.addVertex(matrix, maxX, maxY, 0).setColor(color);

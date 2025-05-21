@@ -12,7 +12,7 @@ import io.github.mortuusars.exposure.world.item.util.ItemAndStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -85,12 +85,12 @@ public class PhotographItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
 
         Frame frame = getFrame(itemInHand);
         if (frame == Frame.EMPTY || frame.identifier().isEmpty()) {
-            return InteractionResultHolder.pass(itemInHand);
+            return InteractionResult.PASS;
         }
 
         if (level.isClientSide) {
@@ -99,7 +99,7 @@ public class PhotographItem extends Item {
             player.playSound(Exposure.SoundEvents.PHOTOGRAPH_RUSTLE.get(), 0.6f, 1.1f);
         }
 
-        return InteractionResultHolder.success(itemInHand);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(itemInHand);
     }
 
     @Override

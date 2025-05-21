@@ -20,7 +20,7 @@ import io.github.mortuusars.exposure.world.item.PhotographItem;
 import io.github.mortuusars.exposure.network.handler.ClientPacketsHandler;
 import io.github.mortuusars.exposure.client.sound.UniqueSoundManager;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.client.renderer.entity.state.ItemFrameRenderState;
 import net.minecraft.world.item.ItemStack;
 
 public class ClientEvents {
@@ -39,7 +39,7 @@ public class ClientEvents {
         ClientPacketsHandler.clearRenderingCache();
         boolean active = Minecrft.player().getActiveExposureCameraOptional().isEmpty();
 
-        EasingFunction.EASE_OUT_EXPO.ease(0.5);
+        EasingFunction.EASE_OUT_EXPO.ease(0.5f);
         ViewfinderRegistry.getConstructor(Exposure.Items.CAMERA.get()).apply(new Camera(Minecrft.player(), CameraId.create()) {
             @Override
             public ItemStack getItemStack() { return new ItemStack(Exposure.Items.CAMERA.get()); }
@@ -65,14 +65,14 @@ public class ClientEvents {
         ExposureClient.imageRenderer().clearCache();
     }
 
-    public static boolean renderItemFrameItem(ItemFrame itemFrame, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public static boolean renderItemFrameItem(ItemFrameRenderState renderState, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (!Config.Client.PHOTOGRAPH_RENDERS_IN_ITEM_FRAME.get()) return false;
-        if (!(itemFrame.getItem().getItem() instanceof PhotographItem photographItem)) return false;
-        if (photographItem.getFrame(itemFrame.getItem()).identifier().isEmpty()) return false;
+        if (!(renderState.itemStack.getItem() instanceof PhotographItem photographItem)) return false;
+        if (photographItem.getFrame(renderState.itemStack).identifier().isEmpty()) return false;
 
         poseStack.pushPose();
         poseStack.scale(2F, 2F, 2F);
-        ItemFramePhotographRenderer.render(itemFrame, poseStack, buffer, packedLight, photographItem, itemFrame.getItem());
+        ItemFramePhotographRenderer.render(renderState, poseStack, buffer, packedLight, photographItem, renderState.itemStack);
         poseStack.popPose();
 
         return true;

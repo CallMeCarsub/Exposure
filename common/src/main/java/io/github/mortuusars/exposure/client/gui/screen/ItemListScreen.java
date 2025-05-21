@@ -10,7 +10,7 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -149,18 +149,18 @@ public class ItemListScreen extends Screen {
     }
 
     protected void renderBg(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // Render BG expanding it according to number of rows
-        guiGraphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, 17);
+        guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos, topPos, 0, 0, imageWidth, 17, 256, 256);
         for (int i = 0; i < rowsCount; i++) {
-            guiGraphics.blit(TEXTURE, leftPos, topPos + 17 + (i * 18), 0, 17, imageWidth, 18);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos, topPos + 17 + (i * 18), 0, 17, imageWidth, 18, 256, 256);
         }
-        guiGraphics.blit(TEXTURE, leftPos, topPos + 17 + (rowsCount * 18), 0, 35, imageWidth, 7);
+        guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos, topPos + 17 + (rowsCount * 18), 0, 35, imageWidth, 7, 256, 256);
 
         for (Slot slot : slots) {
-            guiGraphics.blit(TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1, 176, 0, 18, 18);
+            guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1, 176, 0, 18, 18, 256, 256);
         }
     }
 

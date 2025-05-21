@@ -49,7 +49,11 @@ public class PhotographFrameItem extends Item {
 
                 frameEntity.setFrameItem((player.isCreative() ? itemInHand.copy() : itemInHand).split(1));
 
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                if (level.isClientSide) {
+                    return InteractionResult.CONSUME;
+                } else {
+                    return InteractionResult.SUCCESS;
+                }
             }
         }
 

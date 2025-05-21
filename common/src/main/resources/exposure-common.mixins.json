@@ -24,7 +24,9 @@
     "client.LocalPlayerMixin",
     "client.MinecraftMixin",
     "client.MouseHandlerMixin",
-    "client.MultiPlayerGameModeMixin"
+    "client.MultiPlayerGameModeMixin",
+    "client.LivingEntityRendererMixin",
+    "client.PlayerRenderStateMixin"
   ],
   "mixins": [
     "AnvilMenuMixin",

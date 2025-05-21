@@ -9,6 +9,7 @@ import io.github.mortuusars.exposure.commands.argument.ColorPaletteArgument;
 import io.github.mortuusars.exposure.util.color.Color;
 import io.github.mortuusars.exposure.data.ColorPalette;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static net.minecraft.commands.Commands.*;
 
@@ -48,14 +50,14 @@ public class PaletteCommand {
     }
 
     private static int exportAsJson(CommandSourceStack source, ResourceLocation paletteId, String filePath) {
-        @Nullable ColorPalette palette = source.registryAccess().registryOrThrow(Exposure.Registries.COLOR_PALETTE).get(paletteId);
-        if (palette == null) {
+        @Nullable Optional<Holder.Reference<ColorPalette>> palette = source.registryAccess().lookupOrThrow(Exposure.Registries.COLOR_PALETTE).get(paletteId);
+        if (palette.isEmpty()) {
             source.sendFailure(Component.literal(paletteId + " is not found."));
             return 0;
         }
 
         try {
-            savePaletteAsJson(palette, new File(filePath));
+            savePaletteAsJson(palette.get().value(), new File(filePath));
         } catch (Exception e) {
             Exposure.LOGGER.error("Exporting palette '{}' failed: ", paletteId, e);
             source.sendFailure(Component.literal("Exporting palette '" + paletteId + "' failed: " + e.getMessage()));
@@ -70,14 +72,14 @@ public class PaletteCommand {
     }
 
     private static int exportAsPng(CommandSourceStack source, ResourceLocation paletteId, String filePath) {
-        @Nullable ColorPalette palette = source.registryAccess().registryOrThrow(Exposure.Registries.COLOR_PALETTE).get(paletteId);
-        if (palette == null) {
+        @Nullable Optional<Holder.Reference<ColorPalette>> palette = source.registryAccess().lookupOrThrow(Exposure.Registries.COLOR_PALETTE).get(paletteId);
+        if (palette.isEmpty()) {
             source.sendFailure(Component.literal(paletteId + " is not found."));
             return 0;
         }
 
         try {
-            savePaletteAsPng(palette, new File(filePath));
+            savePaletteAsPng(palette.get().value(), new File(filePath));
             source.sendSuccess(() -> Component.literal("Exported palette '" + paletteId + "' to file ")
                     .append(Component.literal(filePath).withStyle(Style.EMPTY
                             .withUnderlined(true))), true);

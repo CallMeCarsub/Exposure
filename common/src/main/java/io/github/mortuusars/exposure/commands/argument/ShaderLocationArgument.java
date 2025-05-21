@@ -19,9 +19,10 @@ public class ShaderLocationArgument extends ResourceLocationArgument {
 
     private static Stream<ResourceLocation> getShaderLocations() {
         return Minecraft.getInstance().getResourceManager()
-                .listResources("shaders", ShaderLocationArgument::filterLocations)
+                .listResources("post_effect", ShaderLocationArgument::filterLocations)
                 .keySet()
-                .stream();
+                .stream()
+                .map(resourceLocation -> resourceLocation.withPath(path -> path.substring("post_chain//".length(), path.indexOf(".json"))));
     }
 
     private static boolean filterLocations(ResourceLocation resourceLocation) {

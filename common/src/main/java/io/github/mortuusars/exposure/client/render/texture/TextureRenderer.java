@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.mortuusars.exposure.util.color.Color;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +31,7 @@ public class TextureRenderer {
                               float minX, float minY, float maxX, float maxY,
                               float minU, float minV, float maxU, float maxV, int packedLight, int r, int g, int b, int a) {
         RenderSystem.setShaderTexture(0, texture);
-        RenderSystem.setShader(GameRenderer::getPositionColorTexLightmapShader);
+        RenderSystem.setShader(CoreShaders.POSITION_COLOR_TEX_LIGHTMAP);
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
 

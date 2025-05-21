@@ -34,7 +34,7 @@ public class ExposureClient {
     private static final PhotographRenderer PHOTOGRAPH_RENDERER = new PhotographRenderer();
 
     public static void init() {
-        CameraModelPoses.register(Exposure.Items.CAMERA.get(), new CameraPoses());
+        CameraModelPoses.register(Exposure.Items.CAMERA.get(), new CameraPoses<>());
 
         ViewfinderRegistry.register(Exposure.Items.CAMERA.get(), Viewfinder::new);
 
@@ -120,7 +120,7 @@ public class ExposureClient {
 
     public static class Models {
         public static final ModelResourceLocation CAMERA_GUI =
-                new ModelResourceLocation(Exposure.resource("camera_gui"), "standalone");
+                new ModelResourceLocation(Exposure.resource("camera_gui"), ModelResourceLocation.INVENTORY_VARIANT);
         public static final ModelResourceLocation PHOTOGRAPH_FRAME_SMALL =
                 new ModelResourceLocation(Exposure.resource("photograph_frame_small"), "standalone");
         public static final ModelResourceLocation PHOTOGRAPH_FRAME_MEDIUM =

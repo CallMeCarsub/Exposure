@@ -48,8 +48,8 @@ public class ClientPacketsHandler {
 
     public static void applyShader(ShaderApplyS2CP packet) {
         packet.shaderLocation().ifPresentOrElse(
-                shader -> Minecrft.get().gameRenderer.loadEffect(shader),
-                () -> Minecrft.get().gameRenderer.shutdownEffect());
+                shader -> Minecrft.get().gameRenderer.setPostEffect(shader),
+                () -> Minecrft.get().gameRenderer.clearPostEffect());
     }
 
     public static void showExposure(ShowExposureCommandS2CP packet) {

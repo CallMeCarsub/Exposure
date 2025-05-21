@@ -3,27 +3,34 @@ package io.github.mortuusars.exposure.client.gui;
 import io.github.mortuusars.exposure.client.gui.screen.PhotographScreen;
 import io.github.mortuusars.exposure.client.gui.screen.album.AlbumViewScreen;
 import io.github.mortuusars.exposure.client.util.Minecrft;
+import io.github.mortuusars.exposure.network.Packets;
+import io.github.mortuusars.exposure.network.packet.serverbound.ComponentTransferringRecipeDisplayC2SP;
 import io.github.mortuusars.exposure.world.item.PhotographItem;
 import io.github.mortuusars.exposure.world.item.crafting.recipe.FilmDevelopingRecipe;
 import io.github.mortuusars.exposure.world.item.crafting.recipe.PhotographCopyingRecipe;
+import io.github.mortuusars.exposure.world.item.crafting.recipe.display.ComponentTransferringRecipeDisplay;
 import io.github.mortuusars.exposure.world.item.util.ItemAndStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class ClientGUI {
+    public static Map<Item, Optional<ComponentTransferringRecipeDisplay>> recipeDisplays;
+
     public static void openPhotographScreen(List<ItemAndStack<PhotographItem>> photographs) {
         Minecrft.get().setScreen(new PhotographScreen(photographs));
     }
@@ -41,7 +48,7 @@ public class ClientGUI {
         addRecipeTooltip(filmStack, tooltipContext, tooltipComponents, isAdvanced,
                 r -> r instanceof FilmDevelopingRecipe filmDevelopingRecipe
                         && filmDevelopingRecipe.getSourceIngredient().test(filmStack),
-                "item.exposure.film_roll.tooltip.details.develop");
+                "item.exposure.film_roll.tooltip.details.develop", "developing");
     }
 
     public static void addPhotographCopyingTooltip(ItemStack photographStack, Item.TooltipContext tooltipContext,
@@ -49,12 +56,12 @@ public class ClientGUI {
         addRecipeTooltip(photographStack, tooltipContext, tooltipComponents, isAdvanced,
                 r -> r instanceof PhotographCopyingRecipe photographCopyingRecipe
                         && photographCopyingRecipe.getSourceIngredient().test(photographStack),
-                "item.exposure.photograph.tooltip.details.copy");
+                "item.exposure.photograph.tooltip.details.copy", "copying");
     }
 
     private static void addRecipeTooltip(ItemStack stack, Item.TooltipContext tooltipContext,
                                          @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced,
-                                         Predicate<CraftingRecipe> recipeFilter, String detailsKey) {
+                                         Predicate<CraftingRecipe> recipeFilter, String detailsKey, String recipeType) {
         if (Minecraft.getInstance().level == null) {
             return;
         }
@@ -64,19 +71,26 @@ public class ClientGUI {
             return;
         }
 
-        Optional<NonNullList<Ingredient>> recipeIngredients = Minecraft.getInstance().level
-                .getRecipeManager()
-                .getAllRecipesFor(RecipeType.CRAFTING)
-                .stream()
-                .map(RecipeHolder::value)
-                .filter(recipeFilter)
-                .findFirst()
-                .map(Recipe::getIngredients);
-
-        if (recipeIngredients.isEmpty() || recipeIngredients.get().isEmpty())
+        if (recipeDisplays == null) {
+            recipeDisplays = new HashMap<>();
+            recipeDisplays.put(stack.getItem(), Optional.empty());
+            Packets.sendToServer(new ComponentTransferringRecipeDisplayC2SP(stack, recipeType));
             return;
+        }
 
-        NonNullList<Ingredient> ingredients = recipeIngredients.get();
+        @Nullable
+        Optional<ComponentTransferringRecipeDisplay> displayOptional = recipeDisplays.get(stack.getItem());
+        if (displayOptional == null) { // we haven't requested this recipe yet.
+            recipeDisplays.put(stack.getItem(), Optional.empty());
+            Packets.sendToServer(new ComponentTransferringRecipeDisplayC2SP(stack, recipeType));
+            return;
+        }
+
+        if (displayOptional.isEmpty()) { // we have requested this recipe, but we haven't gotten a response.
+            return;
+        }
+
+        ComponentTransferringRecipeDisplay display = displayOptional.get();
 
         tooltipComponents.add(Component.empty());
 
@@ -85,18 +99,24 @@ public class ClientGUI {
 
         tooltipComponents.add(Component.translatable(detailsKey).withStyle(orange));
 
-        for (int i = 0; i < ingredients.size(); i++) {
-            ItemStack[] stacks = ingredients.get(i).getItems();
+        List<SlotDisplay> ingredientDisplays = display.ingredients();
 
-            if (stacks.length == 0)
+
+        for (int i = 0; i < ingredientDisplays.size(); i++) {
+            List<ItemStack> stacks = ingredientDisplays.get(i)
+                    .resolveForStacks(new ContextMap.Builder()
+                            .withOptionalParameter(SlotDisplayContext.REGISTRIES, Minecrft.registryAccess())
+                            .create(SlotDisplayContext.CONTEXT));
+
+            if (stacks.isEmpty())
                 tooltipComponents.add(Component.literal("  ").append(Component.literal("?").withStyle(yellow)));
-            else if (stacks.length == 1)
-                tooltipComponents.add(Component.literal("  ").append(stacks[0].getHoverName().copy().withStyle(yellow)));
-            else { // Cycle stacks if it's not one:
-                int val = (int) Math.ceil((Minecraft.getInstance().level.getGameTime() + 10 * i) % (20f * stacks.length) / 20f);
-                int index = Mth.clamp(val - 1, 0, stacks.length - 1);
+            else if (stacks.size() == 1) {
+                tooltipComponents.add(Component.literal("  ").append(stacks.getFirst().getHoverName().copy().withStyle(yellow)));
+            } else { // Cycle stacks if it's not one:
+                int val = (int) Math.ceil((Minecraft.getInstance().level.getGameTime() + 10 * i) % (20f * stacks.size()) / 20f);
+                int index = Mth.clamp(val - 1, 0, stacks.size() - 1);
 
-                tooltipComponents.add(Component.literal("  ").append(stacks[index].getHoverName().copy().withStyle(yellow)));
+                tooltipComponents.add(Component.literal("  ").append(stacks.get(index).getHoverName().copy().withStyle(yellow)));
             }
         }
     }

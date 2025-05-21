@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -86,8 +87,8 @@ public class PhotographSlotWidget extends AbstractWidget {
             PhotographStyle photographStyle = PhotographStyle.of(photograph);
 
             // Paper
-            guiGraphics.blit(photographStyle.albumPaperTexture(),
-                    getX(), getY(), 0, 0, 0, width, height, width, height);
+            guiGraphics.blit(RenderType::guiTextured, photographStyle.albumPaperTexture(),
+                    getX(), getY(), 0, 0, width, height, width, height);
 
             // Exposure
             guiGraphics.pose().pushPose();
@@ -104,8 +105,8 @@ public class PhotographSlotWidget extends AbstractWidget {
             if (photographStyle.hasAlbumOverlayTexture()) {
                 guiGraphics.pose().pushPose();
                 guiGraphics.pose().translate(0, 0, 2);
-                guiGraphics.blit(photographStyle.albumOverlayTexture(),
-                        getX(), getY(), 0, 0, 0, width, height, width, height);
+                guiGraphics.blit(RenderType::guiTextured, photographStyle.albumOverlayTexture(),
+                        getX(), getY(), 0, 0, width, height, width, height);
                 guiGraphics.pose().popPose();
             }
         }
@@ -118,7 +119,7 @@ public class PhotographSlotWidget extends AbstractWidget {
         if (!editable && !hasPhotograph) {
             resourceLocation = sprites.get(isActive(), false);
         }
-        guiGraphics.blitSprite(resourceLocation, getX(), getY(), width, height);
+        guiGraphics.blitSprite(RenderType::guiTextured, resourceLocation, getX(), getY(), width, height);
     }
 
     public void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {

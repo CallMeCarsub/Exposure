@@ -16,8 +16,6 @@ import io.github.mortuusars.exposure.client.render.GlassPhotographFrameEntityRen
 import io.github.mortuusars.exposure.client.render.PhotographFrameEntityRenderer;
 import io.github.mortuusars.exposure.world.inventory.tooltip.PhotographTooltip;
 import io.github.mortuusars.exposure.world.item.camera.CameraItem;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -67,7 +65,6 @@ public class NeoForgeClientEvents {
 
         @SubscribeEvent
         public static void registerModels(ModelEvent.RegisterAdditional event) {
-            event.register(ExposureClient.Models.CAMERA_GUI);
             event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_SMALL);
             event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_MEDIUM);
             event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_LARGE);

@@ -16,10 +16,10 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -33,16 +33,21 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class RegisterImpl {
-    public static <T extends Block> Supplier<T> block(String id, Supplier<T> supplier) {
-        T obj = Registry.register(BuiltInRegistries.BLOCK, Exposure.resource(id), supplier.get());
+    public static <T extends Block> Supplier<T> block(String id, Function<BlockBehaviour.Properties, T> blockFactory, Supplier<BlockBehaviour.Properties> supplier) {
+        T obj = Registry.register(BuiltInRegistries.BLOCK, Exposure.resource(id),
+                blockFactory.apply(supplier.get()
+                        .setId(ResourceKey.create(Registries.BLOCK, Exposure.resource(id)
+                        ))));
         return () -> obj;
     }
 
@@ -52,11 +57,14 @@ public class RegisterImpl {
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> newBlockEntityType(Register.BlockEntitySupplier<T> blockEntitySupplier, Block... validBlocks) {
-        return BlockEntityType.Builder.of(blockEntitySupplier::create, validBlocks).build();
+        return new BlockEntityType<T>(blockEntitySupplier::create, Set.of(validBlocks));
     }
 
-    public static <T extends Item> Supplier<T> item(String id, Supplier<T> supplier) {
-        T obj = Registry.register(BuiltInRegistries.ITEM, Exposure.resource(id), supplier.get());
+    public static <T extends Item> Supplier<T> item(String id, Function<Item.Properties, T> itemFactory, Supplier<Item.Properties> propertiesSupplier) {
+        T obj = Registry.register(BuiltInRegistries.ITEM, Exposure.resource(id),
+                itemFactory.apply(propertiesSupplier.get()
+                        .setId(ResourceKey.create(Registries.ITEM, Exposure.resource(id)
+                        ))));
         return () -> obj;
     }
 
@@ -74,7 +82,7 @@ public class RegisterImpl {
                         .clientTrackingRange(clientTrackingRange)
                         .alwaysUpdateVelocity(velocityUpdates)
                         .updateInterval(updateInterval)
-                        .build());
+                        .build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), Exposure.resource(id))));
         return () -> type;
     }
 
@@ -82,7 +90,7 @@ public class RegisterImpl {
         EntityType.Builder<T> builder = EntityType.Builder.of(factory, category);
         typeBuilder.accept(builder);
         builder.alwaysUpdateVelocity(receiveVelocityUpdates);
-        EntityType<T> type = Registry.register(BuiltInRegistries.ENTITY_TYPE, Exposure.resource(id), builder.build());
+        EntityType<T> type = Registry.register(BuiltInRegistries.ENTITY_TYPE, Exposure.resource(id), builder.build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), Exposure.resource(id))));
         return () -> type;
     }
 

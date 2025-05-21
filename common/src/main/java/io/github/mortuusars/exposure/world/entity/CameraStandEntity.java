@@ -77,7 +77,7 @@ public class CameraStandEntity extends Entity implements CameraHolder {
             SynchedEntityData.defineId(CameraStandEntity.class, EntityDataSerializers.BOOLEAN);
 
     protected static final Predicate<Entity> RIDABLE_MINECARTS = entity -> entity instanceof AbstractMinecart
-            && ((AbstractMinecart)entity).getMinecartType() == AbstractMinecart.Type.RIDEABLE;
+            && ((AbstractMinecart)entity).isRideable();
 
     protected CameraStandRedstoneControl redstoneControl = new CameraStandRedstoneControl(this);
     protected UUID ownerPlayerId = Util.NIL_UUID;
@@ -569,7 +569,7 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     protected void checkForMinecarts() {
         if (!isClientSide() && !isPassenger()) {
             List<Entity> minecarts = level().getEntities(this, getBoundingBox().inflate(0.4F, 0.2F, 0.4F),
-                    e -> e instanceof AbstractMinecart cart && cart.getMinecartType() == AbstractMinecart.Type.RIDEABLE);
+                    e -> e instanceof AbstractMinecart cart && cart.isRideable());
             for (Entity entity : minecarts) {
                 AbstractMinecart minecart = ((AbstractMinecart) entity);
                 if (!minecart.isVehicle()) {
@@ -590,20 +590,19 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     // -- Hurt
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         if (isRemoved()) return true;
-        if (isInvulnerableTo(source)) return false;
+        if (isInvulnerableToBase(source)) return false;
 
         markHurt();
 
         if (!getCamera().isEmpty()) {
-            if (!isClientSide()) {
-                @Nullable ItemEntity itemEntity = spawnAtLocation(getCamera(), getEyeHeight());
-                if (itemEntity != null) {
-                    itemEntity.setPickUpDelay(5);
-                }
-                playCameraRemoveSound();
+            @Nullable ItemEntity itemEntity = spawnAtLocation(level, getCamera(), getEyeHeight());
+            if (itemEntity != null) {
+                itemEntity.setPickUpDelay(5);
             }
+            playCameraRemoveSound();
+
             setCamera(ItemStack.EMPTY);
 
             if (source.isCreativePlayer()) {
@@ -613,24 +612,35 @@ public class CameraStandEntity extends Entity implements CameraHolder {
             amount = 1.0f; // Prevent one-hit harvesting.
         }
 
-        if (!isClientSide()) {
-            setHurtDir(-getHurtDir());
-            setHurtTime(10);
-            markHurt();
-            setDamage(getDamage() + amount * 10.0F);
-            gameEvent(GameEvent.ENTITY_DAMAGE, source.getEntity());
-            playHitSound();
+        setHurtDir(-getHurtDir());
+        setHurtTime(10);
+        markHurt();
+        setDamage(getDamage() + amount * 10.0F);
+        gameEvent(GameEvent.ENTITY_DAMAGE, source.getEntity());
+        playHitSound();
 
-            if (source.isCreativePlayer()) {
-                discard();
-                showBreakingParticles();
-                playBreakSound();
-            } else if (getDamage() > 10.0F) {
-                destroy(source);
-                showBreakingParticles();
-                playBreakSound();
-            }
+        if (source.isCreativePlayer()) {
+            discard();
+            showBreakingParticles();
+            playBreakSound();
+        } else if (getDamage() > 10.0F) {
+            destroy(source);
+            showBreakingParticles();
+            playBreakSound();
+        }
 
+        return true;
+    }
+
+    @Override
+    public boolean hurtClient(DamageSource source) {
+        if (isRemoved()) return true;
+        if (isInvulnerableToBase(source)) return false;
+
+        markHurt();
+
+        if (!getCamera().isEmpty()) {
+            setCamera(ItemStack.EMPTY);
         }
 
         return true;
@@ -665,11 +675,13 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     }
 
     public void destroy(Item dropItem) {
-        this.kill();
-        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            ItemStack itemStack = new ItemStack(dropItem);
-            itemStack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
-            this.spawnAtLocation(itemStack, 0.5f);
+        if (this.level() instanceof ServerLevel) {
+            this.kill((ServerLevel) this.level());
+            if (((ServerLevel) this.level()).getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                ItemStack itemStack = new ItemStack(dropItem);
+                itemStack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
+                this.spawnAtLocation((ServerLevel) this.level(), itemStack, 0.5f);
+            }
         }
     }
 

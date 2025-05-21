@@ -37,11 +37,11 @@ public class UniqueSoundManager {
     }
 
     public static void stop(String id, SoundEvent sound) {
-        stop(id, sound.getLocation());
+        stop(id, sound.location());
     }
 
     public static void stopAllOf(SoundEvent sound) {
-        ResourceLocation location = sound.getLocation();
+        ResourceLocation location = sound.location();
         SOUNDS.cellSet().removeIf(cell -> {
             if (cell.getColumnKey().equals(location)) {
                 Minecrft.get().getSoundManager().stop(cell.getValue());
