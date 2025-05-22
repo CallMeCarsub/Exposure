@@ -21,6 +21,14 @@ public interface CameraOperatorRenderState {
         throw new IllegalStateException("This method must be implemented.");
     }
 
+    default boolean isCameraEntity() {
+        throw new IllegalStateException("This method must be implemented.");
+    }
+
+    default void setIsCameraEntity(boolean isCameraEntity) {
+        throw new IllegalStateException("This method must be implemented.");
+    }
+
     default float getExposureCameraActionAnim() {
         return 0F;
     }

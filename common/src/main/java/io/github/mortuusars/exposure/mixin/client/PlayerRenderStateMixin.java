@@ -19,6 +19,8 @@ public abstract class PlayerRenderStateMixin implements CameraOperatorRenderStat
     @Unique
     public boolean exposure$IsCurrentPlayer;
     @Unique
+    public boolean exposure$IsCameraEntity;
+    @Unique
     public float exposure$CameraActionAnim = 0F;
 
 
@@ -40,6 +42,14 @@ public abstract class PlayerRenderStateMixin implements CameraOperatorRenderStat
     @Override
     public void setIsCurrentPlayer(boolean isCurrentPlayer) {
         exposure$IsCurrentPlayer = isCurrentPlayer;
+    }
+
+    public boolean isCameraEntity() {
+        return exposure$IsCameraEntity;
+    }
+
+    public void setIsCameraEntity(boolean isCameraEntity) {
+        exposure$IsCameraEntity = isCameraEntity;
     }
 
     @Override

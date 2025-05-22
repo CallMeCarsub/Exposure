@@ -22,6 +22,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
             if (entity instanceof CameraOperator cameraOperator) {
                 reusedOperatorState.setExposureCamera(cameraOperator.getActiveExposureCamera());
                 reusedOperatorState.setIsCurrentPlayer(Minecrft.player().equals(entity));
+                reusedOperatorState.setIsCameraEntity(Minecrft.get().cameraEntity == entity);
                 reusedOperatorState.setExposureCameraActionAnim(cameraOperator.getExposureCameraActionAnim(partialTick));
             }
             if (entity instanceof CameraHolder holder && CameraInHand.find(holder) instanceof CameraInHand camera) {

@@ -35,12 +35,15 @@ public class CameraPoses<T extends HumanoidRenderState> {
     }
 
     public void applySelfie(HumanoidModel<?> model, T renderState, HumanoidArm arm, boolean undoArmBobbing) {
+        if (!(renderState instanceof CameraOperatorRenderState operatorState)) {
+            return;
+        }
         ModelPart cameraArm = arm == HumanoidArm.RIGHT ? model.rightArm : model.leftArm;
 
         // Arm follows camera:
         cameraArm.xRot = (model.head.xRot + Math.abs(model.head.xRot * 0.13f)) + (-(float) Math.PI / 2F);
         cameraArm.yRot = model.head.yRot;
-        if (Minecrft.get().cameraEntity == entity) {
+        if (operatorState.isCameraEntity()) {
             cameraArm.yRot += (arm == HumanoidArm.RIGHT ? -0.25f : 0.25f);
         }
 
