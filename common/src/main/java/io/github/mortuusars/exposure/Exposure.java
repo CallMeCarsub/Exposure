@@ -81,7 +81,7 @@ public class Exposure {
     public static final String ID = "exposure";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final List<String> MODS_REQUIRING_DIRECT_CAPTURE = List.of("iris", "oculus", "effective", "distanthorizons");
+    public static final List<String> MODS_REQUIRING_DIRECT_CAPTURE = List.of("veil");
     public static final int MAX_ENTITIES_IN_FRAME = 10;
 
     public static final StreamCodec CUSTOM_INGREDIENT_CODEC = null;

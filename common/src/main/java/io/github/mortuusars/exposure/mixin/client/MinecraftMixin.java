@@ -1,7 +1,9 @@
 package io.github.mortuusars.exposure.mixin.client;
 
+import com.mojang.blaze3d.pipeline.RenderTarget;
 import io.github.mortuusars.exposure.client.camera.CameraClient;
 import io.github.mortuusars.exposure.client.camera.viewfinder.ViewfinderCameraControlsScreen;
+import io.github.mortuusars.exposure.client.capture.task.BackgroundScreenshotCaptureTask;
 import io.github.mortuusars.exposure.event.ClientEvents;
 import io.github.mortuusars.exposure.network.Packets;
 import io.github.mortuusars.exposure.network.packet.serverbound.ActiveCameraReleaseC2SP;
@@ -55,6 +57,13 @@ public abstract class MinecraftMixin {
     void onLevelUnload(ClientLevel newLevel, ReceivingLevelScreen.Reason reason, CallbackInfo ci) {
         if (level != null) {
             ClientEvents.levelUnloaded();
+        }
+    }
+
+    @Inject(method = "getMainRenderTarget", at = @At("HEAD"), cancellable = true)
+    void onGetMainRenderTarget(CallbackInfoReturnable<RenderTarget> cir) {
+        if (BackgroundScreenshotCaptureTask.capturing && BackgroundScreenshotCaptureTask.renderTarget != null) {
+            cir.setReturnValue(BackgroundScreenshotCaptureTask.renderTarget);
         }
     }
 

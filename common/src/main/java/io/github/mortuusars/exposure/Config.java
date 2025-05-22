@@ -389,15 +389,14 @@ public class Config {
                 FORCE_DIRECT_CAPTURE = builder
                         .comment("Force legacy (pre 1.21) capturing method for taking images. Enable if you experiencing issues with resulting images.",
                                 "Direct method will be used regardless of this setting if mods defined in 'mods_needing_direct_capture' is installed.",
-                                "1.21.3+ port note: new method does not work yet, so this should be true unless you want empty photos.",
-                                "Default: true")
-                        .define("force_direct_capture", true);
+                                "Default: false")
+                        .define("force_direct_capture", false);
                 FORCE_DIRECT_CAPTURE_MODS = builder
                         .comment("Direct capture will be used if any of these mods is installed.",
                                 "Format: '[\"mod_id\", \"mod_id\"]'. Default: [" + String.join(", ", Exposure.MODS_REQUIRING_DIRECT_CAPTURE) + "]")
                         .defineList("force_direct_capture_mods", () -> Exposure.MODS_REQUIRING_DIRECT_CAPTURE, () -> "mod_id", o -> true);
                 DIRECT_CAPTURE_DELAY_FRAMES = builder
-                        .comment("Delay in frames before capturing an image if 'direct_capture' method is in use (or if Oculus or Iris is installed).",
+                        .comment("Delay in frames before capturing an image if 'direct_capture' method is in use.",
                                 "Set to higher value when leftovers of GUI elements (such as nameplates) are visible on the images",
                                 "(some shaders have temporal effects that take several frames to disappear fully)")
                         .defineInRange("direct_capture_delay_frames", 0, 0, 100);

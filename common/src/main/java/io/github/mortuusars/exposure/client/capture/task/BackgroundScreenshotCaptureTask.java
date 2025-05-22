@@ -48,8 +48,6 @@ public class BackgroundScreenshotCaptureTask extends Task<Result<Image>> {
 
             minecraft.gameRenderer.setRenderBlockOutline(false);
 
-            //minecraft.levelRenderer.graphicsChanged();
-            renderTarget.bindWrite(false);
             minecraft.gameRenderer.renderLevel(minecraft.getDeltaTracker());
 
             applyShaderEffects(renderTarget);
@@ -65,8 +63,6 @@ public class BackgroundScreenshotCaptureTask extends Task<Result<Image>> {
             minecraft.gameRenderer.setRenderBlockOutline(true);
             renderTarget.destroyBuffers();
             renderTarget = null;
-            //minecraft.levelRenderer.graphicsChanged();
-            minecraft.getMainRenderTarget().bindWrite(true);
             capturing = false;
         }
     }
