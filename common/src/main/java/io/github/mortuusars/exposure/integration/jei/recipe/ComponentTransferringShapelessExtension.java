@@ -18,10 +18,10 @@ public class ComponentTransferringShapelessExtension implements ICraftingCategor
         ComponentTransferringRecipe recipe = recipeHolder.value();
 
         List<List<ItemStack>> inputs = recipe.placementInfo().ingredients().stream()
-                .map(ingredient -> ingredient.items().stream().map(itemHolder -> itemHolder.value().getDefaultInstance()).collect(Collectors.toList()))
+                .map(ingredient -> ingredient.items().map(itemHolder -> itemHolder.value().getDefaultInstance()).collect(Collectors.toList()))
                 .collect(Collectors.toList());
 
-        inputs.addFirst(recipe.getSourceIngredient().items().stream().map(itemHolder -> itemHolder.value().getDefaultInstance()).collect(Collectors.toList()));
+        inputs.addFirst(recipe.getSourceIngredient().items().map(itemHolder -> itemHolder.value().getDefaultInstance()).collect(Collectors.toList()));
 
         ItemStack resultItem = recipe.getResult();
 

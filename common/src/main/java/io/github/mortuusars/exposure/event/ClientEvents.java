@@ -11,12 +11,12 @@ import io.github.mortuusars.exposure.client.capture.template.CameraCaptureTempla
 import io.github.mortuusars.exposure.client.capture.template.CaptureTemplates;
 import io.github.mortuusars.exposure.client.capture.template.PreloadingDummyCaptureTemplate;
 import io.github.mortuusars.exposure.client.render.ItemFramePhotographRenderer;
+import io.github.mortuusars.exposure.client.render.photograph.HasPhotographRenderState;
 import io.github.mortuusars.exposure.client.util.Minecrft;
 import io.github.mortuusars.exposure.network.packet.Packet;
 import io.github.mortuusars.exposure.world.camera.Camera;
 import io.github.mortuusars.exposure.world.camera.CameraId;
 import io.github.mortuusars.exposure.world.camera.capture.CaptureParameters;
-import io.github.mortuusars.exposure.world.item.PhotographItem;
 import io.github.mortuusars.exposure.network.handler.ClientPacketsHandler;
 import io.github.mortuusars.exposure.client.sound.UniqueSoundManager;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -67,12 +67,12 @@ public class ClientEvents {
 
     public static boolean renderItemFrameItem(ItemFrameRenderState renderState, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (!Config.Client.PHOTOGRAPH_RENDERS_IN_ITEM_FRAME.get()) return false;
-        if (!(renderState.itemStack.getItem() instanceof PhotographItem photographItem)) return false;
-        if (photographItem.getFrame(renderState.itemStack).identifier().isEmpty()) return false;
+        if (!(renderState instanceof HasPhotographRenderState hasPhotographRenderState)
+                || hasPhotographRenderState.getPhotographRenderState() == null) return false;
 
         poseStack.pushPose();
         poseStack.scale(2F, 2F, 2F);
-        ItemFramePhotographRenderer.render(renderState, poseStack, buffer, packedLight, photographItem, renderState.itemStack);
+        ItemFramePhotographRenderer.render(renderState, poseStack, buffer, packedLight);
         poseStack.popPose();
 
         return true;

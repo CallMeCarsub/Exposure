@@ -59,7 +59,7 @@ public class ComponentTransferringRecipe extends CustomRecipe {
 
     @Override
     public boolean matches(CraftingInput input, Level level) {
-        if (getSourceIngredient().items().isEmpty() || ingredients.isEmpty())
+        if (getSourceIngredient().isEmpty() || ingredients.isEmpty())
             return false;
 
         List<Ingredient> unmatchedIngredients = new ArrayList<>(ingredients);

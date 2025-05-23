@@ -156,7 +156,7 @@ public class CycleButton<T> extends Button {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if ((button == 0 || button == 1) && clicked(mouseX, mouseY)) {
+        if ((button == 0 || button == 1) && isMouseOver(mouseX, mouseY)) {
             cycle(button == 1);
             playDownSound(Minecraft.getInstance().getSoundManager());
             return true;

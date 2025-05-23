@@ -149,7 +149,7 @@ public class PhotographSlotWidget extends AbstractWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (!this.active || !this.visible || !clicked(mouseX, mouseY)) return false;
+        if (!this.active || !this.visible || !isMouseOver(mouseX, mouseY)) return false;
 
         if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             primaryAction.accept(this);
@@ -162,7 +162,7 @@ public class PhotographSlotWidget extends AbstractWidget {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (scrollY > 0 && clicked(mouseX, mouseY) && hasPhotograph) {
+        if (scrollY > 0 && isMouseOver(mouseX, mouseY) && hasPhotograph) {
             primaryAction.accept(this);
             return true;
         }

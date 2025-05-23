@@ -6,6 +6,6 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class PlatformHelperClientImpl {
     public static BakedModel getModel(ModelResourceLocation model) {
-        return Minecraft.getInstance().getModelManager().getModel(model);
+        return Minecraft.getInstance().getModelManager().getStandaloneModel(model.id());
     }
 }

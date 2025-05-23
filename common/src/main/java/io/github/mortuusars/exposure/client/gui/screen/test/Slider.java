@@ -153,7 +153,7 @@ public class Slider extends AbstractWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == InputConstants.MOUSE_BUTTON_RIGHT && active && visible && clicked(mouseX, mouseY)) {
+        if (button == InputConstants.MOUSE_BUTTON_RIGHT && active && visible && isMouseOver(mouseX, mouseY)) {
             resetToDefault();
             playDownSound(Minecrft.get().getSoundManager());
             return true;

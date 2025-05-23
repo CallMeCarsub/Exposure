@@ -72,9 +72,6 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
         reusedState.isGlowing = entity.isGlowing();
         reusedState.rotation = entity.getItemRotation();
         reusedState.photographBrightness = getPhotographBrightness(entity, reusedState);
-        if (!reusedState.item.isEmpty()) {
-            reusedState.itemModel = Minecrft.get().getItemRenderer().getModel(reusedState.item, entity.level(), null, 0);
-        }
 
         // TODO: idk where to put this?
         if (Minecraft.getInstance().hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() == entity) {
@@ -122,7 +119,7 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
                 poseStack.translate(0, 0, 0.46875);
                 poseStack.scale(scale, scale, scale * 0.75f);
                 poseStack.mulPose(Axis.ZP.rotationDegrees((state.rotation * 360.0F / 4.0F)));
-                Minecrft.get().getItemRenderer().render(item, ItemDisplayContext.FIXED, false, poseStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, state.itemModel);
+                Minecrft.get().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, bufferSource, null, 0);
                 poseStack.popPose();
             }
         }

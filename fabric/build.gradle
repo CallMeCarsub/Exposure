@@ -50,7 +50,7 @@ dependencies {
 
     modCompileOnlyApi("mezz.jei:jei-1.21.1-fabric-api:${jei_version}")
     //modRuntimeOnly("mezz.jei:jei-1.21.1-fabric:${jei_version}")
-    modRuntimeOnly("maven.modrinth:modmenu:4xPSbh0l")
+    modRuntimeOnly("maven.modrinth:modmenu:7iGb2ltH")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

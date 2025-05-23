@@ -7,6 +7,13 @@ import io.github.mortuusars.exposure.client.gui.tooltip.CameraStandTooltip;
 import io.github.mortuusars.exposure.client.input.KeyboardHandler;
 import io.github.mortuusars.exposure.client.render.CameraStandEntityRenderer;
 import io.github.mortuusars.exposure.client.render.GlassPhotographFrameEntityRenderer;
+import io.github.mortuusars.exposure.client.render.item.GlassTint;
+import io.github.mortuusars.exposure.client.render.item.conditional.ProjectorActive;
+import io.github.mortuusars.exposure.client.render.item.range.AlbumPhotos;
+import io.github.mortuusars.exposure.client.render.item.range.Channels;
+import io.github.mortuusars.exposure.client.render.item.range.Count;
+import io.github.mortuusars.exposure.client.render.item.select.StackCameraAttachments;
+import io.github.mortuusars.exposure.client.render.item.select.StackCameraStatus;
 import io.github.mortuusars.exposure.fabric.resources.ExposureFabricClientReloadListener;
 import io.github.mortuusars.exposure.client.gui.tooltip.PhotographClientTooltip;
 import io.github.mortuusars.exposure.client.gui.screen.ItemRenameScreen;
@@ -18,16 +25,18 @@ import io.github.mortuusars.exposure.integration.ModCompatibilityClient;
 import io.github.mortuusars.exposure.world.inventory.tooltip.PhotographTooltip;
 import io.github.mortuusars.exposure.network.fabric.FabricS2CPacketHandler;
 import io.github.mortuusars.exposure.client.render.PhotographFrameEntityRenderer;
-import io.github.mortuusars.exposure.world.item.camera.CameraItem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.client.color.item.ItemTintSources;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
+import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperties;
+import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperties;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 
@@ -38,7 +47,7 @@ public class ExposureFabricClient implements ClientModInitializer {
 
         ConfigScreenFactoryRegistry.INSTANCE.register(Exposure.ID, ConfigurationScreen::new);
 
-        ColorProviderRegistry.ITEM.register(CameraItem::getGlassTintColor, Exposure.Items.CAMERA.get());
+        ItemTintSources.ID_MAPPER.put(Exposure.resource("glass_tint"), GlassTint.MAP_CODEC);
 
         KeyboardHandler.registerKeymappings(KeyBindingHelper::registerKeyBinding);
 
@@ -60,6 +69,15 @@ public class ExposureFabricClient implements ClientModInitializer {
                         ExposureClient.Models.CAMERA_STAND.id(),
                         ExposureClient.Models.CAMERA_STAND_MOUNT.id()
                 ));
+
+        SelectItemModelProperties.ID_MAPPER.put(ExposureClient.SelectProperties.CAMERA_STATUS, StackCameraStatus.TYPE);
+        SelectItemModelProperties.ID_MAPPER.put(ExposureClient.SelectProperties.CAMERA_ATTACHMENTS, StackCameraAttachments.TYPE);
+
+        RangeSelectItemModelProperties.ID_MAPPER.put(ExposureClient.RangeSelectProperties.ALBUM_PHOTOS, AlbumPhotos.MAP_CODEC);
+        RangeSelectItemModelProperties.ID_MAPPER.put(ExposureClient.RangeSelectProperties.CHANNELS, Channels.MAP_CODEC);
+        RangeSelectItemModelProperties.ID_MAPPER.put(ExposureClient.RangeSelectProperties.COUNT, Count.MAP_CODEC);
+
+        ConditionalItemModelProperties.ID_MAPPER.put(ExposureClient.ConditionalProperties.PROJECTOR_ACTIVE, ProjectorActive.MAP_CODEC);
 
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new ExposureFabricClientReloadListener());
 

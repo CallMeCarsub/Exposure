@@ -14,8 +14,14 @@ import io.github.mortuusars.exposure.client.gui.screen.LightroomScreen;
 import io.github.mortuusars.exposure.client.render.CameraStandEntityRenderer;
 import io.github.mortuusars.exposure.client.render.GlassPhotographFrameEntityRenderer;
 import io.github.mortuusars.exposure.client.render.PhotographFrameEntityRenderer;
+import io.github.mortuusars.exposure.client.render.item.GlassTint;
+import io.github.mortuusars.exposure.client.render.item.conditional.ProjectorActive;
+import io.github.mortuusars.exposure.client.render.item.range.AlbumPhotos;
+import io.github.mortuusars.exposure.client.render.item.range.Channels;
+import io.github.mortuusars.exposure.client.render.item.range.Count;
+import io.github.mortuusars.exposure.client.render.item.select.StackCameraAttachments;
+import io.github.mortuusars.exposure.client.render.item.select.StackCameraStatus;
 import io.github.mortuusars.exposure.world.inventory.tooltip.PhotographTooltip;
-import io.github.mortuusars.exposure.world.item.camera.CameraItem;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -32,8 +38,8 @@ public class NeoForgeClientEvents {
         }
 
         @SubscribeEvent
-        public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-            event.register(CameraItem::getGlassTintColor, Exposure.Items.CAMERA.get());
+        public static void registerItemTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
+            event.register(Exposure.resource("glass_tint"), GlassTint.MAP_CODEC);
         }
 
         @SubscribeEvent
@@ -59,20 +65,38 @@ public class NeoForgeClientEvents {
         }
 
         @SubscribeEvent
-        public static void registerResourceReloadListeners(RegisterClientReloadListenersEvent event) {
-            event.registerReloadListener(new ExposureClientReloadListener());
+        public static void addClientReloadListeners(AddClientReloadListenersEvent event) {
+            event.addListener(Exposure.resource("reload_listener"), new ExposureClientReloadListener());
         }
 
         @SubscribeEvent
         public static void registerModels(ModelEvent.RegisterAdditional event) {
-            event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_SMALL);
-            event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_MEDIUM);
-            event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_LARGE);
-            event.register(ExposureClient.Models.CLEAR_PHOTOGRAPH_FRAME_SMALL);
-            event.register(ExposureClient.Models.CLEAR_PHOTOGRAPH_FRAME_MEDIUM);
-            event.register(ExposureClient.Models.CLEAR_PHOTOGRAPH_FRAME_LARGE);
-            event.register(ExposureClient.Models.CAMERA_STAND);
-            event.register(ExposureClient.Models.CAMERA_STAND_MOUNT);
+            event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_SMALL.id());
+            event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_MEDIUM.id());
+            event.register(ExposureClient.Models.PHOTOGRAPH_FRAME_LARGE.id());
+            event.register(ExposureClient.Models.CLEAR_PHOTOGRAPH_FRAME_SMALL.id());
+            event.register(ExposureClient.Models.CLEAR_PHOTOGRAPH_FRAME_MEDIUM.id());
+            event.register(ExposureClient.Models.CLEAR_PHOTOGRAPH_FRAME_LARGE.id());
+            event.register(ExposureClient.Models.CAMERA_STAND.id());
+            event.register(ExposureClient.Models.CAMERA_STAND_MOUNT.id());
+        }
+
+        @SubscribeEvent
+        public static void registerSelectProperties(RegisterSelectItemModelPropertyEvent event) {
+            event.register(ExposureClient.SelectProperties.CAMERA_STATUS, StackCameraStatus.TYPE);
+            event.register(ExposureClient.SelectProperties.CAMERA_ATTACHMENTS, StackCameraAttachments.TYPE);
+        }
+
+        @SubscribeEvent
+        public static void registerRangeSelectProperties(RegisterRangeSelectItemModelPropertyEvent event) {
+            event.register(ExposureClient.RangeSelectProperties.ALBUM_PHOTOS, AlbumPhotos.MAP_CODEC);
+            event.register(ExposureClient.RangeSelectProperties.CHANNELS, Channels.MAP_CODEC);
+            event.register(ExposureClient.RangeSelectProperties.COUNT, Count.MAP_CODEC);
+        }
+
+        @SubscribeEvent
+        public static void registerConditionalSelectProperties(RegisterConditionalItemModelPropertyEvent event) {
+            event.register(ExposureClient.ConditionalProperties.PROJECTOR_ACTIVE, ProjectorActive.MAP_CODEC);
         }
 
         @SubscribeEvent

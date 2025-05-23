@@ -49,9 +49,6 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         if (reusedState.inVehicle) {
             reusedState.vehicleRot = Mth.lerp(partialTick, entity.getVehicle().yRotO, entity.getVehicle().getYRot());
         }
-        if (!reusedState.camera.isEmpty()) {
-            reusedState.cameraModel = Minecrft.get().getItemRenderer().getModel(reusedState.camera, entity.level(), null, 0);
-        }
     }
 
     @Override
@@ -137,7 +134,7 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         poseStack.scale(scale, scale, scale);
         poseStack.translate(0, 0.5, 0);
 
-        Minecrft.get().getItemRenderer().render(camera, ItemDisplayContext.NONE, false, poseStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, state.cameraModel);
+        Minecrft.get().getItemRenderer().renderStatic(camera, ItemDisplayContext.NONE, packedLight, OverlayTexture.NO_OVERLAY, poseStack, bufferSource, null, 0);
         poseStack.popPose();
     }
 }

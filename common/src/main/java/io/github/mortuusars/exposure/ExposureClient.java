@@ -11,19 +11,11 @@ import io.github.mortuusars.exposure.client.render.image.ImageRenderer;
 import io.github.mortuusars.exposure.client.render.photograph.PhotographStyle;
 import io.github.mortuusars.exposure.client.render.photograph.PhotographRenderer;
 import io.github.mortuusars.exposure.client.render.photograph.PhotographStyles;
-import io.github.mortuusars.exposure.client.util.Minecrft;
 import io.github.mortuusars.exposure.world.camera.capture.CaptureType;
-import io.github.mortuusars.exposure.world.item.camera.Attachment;
 import io.github.mortuusars.exposure.world.photograph.PhotographType;
 import io.github.mortuusars.exposure.util.cycles.Cycles;
 import io.github.mortuusars.exposure.client.ExposureStore;
-import io.github.mortuusars.exposure.world.item.AlbumItem;
-import io.github.mortuusars.exposure.world.item.camera.CameraItem;
-import io.github.mortuusars.exposure.world.item.ChromaticSheetItem;
-import io.github.mortuusars.exposure.world.item.StackedPhotographsItem;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 
 public class ExposureClient {
@@ -52,8 +44,6 @@ public class ExposureClient {
                 ImageEffect.AGED));
 
         cycles().addParallelTask(new ClearStaleRenderedImagesIndefiniteTask());
-
-        registerItemModelProperties();
     }
 
     public static Cycles cycles() {
@@ -85,42 +75,7 @@ public class ExposureClient {
 
     // --
 
-    private static void registerItemModelProperties() {
-        ItemProperties.register(Exposure.Items.CAMERA.get(), Exposure.resource("camera_active"), (stack, level, entity, seed) ->
-                stack.getItem() instanceof CameraItem cameraItem && cameraItem.isActive(stack) ? 1 : 0);
-
-        ItemProperties.register(Exposure.Items.CAMERA.get(), Exposure.resource("camera_selfie"), (stack, level, entity, seed) ->
-                stack.getItem() instanceof CameraItem cameraItem && cameraItem.isInSelfieMode(stack)
-                        ? entity == Minecrft.get().getCameraEntity() ? 0.5f : 1f
-                        : 0);
-
-        ItemProperties.register(Exposure.Items.CAMERA.get(), Exposure.resource("camera_has_lens"), (stack, level, entity, seed) ->
-                !Attachment.LENS.get(stack).isEmpty() ? 1 : 0);
-
-        ItemProperties.register(Exposure.Items.CAMERA.get(), Exposure.resource("camera_has_flash"), (stack, level, entity, seed) ->
-                !Attachment.FLASH.get(stack).isEmpty() ? 1 : 0);
-
-
-        ItemProperties.register(Exposure.Items.CHROMATIC_SHEET.get(), Exposure.resource("channels"), (stack, clientLevel, livingEntity, seed) ->
-                stack.getItem() instanceof ChromaticSheetItem chromaticSheet ?
-                        chromaticSheet.getLayers(stack).size() / 10f : 0f);
-
-        ItemProperties.register(Exposure.Items.STACKED_PHOTOGRAPHS.get(), Exposure.resource("count"),
-                (stack, clientLevel, livingEntity, seed) ->
-                        stack.getItem() instanceof StackedPhotographsItem stackedPhotographsItem ?
-                                stackedPhotographsItem.getPhotographs(stack).size() / 100f : 0f);
-
-        ItemProperties.register(Exposure.Items.ALBUM.get(), Exposure.resource("photos"),
-                (stack, clientLevel, livingEntity, seed) ->
-                        stack.getItem() instanceof AlbumItem albumItem ? albumItem.getPhotographsCount(stack) / 100f : 0f);
-
-        ItemProperties.register(Exposure.Items.INTERPLANAR_PROJECTOR.get(), Exposure.resource("projector_active"),
-                (stack, clientLevel, livingEntity, seed) -> Config.Server.CAN_PROJECT.get() && stack.has(DataComponents.CUSTOM_NAME) ? 1f : 0f);
-    }
-
     public static class Models {
-        public static final ModelResourceLocation CAMERA_GUI =
-                new ModelResourceLocation(Exposure.resource("camera_gui"), ModelResourceLocation.INVENTORY_VARIANT);
         public static final ModelResourceLocation PHOTOGRAPH_FRAME_SMALL =
                 new ModelResourceLocation(Exposure.resource("photograph_frame_small"), "standalone");
         public static final ModelResourceLocation PHOTOGRAPH_FRAME_MEDIUM =
@@ -138,6 +93,21 @@ public class ExposureClient {
         public static final ModelResourceLocation CAMERA_STAND_MOUNT =
                 new ModelResourceLocation(Exposure.resource("camera_stand_mount"), "standalone");
     }
+
+    public static class SelectProperties {
+        public static final ResourceLocation CAMERA_STATUS = Exposure.resource("camera_status");
+        public static final ResourceLocation CAMERA_ATTACHMENTS = Exposure.resource("camera_attachments");
+    }
+
+   public static class RangeSelectProperties {
+        public static final ResourceLocation ALBUM_PHOTOS = Exposure.resource("photos");
+        public static final ResourceLocation CHANNELS = Exposure.resource("channels");
+       public static final ResourceLocation COUNT = Exposure.resource("count");
+   }
+
+   public static class ConditionalProperties {
+        public static final ResourceLocation PROJECTOR_ACTIVE = Exposure.resource("projector_active");
+   }
 
     public static class Textures {
         public static final ResourceLocation EMPTY = Exposure.resource("textures/empty.png");

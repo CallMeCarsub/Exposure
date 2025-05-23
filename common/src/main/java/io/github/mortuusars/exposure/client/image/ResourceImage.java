@@ -66,7 +66,7 @@ public class ResourceImage extends SimpleTexture implements RenderableImage {
             return image;
 
         try {
-            NativeImage image = super.getTextureImage(Minecraft.getInstance().getResourceManager()).getImage();
+            NativeImage image = super.loadContents(Minecraft.getInstance().getResourceManager()).image();
             this.image = image;
             return image;
         } catch (IOException e) {
@@ -75,7 +75,7 @@ public class ResourceImage extends SimpleTexture implements RenderableImage {
         }
     }
 
-    @Override
+    /*@Override
     public void reset(@NotNull TextureManager textureManager, @NotNull ResourceManager resourceManager,
                       @NotNull ResourceLocation path, @NotNull Executor executor) {
         super.reset(textureManager, resourceManager, path, executor);
@@ -83,7 +83,7 @@ public class ResourceImage extends SimpleTexture implements RenderableImage {
             image.close();
             image = null;
         }
-    }
+    }*/
 
     @Override
     public void close() {
@@ -102,6 +102,6 @@ public class ResourceImage extends SimpleTexture implements RenderableImage {
 
     @Override
     public RenderableImageIdentifier getIdentifier() {
-        return new RenderableImageIdentifier(location.toString());
+        return new RenderableImageIdentifier(resourceId().toString());
     }
 }

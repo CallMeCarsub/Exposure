@@ -31,12 +31,19 @@ public class PhotographRenderer {
     }
 
     public boolean renderPhotograph(PoseStack poseStack, MultiBufferSource bufferSource,
-                                        PhotographItem photographItem, ItemStack photographStack,
-                                        boolean renderPaper, boolean renderBackside, int packedLight, int r, int g, int b, int a) {
+                                    PhotographItem photographItem, ItemStack photographStack,
+                                    boolean renderPaper, boolean renderBackside, int packedLight, int r, int g, int b, int a) {
 
         PhotographStyle style = PhotographStyle.of(photographStack);
 
         Frame frame = photographItem.getFrame(photographStack);
+
+        return renderPhotograph(poseStack, bufferSource, style, frame, renderPaper, renderBackside, packedLight, r, g, b, a);
+    }
+
+    public boolean renderPhotograph(PoseStack poseStack, MultiBufferSource bufferSource,
+                                        PhotographStyle style, Frame frame,
+                                        boolean renderPaper, boolean renderBackside, int packedLight, int r, int g, int b, int a) {
 
         RenderableImage image = style.process(ExposureClient.renderedExposures().getOrCreate(frame));
 
