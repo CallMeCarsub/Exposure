@@ -7,7 +7,7 @@ loom {
 }
 
 configurations {
-    create("junit")
+//    create("junit")
 }
 
 dependencies {
@@ -20,12 +20,12 @@ dependencies {
 
     modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
 
-    modCompileOnly("curse.maven:real-camera-851574:${realcamera_neoforge_id}")
+//    modCompileOnly("curse.maven:real-camera-851574:${realcamera_neoforge_id}")
 
-    testImplementation(platform("org.junit:junit-bom:${project.property("jupiterVersion")}"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    "junit"(platform("org.junit:junit-bom:${project.property("jupiterVersion")}"))
-    "junit"("org.junit.jupiter:junit-jupiter")
+//    testImplementation(platform("org.junit:junit-bom:${project.property("jupiterVersion")}"))
+//    testImplementation("org.junit.jupiter:junit-jupiter")
+//    "junit"(platform("org.junit:junit-bom:${project.property("jupiterVersion")}"))
+//    "junit"("org.junit.jupiter:junit-jupiter")
 }
 
 tasks {

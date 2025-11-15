@@ -1,5 +1,5 @@
 plugins {
-    id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.13-SNAPSHOT" apply false
     id "architectury-plugin" version "3.4-SNAPSHOT"
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
     id "me.modmuss50.mod-publish-plugin" version "0.8.4"
@@ -120,7 +120,7 @@ subprojects {
         }
 
         modCompileOnlyApi("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-        modCompileOnlyApi("curse.maven:jade-324717:${jade_neoforge_id}")
+//        modCompileOnlyApi("curse.maven:jade-324717:${jade_neoforge_id}")
     }
 
     java {
@@ -141,11 +141,11 @@ subprojects {
         var expandProps = [
                 minecraft_version            : minecraft_version,
                 minecraft_version_range      : minecraft_version_range,
-                neoforge_version             : neoforge_version,
-                neoforge_version_range       : neoforge_version_range,
-                neoforge_loader_version_range: neoforge_loader_version_range,
-                create_version_range         : create_version_range,
-                create_version_range_reason  : create_version_range_reason,
+//                neoforge_version             : neoforge_version,
+//                neoforge_version_range       : neoforge_version_range,
+//                neoforge_loader_version_range: neoforge_loader_version_range,
+//                create_version_range         : create_version_range,
+//                create_version_range_reason  : create_version_range_reason,
                 mod_id                       : mod_id,
                 mod_name                     : mod_name,
                 mod_version                  : mod_version,
@@ -260,13 +260,13 @@ publishMods {
         minecraftVersions.add("${minecraft_version}")
     }
 
-    curseforge("curseforgeNeoForge") {
-        from cfOptions
-        file project(":neoforge")
-        modLoaders.add("neoforge")
-        displayName = "${mod_name} - NeoForge ${minecraft_version} - ${mod_version}"
-        optional("jei")
-    }
+//    curseforge("curseforgeNeoForge") {
+//        from cfOptions
+//        file project(":neoforge")
+//        modLoaders.add("neoforge")
+//        displayName = "${mod_name} - NeoForge ${minecraft_version} - ${mod_version}"
+//        optional("jei")
+//    }
 
     curseforge("curseforgeFabric") {
         from cfOptions
@@ -278,13 +278,13 @@ publishMods {
         optional("jei")
     }
 
-    modrinth("modrinthNeoForge") {
-        from mrOptions
-        file project(":neoforge")
-        modLoaders.add("neoforge")
-        displayName = "${mod_name} - ${mod_version}"
-        optional("jei")
-    }
+//    modrinth("modrinthNeoForge") {
+//        from mrOptions
+//        file project(":neoforge")
+//        modLoaders.add("neoforge")
+//        displayName = "${mod_name} - ${mod_version}"
+//        optional("jei")
+//    }
 
     modrinth("modrinthFabric") {
         from mrOptions
