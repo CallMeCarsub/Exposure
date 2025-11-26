@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -86,27 +87,27 @@ public class PhotographSlotWidget extends AbstractWidget {
             PhotographStyle photographStyle = PhotographStyle.of(photograph);
 
             // Paper
-            guiGraphics.blit(photographStyle.albumPaperTexture(),
-                    getX(), getY(), 0, 0, 0, width, height, width, height);
+            guiGraphics.blit(RenderPipelines.GUI, photographStyle.albumPaperTexture(),
+                    getX(), getY(), 0, 0, width, height, width, height, 0);
 
             // Exposure
-            guiGraphics.pose().pushPose();
+            guiGraphics.pose().pushMatrix();
             float scale = 96;
-            guiGraphics.pose().translate(getX() + 6, getY() + 6, 1);
-            guiGraphics.pose().scale(scale, scale, scale);
+            guiGraphics.pose().translate(getX() + 6, getY() + 6);
+            guiGraphics.pose().scale(scale, scale);
             MultiBufferSource.BufferSource bufferSource = Minecrft.get().renderBuffers().bufferSource();
             ExposureClient.photographRenderer().render(photograph, false, false,
                     guiGraphics.pose(), bufferSource, LightTexture.FULL_BRIGHT);
             bufferSource.endBatch();
-            guiGraphics.pose().popPose();
+            guiGraphics.pose().popMatrix();
 
             // Paper overlay
             if (photographStyle.hasAlbumOverlayTexture()) {
-                guiGraphics.pose().pushPose();
-                guiGraphics.pose().translate(0, 0, 2);
-                guiGraphics.blit(photographStyle.albumOverlayTexture(),
-                        getX(), getY(), 0, 0, 0, width, height, width, height);
-                guiGraphics.pose().popPose();
+                guiGraphics.pose().pushMatrix();
+                guiGraphics.pose().translate(0, 0);
+                guiGraphics.blit(RenderPipelines.GUI, photographStyle.albumOverlayTexture(),
+                        getX(), getY(), 0, 0, width, height, width, height, 0);
+                guiGraphics.pose().popMatrix();
             }
         }
         else {
@@ -172,7 +173,7 @@ public class PhotographSlotWidget extends AbstractWidget {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.active && this.visible && CommonInputs.selected(keyCode)) {
-            if (Screen.hasShiftDown()) {
+            if (Minecraft.getInstance().hasShiftDown()) {
                 secondaryAction.accept(this);
             } else {
                 primaryAction.accept(this);

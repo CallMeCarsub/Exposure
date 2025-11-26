@@ -8,6 +8,7 @@ import io.github.mortuusars.exposure.world.camera.Camera;
 import io.github.mortuusars.exposure.world.item.camera.CameraSettings;
 import io.github.mortuusars.exposure.world.camera.component.FocalRange;
 import io.github.mortuusars.exposure.client.util.ZoomDirection;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.Mth;
 
@@ -67,12 +68,12 @@ public class ViewfinderZoom {
     public boolean keyPressed(int key, int scanCode, int action, int modifiers) {
         if (action == InputConstants.PRESS || action == InputConstants.REPEAT) {
             if (key == InputConstants.KEY_ADD || key == InputConstants.KEY_EQUALS) {
-                zoom(ZoomDirection.IN, Screen.hasShiftDown());
+                zoom(ZoomDirection.IN, Minecraft.getInstance().hasShiftDown());
                 return true;
             }
 
             if (key == 333 /*KEY_SUBTRACT*/ || key == InputConstants.KEY_MINUS) {
-                zoom(ZoomDirection.OUT, Screen.hasShiftDown());
+                zoom(ZoomDirection.OUT, Minecraft.getInstance().hasShiftDown());
                 return true;
             }
         }
@@ -80,7 +81,7 @@ public class ViewfinderZoom {
     }
 
     public boolean mouseScrolled(double amount) {
-        zoom(amount > 0 ? ZoomDirection.IN : ZoomDirection.OUT, Screen.hasShiftDown());
+        zoom(amount > 0 ? ZoomDirection.IN : ZoomDirection.OUT, Minecraft.getInstance().hasShiftDown());
         return true;
     }
 }

@@ -114,7 +114,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
 
         printButton = new ImageButton(leftPos + 117, topPos + 89, 22, 22, PRINT_BUTTON_SPRITES,
                 button -> {
-                    int buttonId = Screen.hasShiftDown() && player.isCreative() ? LightroomMenu.PRINT_CREATIVE_BUTTON_ID : LightroomMenu.PRINT_BUTTON_ID;
+                    int buttonId = Minecraft.getInstance().hasShiftDown() && player.isCreative() ? LightroomMenu.PRINT_CREATIVE_BUTTON_ID : LightroomMenu.PRINT_BUTTON_ID;
                     clickButton(buttonId);
                 }, Component.translatable("gui.exposure.lightroom.print"));
         updatePrintButtonTooltip();
@@ -180,7 +180,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
     }
 
     protected void updateButtons() {
-        printButton.active = getMenu().getBlockEntity().canPrint() || (player.isCreative() && Screen.hasShiftDown() && getMenu().getBlockEntity().canPrintInCreativeMode());
+        printButton.active = getMenu().getBlockEntity().canPrint() || (player.isCreative() && Minecraft.getInstance().hasShiftDown() && getMenu().getBlockEntity().canPrintInCreativeMode());
         printButton.visible = !getMenu().isPrinting();
         updatePrintButtonTooltip();
 

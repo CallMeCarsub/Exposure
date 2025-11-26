@@ -41,12 +41,12 @@ import io.github.mortuusars.exposure.world.item.crafting.recipe.PhotographAgingR
 import io.github.mortuusars.exposure.world.item.crafting.recipe.PhotographCopyingRecipe;
 import io.github.mortuusars.exposure.world.item.crafting.recipe.serializer.ComponentTransferringRecipeSerializer;
 import io.github.mortuusars.exposure.world.item.util.ItemAndStack;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -126,7 +126,7 @@ public class Exposure {
                         .noLootTable()
                         .mapColor(MapColor.NONE)
                         .noOcclusion()
-                        .noCollission()
+                        .noCollision()
                         .lightLevel(state -> 15)));
 
         static void init() {
@@ -533,8 +533,8 @@ public class Exposure {
     }
 
     public static class ItemSubPredicates {
-        public static Supplier<ItemSubPredicate.Type<FramePredicate>> FRAME = Register.itemSubPredicate("frame",
-                () -> new ItemSubPredicate.Type<>(FramePredicate.CODEC));
+        public static Supplier<DataComponentPredicate.Type<FramePredicate>> FRAME = Register.itemSubPredicate("frame",
+                () -> new DataComponentPredicate.Type<>(FramePredicate.CODEC));
 
         public static void init() {
         }

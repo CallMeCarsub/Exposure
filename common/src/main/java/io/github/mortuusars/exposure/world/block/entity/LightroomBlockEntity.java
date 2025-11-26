@@ -43,6 +43,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -156,7 +158,7 @@ public class LightroomBlockEntity extends BaseContainerBlockEntity implements Wo
     }
 
     protected boolean canEjectFilm() {
-        if (level == null || level.isClientSide || getItem(Lightroom.FILM_SLOT).isEmpty())
+        if (level == null || level.isClientSide() || getItem(Lightroom.FILM_SLOT).isEmpty())
             return false;
 
         BlockPos pos = getBlockPos();
@@ -166,14 +168,14 @@ public class LightroomBlockEntity extends BaseContainerBlockEntity implements Wo
     }
 
     protected void ejectFilm() {
-        if (level == null || level.isClientSide || getItem(Lightroom.FILM_SLOT).isEmpty())
+        if (level == null || level.isClientSide() || getItem(Lightroom.FILM_SLOT).isEmpty())
             return;
 
         BlockPos pos = getBlockPos();
         Direction facing = level.getBlockState(pos).getValue(LightroomBlock.FACING);
         ItemStack filmStack = removeItem(Lightroom.FILM_SLOT, 1);
 
-        Vec3i normal = facing.getNormal();
+        Vec3i normal = facing.getUnitVec3i();
         Vec3 point = Vec3.atCenterOf(pos).add(normal.getX() * 0.75f, normal.getY() * 0.75f, normal.getZ() * 0.75f);
         ItemEntity itemEntity = new ItemEntity(level, point.x, point.y, point.z, filmStack);
         itemEntity.setDeltaMovement(normal.getX() * 0.05f, normal.getY() * 0.05f + 0.15f, normal.getZ() * 0.05f);
@@ -602,40 +604,41 @@ public class LightroomBlockEntity extends BaseContainerBlockEntity implements Wo
     // Load/Save
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void loadAdditional(ValueInput tag) {
+    //protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tag, this.items, registries);
+        ContainerHelper.loadAllItems(tag, this.items);
 
         // Backwards compatibility:
-        if (tag.contains("Inventory", Tag.TAG_COMPOUND)) {
-            CompoundTag inventory = tag.getCompound("Inventory");
-            ListTag itemsList = inventory.getList("Items", Tag.TAG_COMPOUND);
+//        if (tag.child("Inventory").isPresent()) {
+//            ValueInput inventory = tag.childOrEmpty("Inventory");
+//            ValueInput.ValueInputList itemsList = inventory.childrenListOrEmpty("Items");
+//
+//            for (ValueInput itemTag : itemsList) {
+//                int slot = itemTag.getInt("Slot").orElseThrow();
+//
+//                if (slot >= 0 && slot < items.size()) {
+//                    itemTag.read("Item", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+//                    ItemStack.parse(registries, itemTag).ifPresent(stack -> items.set(slot, stack));
+//                }
+//            }
+//        }
 
-            for (int i = 0; i < itemsList.size(); i++) {
-                CompoundTag itemTag = itemsList.getCompound(i);
-                int slot = itemTag.getInt("Slot");
-
-                if (slot >= 0 && slot < items.size()) {
-                    ItemStack.parse(registries, itemTag).ifPresent(stack -> items.set(slot, stack));
-                }
-            }
-        }
-
-        this.setSelectedFrameIndex(tag.getInt("SelectedFrame"));
-        this.progress = tag.getInt("Progress");
-        this.printTime = tag.getInt("PrintTime");
-        this.storedExperience = tag.getInt("PrintedPhotographsCount");
-        this.advanceFrame = tag.getBoolean("AdvanceFrame");
-        this.printingMode = PrintingMode.fromStringOrDefault(tag.getString("PrintMode"), PrintingMode.REGULAR);
-        if (tag.contains("LastPlayerId", Tag.TAG_INT_ARRAY)) {
-            this.lastPlayerId = tag.getUUID("LastPlayerId");
+        this.setSelectedFrameIndex(tag.getInt("SelectedFrame").orElseThrow());
+        this.progress = tag.getInt("Progress").orElseThrow();
+        this.printTime = tag.getInt("PrintTime").orElseThrow();
+        this.storedExperience = tag.getInt("PrintedPhotographsCount").orElseThrow();
+        this.advanceFrame = tag.getBooleanOr("AdvanceFrame", false);
+        this.printingMode = PrintingMode.fromStringOrDefault(tag.getString("PrintMode").orElseThrow(), PrintingMode.REGULAR);
+        if (tag.getString("LastPlayerId").isPresent()) {
+            this.lastPlayerId = UUID.fromString(tag.getString("LastPlayerId").orElseThrow());
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        ContainerHelper.saveAllItems(tag, items, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
+        ContainerHelper.saveAllItems(tag, items);
         if (getSelectedFrameIndex() > 0)
             tag.putInt("SelectedFrame", getSelectedFrameIndex());
         if (progress > 0)
@@ -649,7 +652,7 @@ public class LightroomBlockEntity extends BaseContainerBlockEntity implements Wo
         if (printingMode != PrintingMode.REGULAR)
             tag.putString("PrintMode", printingMode.getSerializedName());
         if (!lastPlayerId.equals(Util.NIL_UUID))
-            tag.putUUID("LastPlayerId", lastPlayerId);
+            tag.putString("LastPlayerId", lastPlayerId.toString());
     }
 
     protected @NotNull NonNullList<ItemStack> getItems() {
@@ -707,7 +710,7 @@ public class LightroomBlockEntity extends BaseContainerBlockEntity implements Wo
     @Override
     public void setChanged() {
         super.setChanged();
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }

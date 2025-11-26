@@ -65,20 +65,20 @@ public class Bugger {
 
     private static void up() {
         if (Screen.hasControlDown()) {
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             zoom = shift ? zoom + 5 : zoom + 1;
         } else {
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             scroll = Math.max(shift ? scroll - 5 : scroll - 1, 0);
         }
     }
 
     private static void down() {
         if (Screen.hasControlDown()) {
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             zoom = shift ? zoom - 5 : zoom - 1;
         } else {
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             scroll = Math.max(shift ? scroll + 5 : scroll + 1, 0);
         }
     }

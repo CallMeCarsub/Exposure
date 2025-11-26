@@ -33,3 +33,8 @@ tasks {
         useJUnitPlatform()
     }
 }
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-Xmaxerrs")
+    options.compilerArgs.add("0")
+}

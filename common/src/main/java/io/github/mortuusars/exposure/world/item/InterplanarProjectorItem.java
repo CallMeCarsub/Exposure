@@ -50,7 +50,7 @@ public class InterplanarProjectorItem extends Item {
             components.add(getMode(stack).translate());
         }
 
-        if (Screen.hasShiftDown()) {
+        if (Minecraft.getInstance().hasShiftDown()) {
             if (isConsumable(stack)) {
                 components.add(Component.translatable("item.exposure.interplanar_projector.tooltip.consumed_info"));
             }

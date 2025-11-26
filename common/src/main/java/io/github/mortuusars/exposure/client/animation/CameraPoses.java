@@ -1,10 +1,12 @@
 package io.github.mortuusars.exposure.client.animation;
 
 import io.github.mortuusars.exposure.client.util.Minecrft;
+import io.github.mortuusars.exposure.client.util.ModelUtil;
 import io.github.mortuusars.exposure.world.entity.CameraOperator;
 import io.github.mortuusars.exposure.world.entity.CameraStandEntity;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
@@ -31,7 +33,7 @@ public class CameraPoses {
         offHand.yRot += (actionAnim * 0.1F) * (rightHanded ? 1 : -1);
         model.head.xRot += 0.3f; // Applying rest of head rotation after arms
 
-        model.hat.copyFrom(model.head);
+        ModelUtil.copyFrom(model.hat, model.head);
     }
 
     public void applySelfie(HumanoidModel<?> model, LivingEntity entity, HumanoidArm arm, boolean undoArmBobbing) {
@@ -40,7 +42,7 @@ public class CameraPoses {
         // Arm follows camera:
         cameraArm.xRot = (model.head.xRot + Math.abs(model.head.xRot * 0.13f)) + (-(float) Math.PI / 2F);
         cameraArm.yRot = model.head.yRot;
-        if (Minecrft.get().cameraEntity == entity) {
+        if (Minecrft.get().getCameraEntity() == entity) {
             cameraArm.yRot += (arm == HumanoidArm.RIGHT ? -0.25f : 0.25f);
         }
 
@@ -72,7 +74,7 @@ public class CameraPoses {
         offHand.yRot += (actionAnim * 0.1F) * (rightHanded ? 1 : -1);
         model.head.xRot += 0.3f; // Applying rest of head rotation after arms
 
-        model.hat.copyFrom(model.head);
+        ModelUtil.copyFrom(model.hat, model.head);
     }
 
     public void applyStand(HumanoidModel<?> model, LivingEntity entity, HumanoidArm arm, CameraStandEntity stand) {
@@ -94,7 +96,7 @@ public class CameraPoses {
         float pitch = (float)Math.atan2(-direction.y, distanceXZ);
         model.head.xRot = -pitch;
 
-        model.hat.copyFrom(model.head);
+        ModelUtil.copyFrom(model.hat, model.head);
 
         // Arms to stand:
         mainHand.yRot = (rightHanded ? -0.2F : 0.2F) + model.head.yRot;
@@ -108,7 +110,7 @@ public class CameraPoses {
 
     public float getCameraActionProgress(LivingEntity entity) {
         if (entity instanceof CameraOperator operator) {
-            float partialTick = Minecrft.get().getTimer().getGameTimeDeltaPartialTick(true);
+            float partialTick = Minecrft.get().getDeltaTracker().getGameTimeDeltaPartialTick(true);
             return operator.getExposureCameraActionAnim(partialTick);
         }
         return 0F;

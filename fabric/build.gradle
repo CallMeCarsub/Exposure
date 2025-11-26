@@ -66,3 +66,8 @@ remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
 }
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-Xmaxerrs")
+    options.compilerArgs.add("0")
+}

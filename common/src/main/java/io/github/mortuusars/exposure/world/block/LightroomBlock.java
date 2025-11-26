@@ -22,13 +22,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LightroomBlock extends Block implements EntityBlock {
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty PRINTING = BooleanProperty.create("printing");
     public static final BooleanProperty REFRACTED = BooleanProperty.create("refracted");
 
@@ -51,8 +52,9 @@ public class LightroomBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+    //public void onRemove(BlockState state, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(level.getBlockState(pos).getBlock())) {
             if (level.getBlockEntity(pos) instanceof LightroomBlockEntity lightroomBlockEntity) {
                 if (level instanceof ServerLevel serverLevel) {
                     Containers.dropContents(serverLevel, pos, lightroomBlockEntity);
@@ -62,7 +64,7 @@ public class LightroomBlock extends Block implements EntityBlock {
                 level.updateNeighbourForOutputSignal(pos, this);
             }
 
-            super.onRemove(state, level, pos, newState, isMoving);
+            super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
         }
     }
 
@@ -72,7 +74,8 @@ public class LightroomBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public int getAnalogOutputSignal(@NotNull BlockState blockState, Level level, @NotNull BlockPos pos) {
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
+    //public int getAnalogOutputSignal(@NotNull BlockState blockState, Level level, @NotNull BlockPos pos) {
         if (level.getBlockEntity(pos) instanceof LightroomBlockEntity lightroomBlockEntity) {
             ItemStack resultStack = lightroomBlockEntity.getItem(Lightroom.RESULT_SLOT);
 
@@ -110,16 +113,17 @@ public class LightroomBlock extends Block implements EntityBlock {
             PlatformHelper.openMenu(serverPlayer, lightroomBlockEntity, buffer -> buffer.writeBlockPos(pos));
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER; //InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
-    public void neighborChanged(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos fromPos, boolean pIsMoving) {
-        if (!level.isClientSide) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston) {
+    //public void neighborChanged(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos fromPos, boolean pIsMoving) {
+        if (!level.isClientSide()) {
             if (!state.getValue(PRINTING)) {
                 for (Direction direction : Direction.values()) {
                     BlockPos relative = pos.relative(direction);
-                    if (relative.equals(fromPos) && level.getSignal(relative, direction) > 0
+                    if (/*relative.equals(fromPos) && */level.getSignal(relative, direction) > 0 // todo: validate if this is safe ??
                             && level.getBlockEntity(pos) instanceof LightroomBlockEntity lightroomBlockEntity) {
                         lightroomBlockEntity.startPrintingProcess(true);
                         break;
@@ -150,7 +154,7 @@ public class LightroomBlock extends Block implements EntityBlock {
     }
 
     public static <T extends BlockEntity> BlockEntityTicker<T> getBlockTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        if (!level.isClientSide && blockEntityType.equals(Exposure.BlockEntityTypes.LIGHTROOM.get()))
+        if (!level.isClientSide() && blockEntityType.equals(Exposure.BlockEntityTypes.LIGHTROOM.get()))
             return LightroomBlockEntity::serverTick;
 
         return null;
