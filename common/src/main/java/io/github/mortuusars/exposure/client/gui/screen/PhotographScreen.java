@@ -157,7 +157,7 @@ public class PhotographScreen extends Screen {
 
         renderTransparentBackground(guiGraphics);
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(x, y, 0);
         guiGraphics.pose().translate(width / 2f, height / 2f, 50);
         guiGraphics.pose().scale(scale, scale, scale);
@@ -169,16 +169,16 @@ public class PhotographScreen extends Screen {
                 LightTexture.FULL_BRIGHT, 255, 255, 255, 255);
 
         bufferSource.endBatch();
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
 
         ItemAndStack<PhotographItem> photograph = getCurrentPhotograph();
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         // Places widgets above photograph, because they will be covered when photo is zoomed in
         guiGraphics.pose().translate(0, 0, 100);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderFrameInfoHint(guiGraphics, mouseX, mouseY, photograph);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
 
         if (Config.Client.EXPORT_PHOTOGRAPH_WHEN_VIEWED.get()) {
             trySaveToFile(photograph);

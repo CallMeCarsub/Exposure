@@ -17,7 +17,7 @@ public class ItemFramePhotographRenderer {
         if (itemFrame.getType() == EntityType.GLOW_ITEM_FRAME)
             packedLight = LightTexture.FULL_BRIGHT;
 
-        poseStack.pushPose();
+        poseStack.pushMatrix();
 
         String entityName = BuiltInRegistries.ENTITY_TYPE.getKey(itemFrame.getType()).toString();
         if (entityName.equals("quark:glass_frame")) {
@@ -37,6 +37,6 @@ public class ItemFramePhotographRenderer {
         ExposureClient.photographRenderer().renderPhotograph(poseStack, bufferSource, item, stack,
                 false, false, packedLight, 255, 255, 255, 255);
 
-        poseStack.popPose();
+        poseStack.popMatrix();
     }
 }

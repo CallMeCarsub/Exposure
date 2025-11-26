@@ -49,6 +49,8 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,7 +80,7 @@ public class CameraStandEntity extends Entity implements CameraHolder {
             SynchedEntityData.defineId(CameraStandEntity.class, EntityDataSerializers.BOOLEAN);
 
     protected static final Predicate<Entity> RIDABLE_MINECARTS = entity -> entity instanceof AbstractMinecart
-            && ((AbstractMinecart) entity).getMinecartType() == AbstractMinecart.Type.RIDEABLE;
+            && ((AbstractMinecart) entity).isRideable();
 
     protected CameraStandRedstoneControl redstoneControl = new CameraStandRedstoneControl(this);
     protected UUID ownerPlayerId = Util.NIL_UUID;
@@ -110,32 +112,32 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         tag.putInt("CooldownTime", getCooldownTime());
         tag.putInt("Cooldown", getCooldown());
         tag.putBoolean("Malfunctioned", isMalfunctioned());
         if (!getCamera().isEmpty()) {
-            tag.put("Camera", getCamera().save(registryAccess()));
+            tag.store("Camera", ItemStack.CODEC, getCamera());
         }
 
         redstoneControl.save(tag);
 
         if (!ownerPlayerId.equals(Util.NIL_UUID)) {
-            tag.putUUID("Owner", ownerPlayerId);
+            tag.putString("Owner", ownerPlayerId.toString());
         }
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        setCooldownTime(tag.getInt("CooldownTime"));
-        setCooldown(tag.getInt("Cooldown"));
-        setMalfunctioned(tag.getBoolean("Malfunctioned"));
-        setCamera(ItemStack.parseOptional(registryAccess(), tag.getCompound("Camera")));
+    protected void readAdditionalSaveData(ValueInput tag) {
+        setCooldownTime(tag.getInt("CooldownTime").orElseThrow());
+        setCooldown(tag.getInt("Cooldown").orElseThrow());
+        setMalfunctioned(tag.getBooleanOr("Malfunctioned", false));
+        setCamera(tag.read("Camera", ItemStack.CODEC).orElseThrow());
 
         redstoneControl.load(tag);
 
-        if (tag.contains("Owner", CompoundTag.TAG_INT_ARRAY)) {
-            ownerPlayerId = tag.getUUID("Owner");
+        if (tag.getString("Owner").isPresent()) {
+            ownerPlayerId = UUID.fromString(tag.getString("Owner").orElseThrow());
         }
     }
 
@@ -539,7 +541,7 @@ public class CameraStandEntity extends Entity implements CameraHolder {
             this.setUnderLavaMovement();
         }
 
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             this.noPhysics = false;
         } else {
             this.noPhysics = !this.level().noCollision(this, this.getBoundingBox().deflate(1.0E-7));
@@ -591,7 +593,7 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     protected void checkForMinecarts() {
         if (!isClientSide() && !isPassenger()) {
             List<Entity> minecarts = level().getEntities(this, getBoundingBox().inflate(0.4F, 0.2F, 0.4F),
-                    e -> e instanceof AbstractMinecart cart && cart.getMinecartType() == AbstractMinecart.Type.RIDEABLE);
+                    e -> e instanceof AbstractMinecart cart && cart.isRideable());
             for (Entity entity : minecarts) {
                 AbstractMinecart minecart = ((AbstractMinecart) entity);
                 if (!minecart.isVehicle()) {
@@ -612,15 +614,15 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     // -- Hurt
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         if (isRemoved()) return true;
-        if (isInvulnerableTo(source)) return false;
+        if (isInvulnerableToBase(source)) return false;
 
         markHurt();
 
         if (!getCamera().isEmpty()) {
             if (!isClientSide()) {
-                @Nullable ItemEntity itemEntity = spawnAtLocation(getCamera(), getEyeHeight());
+                @Nullable ItemEntity itemEntity = spawnAtLocation(level, getCamera());
                 if (itemEntity != null) {
                     itemEntity.setPickUpDelay(5);
                 }
@@ -687,11 +689,13 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     }
 
     public void destroy(Item dropItem) {
-        this.kill();
-        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            ItemStack itemStack = new ItemStack(dropItem);
-            itemStack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
-            this.spawnAtLocation(itemStack, 0.5f);
+        if(level() instanceof ServerLevel serverLevel) {
+            this.kill(serverLevel);
+            if (serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                ItemStack itemStack = new ItemStack(dropItem);
+                itemStack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
+                this.spawnAtLocation(serverLevel, itemStack, 0.5f);
+            }
         }
     }
 
@@ -789,18 +793,14 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     }
 
     public boolean isClientSide() {
-        return level().isClientSide;
-    }
-
-    @Override
-    public boolean isControlledByLocalInstance() {
-        return operator() instanceof Player player && player.isLocalPlayer() || super.isControlledByLocalInstance();
+        return level().isClientSide();
     }
 
     // --
 
+
     @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
+    protected void lerpPositionAndRotationStep(int steps, double x, double y, double z, double targetYRot, double targetXRot) {
         this.setPos(x, y, z);
         // this method is called when client receives packet from server,
         // and it makes camera rotation jump around and be janky.

@@ -249,7 +249,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
         RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
 
         if (getMenu().getBlockEntity().isAdvancingFrameOnPrint()) {
-            poseStack.pushPose();
+            poseStack.pushMatrix();
             poseStack.translate(0, 0, 800);
 
             if (selectedFrame < getMenu().getTotalFramesCount() - 1) {
@@ -260,7 +260,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
                 guiGraphics.blit(MAIN_TEXTURE, leftPos + 111, topPos + 44, 210, 0, 10, 10);
             }
 
-            poseStack.popPose();
+            poseStack.popMatrix();
         }
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -387,7 +387,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
             if (!hasShownDevelopingToast && !filmSlot.hasItem()
                     && isHovering(filmSlot.x, filmSlot.y, 16, 16, mouseX, mouseY)
                     && getMenu().getCarried().getItem() instanceof FilmRollItem) {
-                Minecrft.get().getToasts().addToast(new BetterTutorialToast(ToastIcon.HEADS_UP,
+                Minecrft.get().getToastManager().addToast(new BetterTutorialToast(ToastIcon.HEADS_UP,
                         Component.translatable("gui.exposure.lightroom.toast.develop_film.title"),
                         null, BetterTutorialToast.DEFAULT_SHOW_DURATION_MS));
                 hasShownDevelopingToast = true;

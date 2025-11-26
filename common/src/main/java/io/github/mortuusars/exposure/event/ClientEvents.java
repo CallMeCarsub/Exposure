@@ -70,10 +70,10 @@ public class ClientEvents {
         if (!(itemFrame.getItem().getItem() instanceof PhotographItem photographItem)) return false;
         if (photographItem.getFrame(itemFrame.getItem()).identifier().isEmpty()) return false;
 
-        poseStack.pushPose();
+        poseStack.pushMatrix();
         poseStack.scale(2F, 2F, 2F);
         ItemFramePhotographRenderer.render(itemFrame, poseStack, buffer, packedLight, photographItem, itemFrame.getItem());
-        poseStack.popPose();
+        poseStack.popMatrix();
 
         return true;
     }

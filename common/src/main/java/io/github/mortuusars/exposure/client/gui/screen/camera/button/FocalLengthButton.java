@@ -40,7 +40,7 @@ public class FocalLengthButton extends ImageButton {
     protected double getCurrentFov() {
         return Minecrft.get().gameRenderer.getFov(
                 Minecrft.get().gameRenderer.getMainCamera(),
-                Minecrft.get().getTimer().getGameTimeDeltaTicks(),
+                Minecrft.get().getDeltaTracker().getGameTimeDeltaTicks(),
                 true);
     }
 }

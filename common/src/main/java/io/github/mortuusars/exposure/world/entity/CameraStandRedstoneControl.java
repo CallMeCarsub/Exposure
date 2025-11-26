@@ -1,6 +1,8 @@
 package io.github.mortuusars.exposure.world.entity;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class CameraStandRedstoneControl {
     public int delay = 2;
@@ -39,12 +41,12 @@ public class CameraStandRedstoneControl {
         return released;
     }
 
-    public void load(CompoundTag tag) {
-        hasSignal = tag.getBoolean("HasRedstoneSignal");
-        releaseDelay = tag.getInt("RedstoneReleaseDelay");
+    public void load(ValueInput tag) {
+        hasSignal = tag.getBooleanOr("HasRedstoneSignal", false);
+        releaseDelay = tag.getInt("RedstoneReleaseDelay").orElseThrow();
     }
 
-    public void save(CompoundTag tag) {
+    public void save(ValueOutput tag) {
         tag.putBoolean("HasRedstoneSignal", hasSignal);
         tag.putInt("RedstoneReleaseDelay", releaseDelay);
     }

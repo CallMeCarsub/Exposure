@@ -74,13 +74,13 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
         Direction direction = entity.getDirection();
         int size = entity.getSize();
 
-        poseStack.pushPose();
+        poseStack.pushMatrix();
         // Offsets name tag rendering to be like item frame:
         poseStack.translate(direction.getStepX() * 0.3f, direction.getStepY() * 0.3f, direction.getStepZ() * 0.3f);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
-        poseStack.popPose();
+        poseStack.popMatrix();
 
-        poseStack.pushPose();
+        poseStack.pushMatrix();
 
         // thickness of the frame is 1px (0.5 - (1/16 * 0.5)) (0.5 is because we are offsetting from the center)
         // stripped frame is thin, so 1/16 becomes 0.15/16 (thickness of the backplate)
@@ -95,13 +95,13 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
             boolean photographRendered = renderPhotograph(entity, poseStack, bufferSource, packedLight, item, size);
 
             if (!photographRendered) {
-                poseStack.pushPose();
+                poseStack.pushMatrix();
                 float scale = 0.65f + entity.getSize() * 0.5f;
                 poseStack.translate(0, 0, 0.46875);
                 poseStack.scale(scale, scale, scale * 0.75f);
                 poseStack.mulPose(Axis.ZP.rotationDegrees((entity.getItemRotation() * 360.0F / 4.0F)));
                 Minecrft.get().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, bufferSource, entity.level(), 0);
-                poseStack.popPose();
+                poseStack.popMatrix();
             }
         }
 
@@ -109,23 +109,23 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
             renderFrame(entity, poseStack, bufferSource, packedLight, size);
         }
 
-        poseStack.popPose();
+        poseStack.popMatrix();
     }
 
     protected void renderFrame(@NotNull T entity, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource,
                              int packedLight, int size) {
-        poseStack.pushPose();
+        poseStack.pushMatrix();
         poseStack.translate(-0.5f, -0.5f, -0.5f);
         ModelResourceLocation modelLocation = getModelLocation(entity, size);
         BakedModel model = PlatformHelperClient.getModel(modelLocation);
         blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(getRenderType()),
                 null, model, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);
-        poseStack.popPose();
+        poseStack.popMatrix();
     }
 
     protected boolean renderPhotograph(@NotNull T entity, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource,
                                   int packedLight, ItemStack item, int size) {
-        poseStack.pushPose();
+        poseStack.pushMatrix();
 
         boolean frameInvisible = entity.isFrameInvisible();
 
@@ -170,7 +170,7 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
                     poseStack, bufferSource, packedLight, brightness, brightness, brightness, 255);
         }
 
-        poseStack.popPose();
+        poseStack.popMatrix();
 
         return photographRendered;
     }
@@ -198,7 +198,7 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
             Vec3 vec3 = entity.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, entity.getViewYRot(partialTick));
             if (vec3 != null) {
                 boolean bl = !entity.isDiscrete();
-                poseStack.pushPose();
+                poseStack.pushMatrix();
 
                 double yOffset = entity.getDirection().getAxis().isHorizontal()
                         ? vec3.y - 0.2 + entity.getSize() * 0.5
@@ -221,7 +221,7 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
                     font.drawInBatch(displayName, g, 0, -1, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
                 }
 
-                poseStack.popPose();
+                poseStack.popMatrix();
             }
         }
     }

@@ -59,7 +59,7 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
     }
 
     private void renderStand(T entity, float entityYaw, float entityPitch, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        poseStack.pushPose();
+        poseStack.pushMatrix();
 
         if (entity.getVehicle() != null) {
             float vehicleRot = Mth.lerp(partialTick, entity.getVehicle().yRotO, entity.getVehicle().getYRot());
@@ -72,11 +72,11 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         BakedModel model = PlatformHelperClient.getModel(modelLocation);
         blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(RenderType.solid()),
                 null, model, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);
-        poseStack.popPose();
+        poseStack.popMatrix();
     }
 
     private void renderMount(T entity, float entityYaw, float entityPitch, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        poseStack.pushPose();
+        poseStack.pushMatrix();
         poseStack.translate(0, 1.125, 0);
         float scale = MOUNT_SCALE;
         poseStack.scale(scale, scale, scale);
@@ -94,11 +94,11 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         BakedModel mountModel = PlatformHelperClient.getModel(mountModelLocation);
         blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(RenderType.solid()),
                 null, mountModel, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);
-        poseStack.popPose();
+        poseStack.popMatrix();
     }
 
     private void renderCamera(T entity, float entityYaw, float entityPitch, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        poseStack.pushPose();
+        poseStack.pushMatrix();
 
         poseStack.translate(0, 1.125, 0);
         poseStack.mulPose(Axis.YP.rotationDegrees(-entityYaw + 180));
@@ -116,6 +116,6 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         poseStack.translate(0, 0.5, 0);
 
         Minecrft.get().getItemRenderer().renderStatic(camera, ItemDisplayContext.NONE, packedLight, OverlayTexture.NO_OVERLAY, poseStack, bufferSource, entity.level(), 0);
-        poseStack.popPose();
+        poseStack.popMatrix();
     }
 }

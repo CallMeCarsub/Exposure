@@ -89,7 +89,7 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
 
     protected void showTutorialToasts() {
         if (Config.Client.ATTACHMENTS_SHOW_INFO_TOAST.get()) {
-            Minecrft.get().getToasts().addToast(new BetterTutorialToast(ToastIcon.HOVER,
+            Minecrft.get().getToastManager().addToast(new BetterTutorialToast(ToastIcon.HOVER,
                     Component.translatable("gui.exposure.camera_attachments.mouse_over_toast.title"),
                     Component.translatable("gui.exposure.camera_attachments.mouse_over_toast.message"),
                     () -> {
@@ -105,7 +105,7 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
             Config.Client.SPEC.save();
         }
         if (Config.Client.ATTACHMENTS_SHOW_WIKI_TOAST.get()) {
-            Minecrft.get().getToasts().addToast(new BetterTutorialToast(ToastIcon.F1,
+            Minecrft.get().getToastManager().addToast(new BetterTutorialToast(ToastIcon.F1,
                     Component.translatable("gui.exposure.camera_attachments.wiki_toast.title"),
                     Component.translatable("gui.exposure.camera_attachments.wiki_toast.message"),
                     BetterTutorialToast.DEFAULT_SHOW_DURATION_MS, () -> {

@@ -98,7 +98,7 @@ public class ViewfinderOverlay {
         final int width = Minecrft.get().getWindow().getGuiScaledWidth();
         final int height = Minecrft.get().getWindow().getGuiScaledHeight();
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(width / 2f, height / 2f, 0);
         guiGraphics.pose().scale(scale, scale, scale);
 
@@ -150,7 +150,7 @@ public class ViewfinderOverlay {
             renderStatusIcons(guiGraphics.pose(), camera.getItemStack());
         }
 
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
         RenderSystem.disableDepthTest();
     }
 

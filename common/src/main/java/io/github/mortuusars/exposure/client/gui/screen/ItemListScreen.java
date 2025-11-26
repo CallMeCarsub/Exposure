@@ -108,7 +108,7 @@ public class ItemListScreen extends Screen {
 
         renderTransparentBackground(guiGraphics);
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate((width / 2f), (height / 2f), 0.0f);
         float animProgress = (float)openingAnimation.getValue();
         guiGraphics.pose().scale(animProgress, animProgress, animProgress);
@@ -118,7 +118,7 @@ public class ItemListScreen extends Screen {
         RenderSystem.disableDepthTest();
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         {
-            guiGraphics.pose().pushPose();
+            guiGraphics.pose().pushMatrix();
             guiGraphics.pose().translate(left, top, 0.0f);
             hoveredSlot = null;
             for (Slot slot : slots) {
@@ -135,10 +135,10 @@ public class ItemListScreen extends Screen {
                 renderSlotHighlight(guiGraphics, slot.x, slot.y, 0);
             }
             this.renderLabels(guiGraphics, mouseX, mouseY);
-            guiGraphics.pose().popPose();
+            guiGraphics.pose().popMatrix();
         }
         RenderSystem.enableDepthTest();
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
 
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
@@ -172,11 +172,11 @@ public class ItemListScreen extends Screen {
         int x = slot.x;
         int y = slot.y;
         ItemStack itemStack = slot.getItem();
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(0.0f, 0.0f, 100.0f);
         guiGraphics.renderItem(itemStack, x, y, slot.x + slot.y * imageWidth);
         guiGraphics.renderItemDecorations(font, itemStack, x, y, null);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     public static void renderSlotHighlight(GuiGraphics guiGraphics, int x, int y, int blitOffset) {

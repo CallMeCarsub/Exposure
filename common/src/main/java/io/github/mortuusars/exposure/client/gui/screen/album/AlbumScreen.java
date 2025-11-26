@@ -244,11 +244,11 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(0, 0, 15);
         super.renderLabels(guiGraphics, mouseX, mouseY);
 
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     @Override
