@@ -32,6 +32,7 @@ import io.github.mortuusars.exposure.world.level.storage.ExposureIdentifier;
 import io.github.mortuusars.exposure.util.*;
 import io.github.mortuusars.exposure.world.sound.Sound;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.*;
@@ -49,10 +50,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -60,6 +58,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -72,8 +71,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -303,7 +304,7 @@ public class CameraItem extends Item {
 
     public @NotNull InteractionResult activateInHand(Player player, ItemStack stack, @NotNull InteractionHand hand) {
         player.setActiveExposureCamera(new CameraInHand(player, getOrCreateId(stack), hand));
-        if (player.level().isClientSide) {
+        if (player.level().isClientSide()) {
             Minecrft.releaseUseButton(); // Releasing use key to not take a shot immediately, if right click is still held.
         }
         return activate(player, stack);
@@ -311,7 +312,7 @@ public class CameraItem extends Item {
 
     public @NotNull InteractionResult activateOnStand(Player player, ItemStack stack, CameraStandEntity cameraStand) {
         player.setActiveExposureCamera(new CameraOnStand(player, cameraStand, getOrCreateId(stack)));
-        if (player.level().isClientSide) {
+        if (player.level().isClientSide()) {
             Minecrft.releaseUseButton(); // Releasing use key to not take a shot immediately, if right click is still held.
         }
         return activate(player, stack);
@@ -355,22 +356,22 @@ public class CameraItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> components, TooltipFlag flag) {
         if (Config.Client.CAMERA_SHOW_FILM_FRAMES_IN_TOOLTIP.get()) {
             Attachment.FILM.ifPresent(stack, (filmItem, filmStack) -> {
                 int exposed = filmItem.getStoredFramesCount(filmStack);
                 int max = filmItem.getMaxFrameCount(filmStack);
-                components.add(Component.translatable("item.exposure.camera.tooltip.film_roll_frames", exposed, max));
+                components.accept(Component.translatable("item.exposure.camera.tooltip.film_roll_frames", exposed, max));
             });
         }
 
         if (Config.Client.CAMERA_SHOW_TOOLTIP_DETAILS.get()) {
             if (stack.getEntityRepresentation() instanceof CameraStandEntity) {
-                if (Screen.hasShiftDown()) {
-                    components.add(Component.translatable("item.exposure.camera.tooltip.details_attachments_screen_on_stand"));
-                    components.add(Component.translatable("item.exposure.camera.tooltip.details_hotswap_on_stand"));
+                if (Minecraft.getInstance().hasShiftDown()) {
+                    components.accept(Component.translatable("item.exposure.camera.tooltip.details_attachments_screen_on_stand"));
+                    components.accept(Component.translatable("item.exposure.camera.tooltip.details_hotswap_on_stand"));
                 } else
-                    components.add(Component.translatable("tooltip.exposure.hold_for_details"));
+                    components.accept(Component.translatable("tooltip.exposure.hold_for_details"));
                 return;
             }
 
@@ -378,13 +379,13 @@ public class CameraItem extends Item {
             boolean rClickHotswap = Config.Server.CAMERA_GUI_RIGHT_CLICK_HOTSWAP.get();
 
             if (rClickAttachments || rClickHotswap) {
-                if (Screen.hasShiftDown()) {
+                if (Minecraft.getInstance().hasShiftDown()) {
                     if (rClickAttachments)
-                        components.add(Component.translatable("item.exposure.camera.tooltip.details_attachments_screen"));
+                        components.accept(Component.translatable("item.exposure.camera.tooltip.details_attachments_screen"));
                     if (rClickHotswap)
-                        components.add(Component.translatable("item.exposure.camera.tooltip.details_hotswap"));
+                        components.accept(Component.translatable("item.exposure.camera.tooltip.details_hotswap"));
                 } else
-                    components.add(Component.translatable("tooltip.exposure.hold_for_details"));
+                    components.accept(Component.translatable("tooltip.exposure.hold_for_details"));
             }
         }
     }
@@ -425,7 +426,7 @@ public class CameraItem extends Item {
 
     public InteractionResult handleStandSneakInteraction(CameraStandEntity stand, Player player, InteractionHand hand, ItemStack cameraStack) {
         ItemStack itemInHand = player.getItemInHand(hand);
-        int slot = hand == InteractionHand.OFF_HAND ? Inventory.SLOT_OFFHAND : player.getInventory().selected;
+        int slot = hand == InteractionHand.OFF_HAND ? Inventory.SLOT_OFFHAND : player.getInventory().getSelectedSlot();
         SlotAccess access = SlotAccess.forContainer(player.getInventory(), slot);
         return hotswap(stand, cameraStack, itemInHand, access);
     }
@@ -536,13 +537,14 @@ public class CameraItem extends Item {
 
     // --
 
+
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         if (!(entity instanceof CameraHolder holder)) return;
 
         tick(holder, stack);
 
-        if (level.isClientSide && entity instanceof Player player) {
+        if (level.isClientSide() && entity instanceof Player player) {
             boolean matchesActive = player.getActiveExposureCameraOptional()
                     .map(camera -> camera.idMatches(getOrCreateId(stack)))
                     .orElse(false);
@@ -669,7 +671,7 @@ public class CameraItem extends Item {
 
         Sound.playSided(entity, getReleaseButtonSound(), entity.getSoundSource(), 0.3f, 1f, 0.1f);
 
-        if (level.isClientSide || !canTakePhoto(holder, stack)) {
+        if (level.isClientSide() || !canTakePhoto(holder, stack)) {
             return InteractionResult.CONSUME.heldItemTransformedTo(stack);
         }
 
@@ -689,7 +691,7 @@ public class CameraItem extends Item {
     }
 
     protected void takePhoto(CameraHolder holder, ServerPlayer executingPlayer, ItemStack stack) {
-        ServerLevel level = executingPlayer.serverLevel();
+        ServerLevel level = executingPlayer.level();
         Entity entity = holder.asHolderEntity();
 
         ShutterSpeed shutterSpeed = CameraSettings.SHUTTER_SPEED.getOrDefault(stack);
@@ -1003,7 +1005,7 @@ public class CameraItem extends Item {
     }
 
     protected void testPositionsInFrame(ItemStack stack, Level level, Player player) {
-        if (level.isClientSide && level.getGameTime() % 2 == 0) {
+        if (level.isClientSide() && level.getGameTime() % 2 == 0) {
             List<BlockPos> positionsInFrame = getPositionsInFrame(player, getPointOfView(player, stack), getViewfinderFov(level, stack));
             for (BlockPos pos : positionsInFrame) {
                 level.addAlwaysVisibleParticle(ParticleTypes.EXPLOSION, true, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0, 0, 0);

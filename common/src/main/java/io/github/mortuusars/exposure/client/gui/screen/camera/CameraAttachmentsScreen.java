@@ -135,11 +135,11 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
 
-                guiGraphics.pose().pushPose();
+                guiGraphics.pose().pushMatrix();
                 guiGraphics.pose().translate(0, 0, 350);
                 guiGraphics.blit(RenderType::guiTextured, TEXTURE, leftPos + slot.x - 2, topPos + slot.y - 2, 236, 92, 20, 20, 256, 256);
                 RenderSystem.disableBlend();
-                guiGraphics.pose().popPose();
+                guiGraphics.pose().popMatrix();
             }
         }
 

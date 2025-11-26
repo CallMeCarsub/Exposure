@@ -50,17 +50,17 @@ public class PhotographRenderer {
         int paperRotation = frame.identifier().hashCode() % 4 * 90;
 
         if (renderPaper && style.paperTexture() != ExposureClient.Textures.EMPTY) {
-            poseStack.pushPose();
+            poseStack.pushMatrix();
             poseStack.translate(0.5f, 0.5f, 0);
             poseStack.mulPose(Axis.ZP.rotationDegrees(paperRotation));
             poseStack.translate(-0.5f, -0.5f, 0);
 
             TextureRenderer.render(poseStack, bufferSource, style.paperTexture(), packedLight, r, g, b, a);
 
-            poseStack.popPose();
+            poseStack.popMatrix();
 
             if (renderBackside) {
-                poseStack.pushPose();
+                poseStack.pushMatrix();
                 poseStack.mulPose(Axis.YP.rotationDegrees(180));
                 poseStack.translate(-0.5, 0, -0.5);
 
@@ -71,23 +71,23 @@ public class PhotographRenderer {
                 TextureRenderer.render(poseStack, bufferSource, style.paperTexture(),
                         packedLight, (int) (r * 0.85f), (int) (g * 0.85f), (int) (b * 0.85f), a);
 
-                poseStack.popPose();
+                poseStack.popMatrix();
             }
         }
 
         if (renderPaper) {
-            poseStack.pushPose();
+            poseStack.pushMatrix();
             float offset = 0.0625f;
             poseStack.translate(offset, offset, 0.001);
             poseStack.scale(0.875f, 0.875f, 0.875f);
             ExposureClient.imageRenderer().render(image, poseStack, bufferSource, RenderCoordinates.DEFAULT, packedLight, r, g, b, a);
-            poseStack.popPose();
+            poseStack.popMatrix();
         } else {
             ExposureClient.imageRenderer().render(image, poseStack, bufferSource, RenderCoordinates.DEFAULT, packedLight, r, g, b, a);
         }
 
         if (renderPaper && style.hasOverlayTexture()) {
-            poseStack.pushPose();
+            poseStack.pushMatrix();
 
             poseStack.translate(0.5f, 0.5f, 0);
             poseStack.mulPose(Axis.ZP.rotationDegrees(paperRotation));
@@ -95,7 +95,7 @@ public class PhotographRenderer {
 
             poseStack.translate(0, 0, 0.002);
             TextureRenderer.render(poseStack, bufferSource, style.overlayTexture(), packedLight, r, g, b, a);
-            poseStack.popPose();
+            poseStack.popMatrix();
         }
 
         return !image.isEmpty();
@@ -123,18 +123,18 @@ public class PhotographRenderer {
 
             // Top photograph:
             if (i == 0) {
-                poseStack.pushPose();
+                poseStack.pushMatrix();
                 poseStack.translate(0, 0, 0.002);
                 photographRendered = renderPhotograph(poseStack, bufferSource, photograph.getItem(), photograph.getItemStack(),
                         true, false, packedLight, r, g, b, a);
-                poseStack.popPose();
+                poseStack.popMatrix();
                 break;
             }
 
             // Photographs below (only paper)
             float posOffset = getStackedPhotographOffset() * i;
 
-            poseStack.pushPose();
+            poseStack.pushMatrix();
             poseStack.translate(posOffset, posOffset, 0.002 - i / 1000f);
 
             poseStack.translate(0.5f, 0.5f, 0);
@@ -152,7 +152,7 @@ public class PhotographRenderer {
             TextureRenderer.render(poseStack, bufferSource, photographStyle.paperTexture(),
                     packedLight, (int)(r * brightness), (int)(g * brightness), (int)(b * brightness), a);
 
-            poseStack.popPose();
+            poseStack.popMatrix();
         }
 
         return photographRendered;

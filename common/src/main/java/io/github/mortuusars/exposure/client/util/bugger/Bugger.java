@@ -65,20 +65,20 @@ public class Bugger {
 
     private static void up() {
         if (Screen.hasControlDown()) {
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             zoom = shift ? zoom + 5 : zoom + 1;
         } else {
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             scroll = Math.max(shift ? scroll - 5 : scroll - 1, 0);
         }
     }
 
     private static void down() {
         if (Screen.hasControlDown()) {
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             zoom = shift ? zoom - 5 : zoom - 1;
         } else {
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             scroll = Math.max(shift ? scroll + 5 : scroll + 1, 0);
         }
     }
@@ -86,13 +86,13 @@ public class Bugger {
     public static void renderMainPage(GuiGraphics guiGraphics) {
         float scale = (zoom + 100) / 100f;
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().scale(scale, scale, scale);
         List<String> leftLines = collectLeftLines().stream().skip(scroll).toList();
         ((BuggerScreenRenderLinesInvoker) Minecraft.getInstance().getDebugOverlay()).drawLines(guiGraphics, leftLines, true);
         List<String> rightLines = collectRightLines().stream().skip(scroll).toList();
         ((BuggerScreenRenderLinesInvoker) Minecraft.getInstance().getDebugOverlay()).drawLines(guiGraphics, rightLines, false);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     private static List<String> collectLeftLines() {
@@ -134,10 +134,10 @@ public class Bugger {
 
         float scale = (zoom + 100) / 100f;
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().scale(scale, scale, scale);
         ((BuggerScreenRenderLinesInvoker) Minecrft.get().getDebugOverlay()).drawLines(guiGraphics, lines, true);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     private static @NotNull List<String> getTagPageLines() {

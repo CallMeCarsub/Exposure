@@ -161,11 +161,11 @@ public class TextBox extends AbstractWidget {
             if (isEndOfText)
                 guiGraphics.drawString(this.font, "_", cursorPos.x, cursorPos.y, getCurrentFontColor(), false);
             else {
-                guiGraphics.pose().pushPose();
+                guiGraphics.pose().pushMatrix();
                 guiGraphics.pose().translate(0, 0, 50);
                 RenderSystem.disableBlend();
                 guiGraphics.fill(cursorPos.x, cursorPos.y - 1, cursorPos.x + 1, cursorPos.y + this.font.lineHeight, getCurrentFontColor());
-                guiGraphics.pose().popPose();
+                guiGraphics.pose().popMatrix();
             }
         }
     }
@@ -243,7 +243,7 @@ public class TextBox extends AbstractWidget {
                         textFieldHelper.selectAll();
                     }
                 } else {
-                    textFieldHelper.setCursorPos(index, Screen.hasShiftDown());
+                    textFieldHelper.setCursorPos(index, Minecraft.getInstance().hasShiftDown());
                 }
                 clearDisplayCache();
             }
@@ -276,27 +276,27 @@ public class TextBox extends AbstractWidget {
     protected void changeLine(int yChange) {
         int cursorPos = this.textFieldHelper.getCursorPos();
         int line = this.getDisplayCache().changeLine(cursorPos, yChange);
-        this.textFieldHelper.setCursorPos(line, Screen.hasShiftDown());
+        this.textFieldHelper.setCursorPos(line, Minecraft.getInstance().hasShiftDown());
     }
 
     protected void keyHome() {
         if (Screen.hasControlDown()) {
-            this.textFieldHelper.setCursorToStart(Screen.hasShiftDown());
+            this.textFieldHelper.setCursorToStart(Minecraft.getInstance().hasShiftDown());
         } else {
             int cursorIndex = this.textFieldHelper.getCursorPos();
             int lineStartIndex = this.getDisplayCache().findLineStart(cursorIndex);
-            this.textFieldHelper.setCursorPos(lineStartIndex, Screen.hasShiftDown());
+            this.textFieldHelper.setCursorPos(lineStartIndex, Minecraft.getInstance().hasShiftDown());
         }
     }
 
     protected void keyEnd() {
         if (Screen.hasControlDown()) {
-            this.textFieldHelper.setCursorToEnd(Screen.hasShiftDown());
+            this.textFieldHelper.setCursorToEnd(Minecraft.getInstance().hasShiftDown());
         } else {
             DisplayCache displayCache = this.getDisplayCache();
             int cursorIndex = this.textFieldHelper.getCursorPos();
             int lineEndIndex = displayCache.findLineEnd(cursorIndex);
-            this.textFieldHelper.setCursorPos(lineEndIndex, Screen.hasShiftDown());
+            this.textFieldHelper.setCursorPos(lineEndIndex, Minecraft.getInstance().hasShiftDown());
         }
     }
 }

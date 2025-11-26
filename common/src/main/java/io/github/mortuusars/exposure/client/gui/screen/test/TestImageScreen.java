@@ -376,7 +376,7 @@ public class TestImageScreen extends Screen {
             applyEdits();
         }
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         float size = height * 0.8f * scale;
         guiGraphics.pose().translate(width / 2f - size / 2f, height / 2f - size / 2f, 100);
 
@@ -389,7 +389,7 @@ public class TestImageScreen extends Screen {
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         ExposureClient.imageRenderer().render(renderableImage, guiGraphics.pose(), bufferSource, RenderCoordinates.DEFAULT, Color.WHITE);
         bufferSource.endBatch();
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     @Override

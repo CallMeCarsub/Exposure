@@ -13,11 +13,11 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.navigation.CommonInputs;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -91,23 +91,23 @@ public class PhotographSlotWidget extends AbstractWidget {
                     getX(), getY(), 0, 0, width, height, width, height);
 
             // Exposure
-            guiGraphics.pose().pushPose();
+            guiGraphics.pose().pushMatrix();
             float scale = 96;
-            guiGraphics.pose().translate(getX() + 6, getY() + 6, 1);
-            guiGraphics.pose().scale(scale, scale, scale);
+            guiGraphics.pose().translate(getX() + 6, getY() + 6);
+            guiGraphics.pose().scale(scale, scale);
             MultiBufferSource.BufferSource bufferSource = Minecrft.get().renderBuffers().bufferSource();
             ExposureClient.photographRenderer().render(photograph, false, false,
                     guiGraphics.pose(), bufferSource, LightTexture.FULL_BRIGHT);
             bufferSource.endBatch();
-            guiGraphics.pose().popPose();
+            guiGraphics.pose().popMatrix();
 
             // Paper overlay
             if (photographStyle.hasAlbumOverlayTexture()) {
-                guiGraphics.pose().pushPose();
-                guiGraphics.pose().translate(0, 0, 2);
+                guiGraphics.pose().pushMatrix();
+                guiGraphics.pose().translate(0, 0);
                 guiGraphics.blit(RenderType::guiTextured, photographStyle.albumOverlayTexture(),
                         getX(), getY(), 0, 0, width, height, width, height);
-                guiGraphics.pose().popPose();
+                guiGraphics.pose().popMatrix();
             }
         }
         else {
@@ -119,7 +119,7 @@ public class PhotographSlotWidget extends AbstractWidget {
         if (!editable && !hasPhotograph) {
             resourceLocation = sprites.get(isActive(), false);
         }
-        guiGraphics.blitSprite(RenderType::guiTextured, resourceLocation, getX(), getY(), width, height);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, resourceLocation, getX(), getY(), width, height);
     }
 
     public void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
@@ -173,7 +173,7 @@ public class PhotographSlotWidget extends AbstractWidget {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.active && this.visible && CommonInputs.selected(keyCode)) {
-            if (Screen.hasShiftDown()) {
+            if (Minecraft.getInstance().hasShiftDown()) {
                 secondaryAction.accept(this);
             } else {
                 primaryAction.accept(this);

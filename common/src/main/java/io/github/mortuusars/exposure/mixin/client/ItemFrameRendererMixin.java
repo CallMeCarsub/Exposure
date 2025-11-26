@@ -48,7 +48,7 @@ public abstract class ItemFrameRendererMixin<T extends ItemFrame> extends Entity
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V"))
     void onItemFrameRender(ItemFrameRenderState renderState, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
         if (ClientEvents.renderItemFrameItem(renderState, poseStack, buffer, packedLight)) {
-            poseStack.popPose();
+            poseStack.popMatrix();
             ci.cancel();
         }
     }

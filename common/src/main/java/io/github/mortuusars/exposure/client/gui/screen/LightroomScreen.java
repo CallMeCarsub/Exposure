@@ -111,7 +111,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
 
         printButton = new ImageButton(leftPos + 117, topPos + 89, 22, 22, PRINT_BUTTON_SPRITES,
                 button -> {
-                    int buttonId = Screen.hasShiftDown() && player.isCreative() ? LightroomMenu.PRINT_CREATIVE_BUTTON_ID : LightroomMenu.PRINT_BUTTON_ID;
+                    int buttonId = Minecraft.getInstance().hasShiftDown() && player.isCreative() ? LightroomMenu.PRINT_CREATIVE_BUTTON_ID : LightroomMenu.PRINT_BUTTON_ID;
                     clickButton(buttonId);
                 }, Component.translatable("gui.exposure.lightroom.print"));
         updatePrintButtonTooltip();
@@ -177,7 +177,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
     }
 
     protected void updateButtons() {
-        printButton.active = getMenu().getBlockEntity().canPrint() || (player.isCreative() && Screen.hasShiftDown() && getMenu().getBlockEntity().canPrintInCreativeMode());
+        printButton.active = getMenu().getBlockEntity().canPrint() || (player.isCreative() && Minecraft.getInstance().hasShiftDown() && getMenu().getBlockEntity().canPrintInCreativeMode());
         printButton.visible = !getMenu().isPrinting();
         updatePrintButtonTooltip();
 
@@ -246,7 +246,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
         RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
 
         if (getMenu().getBlockEntity().isAdvancingFrameOnPrint()) {
-            poseStack.pushPose();
+            poseStack.pushMatrix();
             poseStack.translate(0, 0, 800);
 
             if (selectedFrame < getMenu().getTotalFramesCount() - 1) {
@@ -257,7 +257,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
                 guiGraphics.blit(RenderType::guiTextured, MAIN_TEXTURE, leftPos + 111, topPos + 44, 210, 0, 10, 10, 256, 256);
             }
 
-            poseStack.popPose();
+            poseStack.popMatrix();
         }
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

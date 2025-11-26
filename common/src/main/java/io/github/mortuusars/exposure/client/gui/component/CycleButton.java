@@ -176,7 +176,7 @@ public class CycleButton<T> extends Button {
         boolean pressed = super.keyPressed(pKeyCode, pScanCode, pModifiers);
 
         if (pressed)
-            cycle(Screen.hasShiftDown());
+            cycle(Minecraft.getInstance().hasShiftDown());
 
         return pressed;
     }

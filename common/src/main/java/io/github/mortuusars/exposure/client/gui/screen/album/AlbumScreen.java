@@ -25,7 +25,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -213,11 +212,11 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             RenderSystem.defaultBlendFunc();
             for (Slot slot : getMenu().slots) {
                 if (!slot.getItem().isEmpty() && !(slot.getItem().getItem() instanceof PhotographItem)) {
-                    guiGraphics.pose().pushPose();
+                    guiGraphics.pose().pushMatrix();
                     guiGraphics.pose().translate(0.0f, 0.0f, 350.0f);
                     guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1, 176, 188,
                             18, 18, 512, 512);
-                    guiGraphics.pose().popPose();
+                    guiGraphics.pose().popMatrix();
                 }
             }
             RenderSystem.disableBlend();
@@ -248,11 +247,11 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(0, 0, 15);
         super.renderLabels(guiGraphics, mouseX, mouseY);
 
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     @Override
@@ -322,10 +321,10 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             AlbumPlayerInventorySlot firstSlot = getMenu().getPlayerInventorySlots().getFirst();
             int x = firstSlot.x - 8;
             int y = firstSlot.y - 18;
-            guiGraphics.pose().pushPose();
+            guiGraphics.pose().pushMatrix();
             guiGraphics.pose().translate(0.0f, 0.0f, 10.0f);
             guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos + x, topPos + y, 0, 188, 176, 100, 512, 512);
-            guiGraphics.pose().popPose();
+            guiGraphics.pose().popMatrix();
 
             @Nullable Side pageBeingAddedTo = getMenu().getSideBeingAddedTo();
             for (Page page : pages) {

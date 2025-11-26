@@ -70,10 +70,10 @@ public class ClientEvents {
         if (!(renderState instanceof HasPhotographRenderState hasPhotographRenderState)
                 || hasPhotographRenderState.getPhotographRenderState() == null) return false;
 
-        poseStack.pushPose();
+        poseStack.pushMatrix();
         poseStack.scale(2F, 2F, 2F);
         ItemFramePhotographRenderer.render(renderState, poseStack, buffer, packedLight);
-        poseStack.popPose();
+        poseStack.popMatrix();
 
         return true;
     }

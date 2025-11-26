@@ -244,7 +244,7 @@ public class ViewfinderCameraControlsScreen extends Screen {
 
         if (Minecrft.options().hideGui) return;
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
 
         float viewfinderScale = viewfinder.overlay().getScale();
         if (viewfinderScale != 1.0f) {
@@ -255,7 +255,7 @@ public class ViewfinderCameraControlsScreen extends Screen {
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     @Override

@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ClientGUI {
@@ -44,7 +45,7 @@ public class ClientGUI {
     }
 
     public static void addFilmRollDevelopingTooltip(ItemStack filmStack, Item.TooltipContext tooltipContext,
-                                                    @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
+                                                    @NotNull Consumer<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
         addRecipeTooltip(filmStack, tooltipContext, tooltipComponents, isAdvanced,
                 r -> r instanceof FilmDevelopingRecipe filmDevelopingRecipe
                         && filmDevelopingRecipe.getSourceIngredient().test(filmStack),
@@ -52,7 +53,7 @@ public class ClientGUI {
     }
 
     public static void addPhotographCopyingTooltip(ItemStack photographStack, Item.TooltipContext tooltipContext,
-                                                   @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
+                                                   @NotNull Consumer<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
         addRecipeTooltip(photographStack, tooltipContext, tooltipComponents, isAdvanced,
                 r -> r instanceof PhotographCopyingRecipe photographCopyingRecipe
                         && photographCopyingRecipe.getSourceIngredient().test(photographStack),
@@ -60,14 +61,14 @@ public class ClientGUI {
     }
 
     private static void addRecipeTooltip(ItemStack stack, Item.TooltipContext tooltipContext,
-                                         @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced,
+                                         @NotNull Consumer<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced,
                                          Predicate<CraftingRecipe> recipeFilter, String detailsKey, String recipeType) {
         if (Minecraft.getInstance().level == null) {
             return;
         }
 
-        tooltipComponents.add(Component.translatable("tooltip.exposure.hold_for_details"));
-        if (!Screen.hasShiftDown()) {
+        tooltipComponents.accept(Component.translatable("tooltip.exposure.hold_for_details"));
+        if (!Minecraft.getInstance().hasShiftDown()) {
             return;
         }
 
@@ -92,12 +93,12 @@ public class ClientGUI {
 
         ComponentTransferringRecipeDisplay display = displayOptional.get();
 
-        tooltipComponents.add(Component.empty());
+        tooltipComponents.accept(Component.empty());
 
         Style orange = Style.EMPTY.withColor(0xc7954b);
         Style yellow = Style.EMPTY.withColor(0xeeda78);
 
-        tooltipComponents.add(Component.translatable(detailsKey).withStyle(orange));
+        tooltipComponents.accept(Component.translatable(detailsKey).withStyle(orange));
 
         List<SlotDisplay> ingredientDisplays = display.ingredients();
 
@@ -109,14 +110,14 @@ public class ClientGUI {
                             .create(SlotDisplayContext.CONTEXT));
 
             if (stacks.isEmpty())
-                tooltipComponents.add(Component.literal("  ").append(Component.literal("?").withStyle(yellow)));
+                tooltipComponents.accept(Component.literal("  ").append(Component.literal("?").withStyle(yellow)));
             else if (stacks.size() == 1) {
-                tooltipComponents.add(Component.literal("  ").append(stacks.getFirst().getHoverName().copy().withStyle(yellow)));
+                tooltipComponents.accept(Component.literal("  ").append(stacks.getFirst().getHoverName().copy().withStyle(yellow)));
             } else { // Cycle stacks if it's not one:
                 int val = (int) Math.ceil((Minecraft.getInstance().level.getGameTime() + 10 * i) % (20f * stacks.size()) / 20f);
                 int index = Mth.clamp(val - 1, 0, stacks.size() - 1);
 
-                tooltipComponents.add(Component.literal("  ").append(stacks.get(index).getHoverName().copy().withStyle(yellow)));
+                tooltipComponents.accept(Component.literal("  ").append(stacks.get(index).getHoverName().copy().withStyle(yellow)));
             }
         }
     }

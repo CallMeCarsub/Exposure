@@ -122,7 +122,7 @@ public class FilmFrameInspectScreen extends Screen {
 
         renderTransparentBackground(guiGraphics);
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(x, y, 0);
         guiGraphics.pose().translate(width / 2f, height / 2f, 50);
         guiGraphics.pose().scale(scale, scale, scale);
@@ -147,13 +147,13 @@ public class FilmFrameInspectScreen extends Screen {
                 new RenderCoordinates(0, 0, FRAME_SIZE, FRAME_SIZE), filmType.getImageColor());
         bufferSource.endBatch();
 
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         // Places widgets above, because they will be covered when photo is zoomed in
 //        guiGraphics.pose().translate(0, 0, 100);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     @Override

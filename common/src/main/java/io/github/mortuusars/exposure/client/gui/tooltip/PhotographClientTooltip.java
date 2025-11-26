@@ -40,7 +40,7 @@ public class PhotographClientTooltip implements ClientTooltipComponent {
         int photographsCount = photographs.size();
         int additionalPhotographs = Math.min(2, photographsCount - 1);
 
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(mouseX, mouseY, 5);
         float scale = SIZE;
         float nextPhotographOffset = ExposureClient.photographRenderer().getStackedPhotographOffset();
@@ -54,11 +54,11 @@ public class PhotographClientTooltip implements ClientTooltipComponent {
 
         bufferSource.endBatch();
 
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
 
         // Stack count:
         if (photographsCount > 1) {
-            guiGraphics.pose().pushPose();
+            guiGraphics.pose().pushMatrix();
             String count = Integer.toString(photographsCount);
             int fontWidth = Minecraft.getInstance().font.width(count);
             float fontScale = 1.6f;
@@ -68,7 +68,7 @@ public class PhotographClientTooltip implements ClientTooltipComponent {
                     10);
             guiGraphics.pose().scale(fontScale, fontScale, fontScale);
             guiGraphics.drawString(font, count, 0, 0, 0xFFFFFFFF);
-            guiGraphics.pose().popPose();
+            guiGraphics.pose().popMatrix();
         }
     }
 }

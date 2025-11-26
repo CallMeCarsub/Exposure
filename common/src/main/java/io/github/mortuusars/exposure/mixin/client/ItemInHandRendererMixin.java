@@ -40,7 +40,7 @@ public abstract class ItemInHandRendererMixin {
                                   float swingProgress, ItemStack stack, float equipProgress, PoseStack poseStack,
                                   MultiBufferSource buffer, int combinedLight, CallbackInfo ci, @Local boolean isMainHand, @Local HumanoidArm arm) {
         if (CameraClient.viewfinder() != null && CameraClient.viewfinder().isLookingThrough()) {
-            poseStack.popPose();
+            poseStack.popMatrix();
             ci.cancel();
             return;
         }
@@ -52,7 +52,7 @@ public abstract class ItemInHandRendererMixin {
                 exposure$renderOneHandedPhotograph(player, poseStack, buffer, combinedLight, equipProgress, arm, swingProgress, stack);
             }
 
-            poseStack.popPose();
+            poseStack.popMatrix();
 
             ci.cancel();
         }
@@ -63,13 +63,13 @@ public abstract class ItemInHandRendererMixin {
         float f = pHand == HumanoidArm.RIGHT ? 1.0F : -1.0F;
         poseStack.translate(f * 0.125F, -0.125D, 0.0D);
         if (!player.isInvisible()) {
-            poseStack.pushPose();
+            poseStack.pushMatrix();
             poseStack.mulPose(Axis.ZP.rotationDegrees(f * 10.0F));
             this.renderPlayerArm(poseStack, buffer, packedLight, pEquippedProgress, pSwingProgress, pHand);
-            poseStack.popPose();
+            poseStack.popMatrix();
         }
 
-        poseStack.pushPose();
+        poseStack.pushMatrix();
         poseStack.translate(f * 0.51F, -0.08F + pEquippedProgress * -1.2F, -0.75D);
         float f1 = Mth.sqrt(pSwingProgress);
         float f2 = Mth.sin(f1 * (float)Math.PI);
@@ -88,7 +88,7 @@ public abstract class ItemInHandRendererMixin {
 
         ExposureClient.photographRenderer().render(stack, true, false, poseStack, buffer, packedLight);
 
-        poseStack.popPose();
+        poseStack.popMatrix();
     }
 
     @Unique
@@ -101,11 +101,11 @@ public abstract class ItemInHandRendererMixin {
         poseStack.translate(0.0D, 0.04F + equippedProgress * -1.2F + f3 * -0.5F, -0.72F);
         poseStack.mulPose(Axis.XP.rotationDegrees(f3 * -85.0F));
         if (!player.isInvisible()) {
-            poseStack.pushPose();
+            poseStack.pushMatrix();
             poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
             this.renderMapHand(poseStack, buffer, packedLight, HumanoidArm.RIGHT);
             this.renderMapHand(poseStack, buffer, packedLight, HumanoidArm.LEFT);
-            poseStack.popPose();
+            poseStack.popMatrix();
         }
 
         float f4 = Mth.sin(f * (float)Math.PI);
