@@ -84,12 +84,12 @@ public class ExtraData extends CompoundTag {
 
     @Override
     public @NotNull ExtraData merge(CompoundTag other) {
-        for (String key : other.getAllKeys()) {
+        for (String key : other.keySet()) {
             Tag tag = other.get(key);
             assert tag != null;
             if (tag.getId() == 10) {
-                if (this.contains(key, 10)) {
-                    CompoundTag compoundTag = this.getCompound(key);
+                if (this.contains(key)) {
+                    CompoundTag compoundTag = this.getCompound(key).orElseThrow();
                     compoundTag.merge((CompoundTag) tag);
                 } else {
                     this.put(key, tag.copy());
@@ -107,40 +107,40 @@ public class ExtraData extends CompoundTag {
     public record Type<T>(String key, BiFunction<ExtraData, String, @Nullable T> getter,
                           TriConsumer<ExtraData, String, T> setter) {
         public static Type<String> string(String key) {
-            return new Type<>(key, ExtraData::getString, ExtraData::putString);
+            return new Type<>(key, (tag,k) -> tag.getString(k).orElseThrow(), ExtraData::putString);
         }
 
         public static Type<Boolean> bool(String key) {
-            return new Type<>(key, ExtraData::getBoolean, ExtraData::putBoolean);
+            return new Type<>(key, (tag,k) -> tag.getBoolean(k).orElseThrow(), ExtraData::putBoolean);
         }
 
         public static Type<Integer> intVal(String key) {
-            return new Type<>(key, ExtraData::getInt, ExtraData::putInt);
+            return new Type<>(key, (tag,k) -> tag.getInt(k).orElseThrow(), ExtraData::putInt);
         }
 
         public static Type<Long> longVal(String key) {
-            return new Type<>(key, ExtraData::getLong, ExtraData::putLong);
+            return new Type<>(key, (tag,k) -> tag.getLong(k).orElseThrow(), ExtraData::putLong);
         }
 
         public static Type<Float> floatVal(String key) {
-            return new Type<>(key, ExtraData::getFloat, ExtraData::putFloat);
+            return new Type<>(key, (tag,k) -> tag.getFloat(k).orElseThrow(), ExtraData::putFloat);
         }
 
         public static Type<Double> doubleVal(String key) {
-            return new Type<>(key, ExtraData::getDouble, ExtraData::putDouble);
+            return new Type<>(key, (tag,k) -> tag.getDouble(k).orElseThrow(), ExtraData::putDouble);
         }
 
         public static <T extends StringRepresentable> Type<T> stringRepresentable(String key, Function<String, @Nullable T> deserializeFunction) {
             return new Type<>(key,
-                    (data, k) -> deserializeFunction.apply(data.getString(k)),
+                    (data, k) -> deserializeFunction.apply(data.getString(k).orElseThrow()),
                     (data, k, value) -> data.putString(k, value.getSerializedName()));
         }
 
         public static Type<Vec3> vec3(String key) {
             return new Type<>(key,
                     (data, k) -> {
-                        ListTag pos = data.getList(k, DoubleTag.TAG_DOUBLE);
-                        return new Vec3(pos.getDouble(0), pos.getDouble(1), pos.getDouble(2));
+                        ListTag pos = data.getList(k).orElseThrow();
+                        return new Vec3(pos.getDouble(0).orElseThrow(), pos.getDouble(1).orElseThrow(), pos.getDouble(2).orElseThrow());
                     },
                     (data, k, value) -> {
                         ListTag pos = new ListTag();
@@ -153,13 +153,13 @@ public class ExtraData extends CompoundTag {
 
         public static Type<ResourceLocation> resourceLocation(String key) {
             return new Type<>(key,
-                    (data, k) -> ResourceLocation.parse(data.getString(k)),
+                    (data, k) -> ResourceLocation.parse(data.getString(k).orElseThrow()),
                     (data, k, value) -> data.putString(k, value.toString()));
         }
 
         public static <T> Type<List<T>> list(String key, int tagType, Function<Tag, T> extractFunc, Function<T, Tag> packFunc) {
             return new Type<>(key,
-                    (data, k) -> data.getList(k, tagType).stream()
+                    (data, k) -> data.getList(k).orElseThrow().stream()
                             .map(extractFunc)
                             .toList(),
                     (data, k, value) -> {
@@ -172,7 +172,7 @@ public class ExtraData extends CompoundTag {
         }
 
         public static <T> Type<List<T>> stringBasedList(String key, Function<String, T> extractFunc, Function<T, String> packFunc) {
-            return list(key, Tag.TAG_STRING, tag -> extractFunc.apply(tag.getAsString()), value -> StringTag.valueOf(packFunc.apply(value)));
+            return list(key, Tag.TAG_STRING, tag -> extractFunc.apply(tag.asString().orElseThrow()), value -> StringTag.valueOf(packFunc.apply(value)));
         }
     }
 }

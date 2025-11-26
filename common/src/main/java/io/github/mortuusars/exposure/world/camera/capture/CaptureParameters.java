@@ -32,10 +32,8 @@ public record CaptureParameters(String exposureId,
 
     public static final ExtraData.Type<ShutterSpeed> SHUTTER_SPEED =
             ExtraData.Type.stringRepresentable("shutter_speed", ShutterSpeed::new);
-    public static final ExtraData.Type<Boolean> FLASH =
-            new ExtraData.Type<>("flash", ExtraData::getBoolean, ExtraData::putBoolean);
-    public static final ExtraData.Type<Integer> LIGHT_LEVEL =
-            new ExtraData.Type<>("light_level", ExtraData::getInt, ExtraData::putInt);
+    public static final ExtraData.Type<Boolean> FLASH = ExtraData.Type.bool("flash");
+    public static final ExtraData.Type<Integer> LIGHT_LEVEL = ExtraData.Type.intVal("light_level");
 
     // --
 
