@@ -8,6 +8,7 @@ import io.github.mortuusars.exposure.world.camera.Camera;
 import io.github.mortuusars.exposure.world.item.camera.CameraSettings;
 import io.github.mortuusars.exposure.world.camera.component.FocalRange;
 import io.github.mortuusars.exposure.client.util.ZoomDirection;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.Mth;
 

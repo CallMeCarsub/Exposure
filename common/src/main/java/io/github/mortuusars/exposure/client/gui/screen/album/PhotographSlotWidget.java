@@ -8,6 +8,7 @@ import io.github.mortuusars.exposure.client.render.photograph.PhotographStyle;
 import io.github.mortuusars.exposure.client.util.Minecrft;
 import io.github.mortuusars.exposure.world.item.PhotographItem;
 import io.github.mortuusars.exposure.world.item.util.ItemAndStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -87,7 +88,7 @@ public class PhotographSlotWidget extends AbstractWidget {
             PhotographStyle photographStyle = PhotographStyle.of(photograph);
 
             // Paper
-            guiGraphics.blit(RenderType::guiTextured, photographStyle.albumPaperTexture(),
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, photographStyle.albumPaperTexture(),
                     getX(), getY(), 0, 0, width, height, width, height);
 
             // Exposure
@@ -105,7 +106,7 @@ public class PhotographSlotWidget extends AbstractWidget {
             if (photographStyle.hasAlbumOverlayTexture()) {
                 guiGraphics.pose().pushMatrix();
                 guiGraphics.pose().translate(0, 0);
-                guiGraphics.blit(RenderType::guiTextured, photographStyle.albumOverlayTexture(),
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, photographStyle.albumOverlayTexture(),
                         getX(), getY(), 0, 0, width, height, width, height);
                 guiGraphics.pose().popMatrix();
             }

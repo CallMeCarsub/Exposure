@@ -26,6 +26,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.ClickEvent;
@@ -214,7 +215,7 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
                 if (!slot.getItem().isEmpty() && !(slot.getItem().getItem() instanceof PhotographItem)) {
                     guiGraphics.pose().pushMatrix();
                     guiGraphics.pose().translate(0.0f, 0.0f, 350.0f);
-                    guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1, 176, 188,
+                    guiGraphics.blit(RenderPipelines.GUI_TEXTURED, AlbumGUI.TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1, 176, 188,
                             18, 18, 512, 512);
                     guiGraphics.pose().popMatrix();
                 }
@@ -306,11 +307,11 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos, topPos, 0, 0,
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, AlbumGUI.TEXTURE, leftPos, topPos, 0, 0,
                 imageWidth, imageHeight, 512, 512);
 
         if (enterSignModeButton != null && enterSignModeButton.visible) {
-            guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos - 27, topPos + 14, 447, 0,
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, AlbumGUI.TEXTURE, leftPos - 27, topPos + 14, 447, 0,
                     27, 28, 512, 512);
         }
 
@@ -322,14 +323,14 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             int x = firstSlot.x - 8;
             int y = firstSlot.y - 18;
             guiGraphics.pose().pushMatrix();
-            guiGraphics.pose().translate(0.0f, 0.0f, 10.0f);
-            guiGraphics.blit(RenderType::guiTextured, AlbumGUI.TEXTURE, leftPos + x, topPos + y, 0, 188, 176, 100, 512, 512);
+            guiGraphics.pose().translate(0.0f, 0.0f);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, AlbumGUI.TEXTURE, leftPos + x, topPos + y, 0, 188, 176, 100, 512, 512);
             guiGraphics.pose().popMatrix();
 
             @Nullable Side pageBeingAddedTo = getMenu().getSideBeingAddedTo();
             for (Page page : pages) {
                 if (page.side == pageBeingAddedTo) {
-                    guiGraphics.blitSprite(RenderType::guiTextured, PhotographSlotWidget.EMPTY_SPRITES.enabledFocused(),
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, PhotographSlotWidget.EMPTY_SPRITES.enabledFocused(),
                             page.photoArea.getX(), page.photoArea.getY(), page.photoArea.getWidth(), page.photoArea.getHeight());
                 }
             }

@@ -1,6 +1,7 @@
 package io.github.mortuusars.exposure.client.camera.viewfinder;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import io.github.mortuusars.exposure.Config;
 import io.github.mortuusars.exposure.Exposure;
 import io.github.mortuusars.exposure.client.gui.Widgets;
@@ -220,7 +221,7 @@ public class ViewfinderCameraControlsScreen extends Screen {
             if (keyMapping.key.getType() == InputConstants.Type.MOUSE) {
                 keyMapping.setDown(MouseHandler.isMouseButtonHeld(keyMapping.key.getValue()));
             } else {
-                long windowId = Minecraft.getInstance().getWindow().getWindow();
+                Window windowId = Minecraft.getInstance().getWindow();
                 keyMapping.setDown(InputConstants.isKeyDown(windowId, keyMapping.key.getValue()));
             }
         };
@@ -248,9 +249,9 @@ public class ViewfinderCameraControlsScreen extends Screen {
 
         float viewfinderScale = viewfinder.overlay().getScale();
         if (viewfinderScale != 1.0f) {
-            guiGraphics.pose().translate(width / 2f, height / 2f, 0);
-            guiGraphics.pose().scale(viewfinderScale, viewfinderScale, viewfinderScale);
-            guiGraphics.pose().translate(-width / 2f, -height / 2f, 0);
+            guiGraphics.pose().translate(width / 2f, height / 2f);
+            guiGraphics.pose().scale(viewfinderScale, viewfinderScale);
+            guiGraphics.pose().translate(-width / 2f, -height / 2f);
         }
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);

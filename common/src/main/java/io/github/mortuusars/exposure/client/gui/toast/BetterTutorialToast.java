@@ -4,6 +4,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastManager;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -67,7 +68,7 @@ public class BetterTutorialToast implements Toast {
 
     @Override
     public void render(GuiGraphics guiGraphics, Font font, long timeSinceLastVisible) {
-        guiGraphics.blitSprite(RenderType::guiTextured, backgroundSprite, 0, 0, this.width(), this.height());
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, backgroundSprite, 0, 0, this.width(), this.height());
         this.icon.render(guiGraphics, 6, 6);
         if (this.message == null) {
             guiGraphics.drawString(font, this.title, 30, 12, 0xFF500050, false);

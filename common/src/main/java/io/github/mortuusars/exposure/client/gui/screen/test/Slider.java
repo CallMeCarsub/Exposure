@@ -196,7 +196,7 @@ public class Slider extends AbstractWidget {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        guiGraphics.blitSprite(RenderType::guiTextured, getSprite(), getX(), getY(), getWidth(), getHeight(), ARGB.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, getSprite(), getX(), getY(), getWidth(), getHeight(), ARGB.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
 
         if (active && horizontalGradient != null) {
             fillHorizontalGradient(guiGraphics, getX() + 1, getY() + 1, getX() + getWidth() - 1,
@@ -206,7 +206,7 @@ public class Slider extends AbstractWidget {
         guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(0, 0);
 
-        guiGraphics.blitSprite(RenderType::guiTextured, getHandleSprite(), getX() + (int)(position * (double)(width - HANDLE_WIDTH)), getY(), HANDLE_WIDTH, getHeight());
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, getHandleSprite(), getX() + (int)(position * (double)(width - HANDLE_WIDTH)), getY(), HANDLE_WIDTH, getHeight());
         int textColor = (active ? 0xFFFFFF : 0xA0A0A0) | Mth.ceil(alpha * 255.0F) << 24;
         renderScrollingString(guiGraphics, minecraft.font, TEXT_MARGIN, textColor);
         guiGraphics.pose().popMatrix();

@@ -151,7 +151,7 @@ public class CycleButton<T> extends Button {
         ResourceLocation spriteLocation = sprites != null
                 ? sprites.get(isActive(), isHoveredOrFocused())
                 : TextureManager.INTENTIONAL_MISSING_TEXTURE;
-        guiGraphics.blitSprite(RenderType::guiTextured, spriteLocation, getX(), getY(), getWidth(), getHeight());
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, spriteLocation, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override

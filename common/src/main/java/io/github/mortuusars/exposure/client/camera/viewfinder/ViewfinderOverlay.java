@@ -187,7 +187,7 @@ public class ViewfinderOverlay {
         int y = yCenter;
 
         int sadFaceSize = font.lineHeight * 5;
-        guiGraphics.blit(RenderType::guiTextured, BSOD_SAD_FACE_TEXTURE, x, y - sadFaceSize - margin, 0, 0, sadFaceSize, sadFaceSize, sadFaceSize, sadFaceSize, 42, 42);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BSOD_SAD_FACE_TEXTURE, x, y - sadFaceSize - margin, 0, 0, sadFaceSize, sadFaceSize, sadFaceSize, sadFaceSize, 42, 42);
 
         MutableComponent message = Component.translatable("item.exposure.broken_interplanar_projector.viewfinder.message");
         List<FormattedCharSequence> messageLines = font.split(message, (int) (opening.width * 0.75f));
@@ -205,7 +205,7 @@ public class ViewfinderOverlay {
             case 2 -> qrCodeTextureSize * 2;
             default -> qrCodeTextureSize;
         };
-        guiGraphics.blit(RenderType::guiTextured, BSOD_QR_CODE_TEXTURE, x, y, 0, 0, qrCodeSize, qrCodeSize, qrCodeSize, qrCodeSize, qrCodeTextureSize, qrCodeTextureSize);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BSOD_QR_CODE_TEXTURE, x, y, 0, 0, qrCodeSize, qrCodeSize, qrCodeSize, qrCodeSize, qrCodeTextureSize, qrCodeTextureSize);
 
         MutableComponent errorCode = Component.translatable("item.exposure.broken_interplanar_projector.viewfinder.error_code");
         guiGraphics.drawString(font, errorCode, x + qrCodeSize + margin, y, 0xFFFFFFFF, false);

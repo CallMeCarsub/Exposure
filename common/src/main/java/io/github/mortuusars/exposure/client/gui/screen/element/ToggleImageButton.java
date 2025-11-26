@@ -47,6 +47,6 @@ public class ToggleImageButton extends ImageButton {
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         WidgetSprites sprites = isOn() ? onSprites : this.sprites;
         ResourceLocation resourceLocation = sprites.get(this.isActive(), this.isHoveredOrFocused());
-        guiGraphics.blitSprite(RenderType::guiTextured, resourceLocation, this.getX(), this.getY(), this.width, this.height);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, resourceLocation, this.getX(), this.getY(), this.width, this.height);
     }
 }
