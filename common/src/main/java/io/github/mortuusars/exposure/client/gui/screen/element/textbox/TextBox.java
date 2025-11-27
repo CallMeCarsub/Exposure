@@ -1,5 +1,6 @@
 package io.github.mortuusars.exposure.client.gui.screen.element.textbox;
 
+import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.mortuusars.exposure.util.Pos2i;
@@ -162,8 +163,8 @@ public class TextBox extends AbstractWidget {
                 guiGraphics.drawString(this.font, "_", cursorPos.x, cursorPos.y, getCurrentFontColor(), false);
             else {
                 guiGraphics.pose().pushMatrix();
-                guiGraphics.pose().translate(0, 0, 50);
-                RenderSystem.disableBlend();
+                guiGraphics.pose().translate(0, 0);
+                GlStateManager._disableBlend();
                 guiGraphics.fill(cursorPos.x, cursorPos.y - 1, cursorPos.x + 1, cursorPos.y + this.font.lineHeight, getCurrentFontColor());
                 guiGraphics.pose().popMatrix();
             }

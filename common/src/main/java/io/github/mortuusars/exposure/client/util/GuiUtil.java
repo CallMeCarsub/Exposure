@@ -6,11 +6,11 @@ import io.github.mortuusars.exposure.util.Rect2f;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3x2fStack;
 import org.joml.Matrix4f;
 
 public class GuiUtil {
@@ -45,18 +45,18 @@ public class GuiUtil {
                              float minX, float maxX, float minY, float maxY, float zOffset,
                              float minU, float maxU, float minV, float maxV) {
         if (texture != null) {
-            RenderSystem.setShaderTexture(0, texture);
+//            RenderSystem.setShaderTexture(0, texture);
         }
 
         Matrix4f matrix = poseStack.last().pose();
-        RenderSystem.setShader(CoreShaders.POSITION);
-        RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        RenderSystem.setShader(CoreShaders.POSITION);
+//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferBuilder.addVertex(matrix, minX, maxY, zOffset).setUv(minU, maxV);
         bufferBuilder.addVertex(matrix, maxX, maxY, zOffset).setUv(maxU, maxV);
         bufferBuilder.addVertex(matrix, maxX, minY, zOffset).setUv(maxU, minV);
         bufferBuilder.addVertex(matrix, minX, minY, zOffset).setUv(minU, minV);
-        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
+//        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
     }
 
     // --
@@ -69,7 +69,7 @@ public class GuiUtil {
         drawRect(guiGraphics.pose(), x, y, x + width, y + height, color);
     }
 
-    public static void drawRect(PoseStack poseStack, float minX, float minY, float maxX, float maxY, int color) {
+    public static void drawRect(Matrix3x2fStack poseStack, float minX, float minY, float maxX, float maxY, int color) {
         if (minX < maxX) {
             float temp = minX;
             minX = maxX;
@@ -82,14 +82,14 @@ public class GuiUtil {
             maxY = temp;
         }
 
-        Matrix4f matrix = poseStack.last().pose();
-        RenderSystem.setShader(CoreShaders.POSITION_COLOR);
-        BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        bufferBuilder.addVertex(matrix, minX, maxY, 0).setColor(color);
-        bufferBuilder.addVertex(matrix, maxX, maxY, 0).setColor(color);
-        bufferBuilder.addVertex(matrix, maxX, minY, 0).setColor(color);
-        bufferBuilder.addVertex(matrix, minX, minY, 0).setColor(color);
-        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
+//        Matrix4f matrix = poseStack.last().pose();
+////        RenderSystem.setShader(CoreShaders.POSITION_COLOR);
+//        BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+//        bufferBuilder.addVertex(matrix, minX, maxY, 0).setColor(color);
+//        bufferBuilder.addVertex(matrix, maxX, maxY, 0).setColor(color);
+//        bufferBuilder.addVertex(matrix, maxX, minY, 0).setColor(color);
+//        bufferBuilder.addVertex(matrix, minX, minY, 0).setColor(color);
+//        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
     }
 
     // --

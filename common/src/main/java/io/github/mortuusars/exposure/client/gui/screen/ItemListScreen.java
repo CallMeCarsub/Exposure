@@ -110,17 +110,17 @@ public class ItemListScreen extends Screen {
         renderTransparentBackground(guiGraphics);
 
         guiGraphics.pose().pushMatrix();
-        guiGraphics.pose().translate((width / 2f), (height / 2f), 0.0f);
+        guiGraphics.pose().translate((width / 2f), (height / 2f));
         float animProgress = (float)openingAnimation.getValue();
-        guiGraphics.pose().scale(animProgress, animProgress, animProgress);
-        guiGraphics.pose().translate(-(width / 2f), -(height / 2f), 0.0f);
+        guiGraphics.pose().scale(animProgress, animProgress);
+        guiGraphics.pose().translate(-(width / 2f), -(height / 2f));
 
         renderBg(guiGraphics, mouseX, mouseY, partialTick);
-        RenderSystem.disableDepthTest();
+        //RenderSystem.disableDepthTest();
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         {
             guiGraphics.pose().pushMatrix();
-            guiGraphics.pose().translate(left, top, 0.0f);
+            guiGraphics.pose().translate(left, top);
             hoveredSlot = null;
             for (Slot slot : slots) {
                 if (slot.isActive()) {
@@ -138,7 +138,7 @@ public class ItemListScreen extends Screen {
             this.renderLabels(guiGraphics, mouseX, mouseY);
             guiGraphics.pose().popMatrix();
         }
-        RenderSystem.enableDepthTest();
+        //RenderSystem.enableDepthTest();
         guiGraphics.pose().popMatrix();
 
         renderTooltip(guiGraphics, mouseX, mouseY);

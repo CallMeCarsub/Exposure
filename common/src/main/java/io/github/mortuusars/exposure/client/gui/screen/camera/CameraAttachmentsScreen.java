@@ -133,13 +133,13 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
         for (Slot slot : getMenu().slots) {
             if (!slot.mayPickup(player)) {
                 guiGraphics.renderItem(slot.getItem(), leftPos + slot.x, topPos + slot.y);
-                RenderSystem.enableBlend();
-                RenderSystem.defaultBlendFunc();
+//                RenderSystem.enableBlend();
+//                RenderSystem.defaultBlendFunc();
 
                 guiGraphics.pose().pushMatrix();
-                guiGraphics.pose().translate(0, 0, 350);
+                guiGraphics.pose().translate(0, 0);
                 guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos + slot.x - 2, topPos + slot.y - 2, 236, 92, 20, 20, 256, 256);
-                RenderSystem.disableBlend();
+                //RenderSystem.disableBlend();
                 guiGraphics.pose().popMatrix();
             }
         }
@@ -149,10 +149,10 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
 
     @Override
     protected void renderBg(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        RenderSystem.enableBlend();
+//        RenderSystem.defaultBlendFunc();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
         renderSlotPlaceholders(guiGraphics, mouseX, mouseY, partialTick);
@@ -165,7 +165,7 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
             }
         }
 
-        RenderSystem.disableBlend();
+//        RenderSystem.disableBlend();
     }
 
     protected void renderAttachments(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -190,12 +190,12 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
                 renderFilter(guiGraphics, mouseX, mouseY, filter, filterX, filterY);
             });
         } else if (isMouseOver(filterOnLens, mouseX, mouseY)) {
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
+//            RenderSystem.enableBlend();
+//            RenderSystem.defaultBlendFunc();
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos + 110, topPos + 58, 176, 165, 15, 23, 256, 256);
         } else if (isMouseOver(filter, mouseX, mouseY)) {
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
+//            RenderSystem.enableBlend();
+//            RenderSystem.defaultBlendFunc();
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos + 106, topPos + 56, 176, 165, 15, 23, 256, 256);
         } else if (isMouseOver(viewfinder, mouseX, mouseY) && !isMouseOver(flash, mouseX, mouseY)) {
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos + 65, topPos + 24, 42, 185, 49, 26, 256, 256);
