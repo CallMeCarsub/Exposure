@@ -57,7 +57,7 @@ public class FrameExposedTrigger extends SimpleCriterionTrigger<FrameExposedTrig
                                Frame frame,
                                List<BlockPos> locationsInFrame,
                                List<LivingEntity> entitiesInFrame) {
-            return (camera.isEmpty() || camera.get().matches(player.serverLevel(), cameraStack, cameraHolder.asHolderEntity().position()))
+            return (camera.isEmpty() || camera.get().matches(player.level(), cameraStack, cameraHolder.asHolderEntity().position()))
                     && (this.frame.isEmpty() || this.frame.get().matches(frame))
                     && locationsMatch(player, locationsInFrame)
                     && entitiesInFrameMatch(player, cameraHolder, entitiesInFrame);
@@ -65,13 +65,13 @@ public class FrameExposedTrigger extends SimpleCriterionTrigger<FrameExposedTrig
 
         private boolean locationsMatch(ServerPlayer player, List<BlockPos> locationsInFrame) {
             return locationInFrame.isEmpty() || locationsInFrame.stream().anyMatch(pos ->
-                    locationInFrame.get().matches(player.serverLevel(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
+                    locationInFrame.get().matches(player.level(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
         }
 
         private boolean entitiesInFrameMatch(ServerPlayer player, CameraHolder cameraHolder, List<LivingEntity> entitiesInFrame) {
             return this.entitiesInFrame.isEmpty() || this.entitiesInFrame.get().stream().allMatch(predicate ->
                     entitiesInFrame.stream().anyMatch(entity -> {
-                        LootContext context = createContextForHolder(player.serverLevel(), cameraHolder, entity);
+                        LootContext context = createContextForHolder(player.level(), cameraHolder, entity);
                         return predicate.matches(context);
                     }));
         }

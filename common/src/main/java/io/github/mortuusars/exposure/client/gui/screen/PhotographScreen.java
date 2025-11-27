@@ -150,17 +150,17 @@ public class PhotographScreen extends Screen {
         float zoomFactor = height * 0.8f;
         float scale = (float) (zoom.get() * zoomFactor);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableDepthTest();
+//        RenderSystem.enableBlend();
+//        RenderSystem.defaultBlendFunc();
+//        RenderSystem.disableDepthTest();
 
         renderTransparentBackground(guiGraphics);
 
         guiGraphics.pose().pushMatrix();
-        guiGraphics.pose().translate(x, y, 0);
-        guiGraphics.pose().translate(width / 2f, height / 2f, 50);
-        guiGraphics.pose().scale(scale, scale, scale);
-        guiGraphics.pose().translate(-0.5, -0.5, 0);
+        guiGraphics.pose().translate(x, y);
+        guiGraphics.pose().translate(width / 2f, height / 2f);
+        guiGraphics.pose().scale(scale, scale);
+        guiGraphics.pose().translate(-0.5f, -0.5f);
 
         MultiBufferSource.BufferSource bufferSource = Minecrft.get().renderBuffers().bufferSource();
 
@@ -174,7 +174,7 @@ public class PhotographScreen extends Screen {
 
         guiGraphics.pose().pushMatrix();
         // Places widgets above photograph, because they will be covered when photo is zoomed in
-        guiGraphics.pose().translate(0, 0, 100);
+        guiGraphics.pose().translate(0, 0);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderFrameInfoHint(guiGraphics, mouseX, mouseY, photograph);
         guiGraphics.pose().popMatrix();

@@ -378,12 +378,12 @@ public class TestImageScreen extends Screen {
 
         guiGraphics.pose().pushMatrix();
         float size = height * 0.8f * scale;
-        guiGraphics.pose().translate(width / 2f - size / 2f, height / 2f - size / 2f, 100);
+        guiGraphics.pose().translate(width / 2f - size / 2f, height / 2f - size / 2f);
 
         float borderPercent = 0.02f;
         guiGraphics.fill(Mth.floor(-size * borderPercent), Mth.floor(-size * borderPercent),
                 Mth.ceil(size + (size * borderPercent)), Mth.ceil(size + (size * borderPercent)), 0xFFFFFFFF);
-        guiGraphics.pose().scale(size, size, size);
+        guiGraphics.pose().scale(size, size);
 
 
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();

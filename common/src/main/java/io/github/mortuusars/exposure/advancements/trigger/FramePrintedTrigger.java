@@ -41,7 +41,7 @@ public class FramePrintedTrigger extends SimpleCriterionTrigger<FramePrintedTrig
                                BlockPos pos,
                                Frame frame,
                                ItemStack result) {
-            return (location.isEmpty() || location.get().matches(player.serverLevel(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5))
+            return (location.isEmpty() || location.get().matches(player.level(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5))
                     && (this.frame.isEmpty() || this.frame.get().matches(frame))
                     && (item.isEmpty() || item.get().test(result));
         }

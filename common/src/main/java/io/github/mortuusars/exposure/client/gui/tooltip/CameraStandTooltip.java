@@ -33,10 +33,10 @@ public class CameraStandTooltip {
                     .withStyle(ChatFormatting.RED), 230);
             guiGraphics.renderTooltip(minecraft.font, lines, x, y + 12);
         } else {
-            TooltipRenderUtil.renderTooltipBackground(guiGraphics, x, y, 18, 18, 400, null);
+            TooltipRenderUtil.renderTooltipBackground(guiGraphics, x, y, 18, 18, null);
 
             guiGraphics.pose().pushMatrix();
-            guiGraphics.pose().translate(0, 0, 400);
+            guiGraphics.pose().translate(0, 0);
             guiGraphics.renderItem(stand.getCamera(), x + 1, y + 1);
             guiGraphics.pose().popMatrix();
 

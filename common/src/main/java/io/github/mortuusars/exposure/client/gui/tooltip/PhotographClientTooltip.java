@@ -41,11 +41,11 @@ public class PhotographClientTooltip implements ClientTooltipComponent {
         int additionalPhotographs = Math.min(2, photographsCount - 1);
 
         guiGraphics.pose().pushMatrix();
-        guiGraphics.pose().translate(mouseX, mouseY, 5);
+        guiGraphics.pose().translate(mouseX, mouseY);
         float scale = SIZE;
         float nextPhotographOffset = ExposureClient.photographRenderer().getStackedPhotographOffset();
         scale *= 1f - (additionalPhotographs * nextPhotographOffset);
-        guiGraphics.pose().scale(scale, scale, 1f);
+        guiGraphics.pose().scale(scale, scale);
 
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 
@@ -64,9 +64,8 @@ public class PhotographClientTooltip implements ClientTooltipComponent {
             float fontScale = 1.6f;
             guiGraphics.pose().translate(
                     mouseX + scale - 2 - fontWidth * fontScale,
-                    mouseY + scale - 2 - 8 * fontScale,
-                    10);
-            guiGraphics.pose().scale(fontScale, fontScale, fontScale);
+                    mouseY + scale - 2 - 8 * fontScale);
+            guiGraphics.pose().scale(fontScale, fontScale);
             guiGraphics.drawString(font, count, 0, 0, 0xFFFFFFFF);
             guiGraphics.pose().popMatrix();
         }
