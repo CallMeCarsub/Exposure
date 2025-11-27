@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import io.github.mortuusars.exposure.Exposure;
 import io.github.mortuusars.exposure.ExposureClient;
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.render.photograph.PhotographStyle;
 import io.github.mortuusars.exposure.client.util.Minecrft;
 import io.github.mortuusars.exposure.world.item.PhotographItem;
@@ -125,7 +126,7 @@ public class PhotographSlotWidget extends AbstractWidget {
 
     public void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (editable && !hasPhotograph) {
-            guiGraphics.renderTooltip(Minecrft.get().font, Component.translatable("gui.exposure.album.add_photograph"), mouseX, mouseY);
+            Tooltips.renderTooltip(guiGraphics, Minecrft.get().font, List.of(Component.translatable("gui.exposure.album.add_photograph")), mouseX, mouseY);
             return;
         }
 
@@ -141,11 +142,11 @@ public class PhotographSlotWidget extends AbstractWidget {
         // Photograph image in tooltip is not rendered
 
         if (isFocused()) {
-            guiGraphics.renderTooltip(Minecrft.get().font, Lists.transform(itemTooltip,
-                    Component::getVisualOrderText), DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+            Tooltips.renderFormattedTooltip(guiGraphics, Minecrft.get().font, Lists.transform(itemTooltip,
+                    Component::getVisualOrderText), mouseX, mouseY);
         }
         else
-            guiGraphics.renderTooltip(Minecrft.get().font, itemTooltip, Optional.empty(), mouseX, mouseY);
+            Tooltips.renderTooltip(guiGraphics, Minecrft.get().font, itemTooltip, mouseX, mouseY);
     }
 
     @Override

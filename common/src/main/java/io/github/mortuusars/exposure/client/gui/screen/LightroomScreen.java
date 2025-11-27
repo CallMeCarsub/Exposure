@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.mortuusars.exposure.Exposure;
 import io.github.mortuusars.exposure.ExposureClient;
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.gui.toast.BetterTutorialToast;
 import io.github.mortuusars.exposure.client.gui.toast.ToastIcon;
 import io.github.mortuusars.exposure.client.input.Key;
@@ -304,7 +305,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
             tooltipLines.add(Component.translatable("gui.exposure.lightroom.zoom_in.tooltip"));
         }
 
-        guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipLines, Optional.empty(), mouseX, mouseY);
+        Tooltips.renderTooltip(guiGraphics, Minecraft.getInstance().font, tooltipLines, mouseX, mouseY);
     }
 
     private void addFrameInfoTooltipLines(List<Component> tooltipLines, int frameIndex, boolean isAdvancedTooltips) {

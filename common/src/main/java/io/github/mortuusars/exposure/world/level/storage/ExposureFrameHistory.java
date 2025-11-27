@@ -10,6 +10,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -79,15 +80,11 @@ public class ExposureFrameHistory extends SavedData {
         return tag;
     }
 
-    public static SavedData.Factory<ExposureFrameHistory> factory() {
-        return new SavedData.Factory<>(() -> new ExposureFrameHistory(new HashMap<>()), ExposureFrameHistory::load, null);
-    }
-
-    public static ExposureFrameHistory load(CompoundTag tag, HolderLookup.Provider levelRegistry) {
-        return CODEC.decode(NbtOps.INSTANCE, tag).getOrThrow().getFirst();
+    public static SavedDataType<ExposureFrameHistory> factory() {
+        return new SavedDataType<>("exposure_frame_history", (c) -> new ExposureFrameHistory(new HashMap<>()), (ctx) -> CODEC, null);
     }
 
     public static @NotNull ExposureFrameHistory loadOrCreate(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(ExposureFrameHistory.factory(), "exposure_frame_history");
+        return server.overworld().getDataStorage().computeIfAbsent(ExposureFrameHistory.factory());
     }
 }

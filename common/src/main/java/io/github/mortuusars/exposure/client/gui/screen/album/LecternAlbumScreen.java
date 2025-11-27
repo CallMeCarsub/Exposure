@@ -1,6 +1,7 @@
 package io.github.mortuusars.exposure.client.gui.screen.album;
 
 import io.github.mortuusars.exposure.Config;
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.util.Minecrft;
 import io.github.mortuusars.exposure.world.inventory.LecternAlbumMenu;
 import net.minecraft.client.gui.Font;
@@ -14,6 +15,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class LecternAlbumScreen extends AlbumViewScreen implements MenuAccess<LecternAlbumMenu> {
     private final LecternAlbumMenu menu;
@@ -120,9 +123,9 @@ public class LecternAlbumScreen extends AlbumViewScreen implements MenuAccess<Le
         int page = getMenu().getPage();
 
         if (page % 2 == 1 && isHovering(70, 167, 17, 7, x, y)) {
-            guiGraphics.renderTooltip(font, Component.translatable("gui.exposure.album.lectern.set_current_page"), x, y);
+            Tooltips.renderTooltip(guiGraphics, font, List.of(Component.translatable("gui.exposure.album.lectern.set_current_page")), x, y);
         } else if (page % 2 == 0 && isHovering(210, 167, 17, 7, x, y)) {
-            guiGraphics.renderTooltip(font, Component.translatable("gui.exposure.album.lectern.set_current_page"), x, y);
+            Tooltips.renderTooltip(guiGraphics, font, List.of(Component.translatable("gui.exposure.album.lectern.set_current_page")), x, y);
         }
     }
 

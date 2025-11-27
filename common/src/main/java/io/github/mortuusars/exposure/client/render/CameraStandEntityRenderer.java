@@ -10,12 +10,12 @@ import io.github.mortuusars.exposure.world.entity.CameraStandEntity;
 import io.github.mortuusars.exposure.world.item.camera.CameraItem;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -52,8 +52,7 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
     }
 
     @Override
-    public void render(CameraStandEntityRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        super.render(state, poseStack, bufferSource, packedLight);
+    public void submit(CameraStandEntityRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
 
         float hurtTime = state.hurtTime;
         float damage = state.damageTime;
@@ -65,10 +64,10 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
 
         float entityPitch = state.entityPitch;
 
-        renderStand(state, poseStack, bufferSource, packedLight);
-        renderMount(state, poseStack, bufferSource, packedLight);
+        renderStand(state, poseStack, nodeCollector, state.lightCoords);
+        renderMount(state, poseStack, nodeCollector, state.lightCoords);
         if (!state.camera.isEmpty()) {
-            renderCamera(state, poseStack, bufferSource, packedLight);
+            renderCamera(state, poseStack, nodeCollector, state.lightCoords);
         }
     }
 

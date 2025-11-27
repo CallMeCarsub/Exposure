@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Either;
 import io.github.mortuusars.exposure.Config;
 import io.github.mortuusars.exposure.Exposure;
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.gui.screen.element.Pager;
 import io.github.mortuusars.exposure.client.gui.screen.element.TextBlock;
 import io.github.mortuusars.exposure.client.gui.screen.element.textbox.HorizontalAlignment;
@@ -280,7 +281,7 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
                     if (hasText)
                         tooltip.add(Component.translatable("gui.exposure.album.right_click_to_clear"));
 
-                    guiGraphics.renderTooltip(this.font, tooltip, Optional.empty(), x, y);
+                    Tooltips.renderTooltip(guiGraphics, this.font, tooltip, x, y);
 
                     return;
                 }

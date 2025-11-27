@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.mortuusars.exposure.Config;
 import io.github.mortuusars.exposure.Exposure;
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.gui.screen.ItemListScreen;
 import io.github.mortuusars.exposure.client.gui.toast.BetterTutorialToast;
 import io.github.mortuusars.exposure.client.gui.toast.ToastIcon;
@@ -259,7 +260,7 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
         boolean hoveredOverPart = true; // easier to set it to false in else block, than in every if block.
 
         if (isMouseOver(flash, x, y)) {
-            guiGraphics.renderTooltip(font, getTooltipLines(translate("flash.tooltip")), x, y);
+            Tooltips.renderFormattedTooltip(guiGraphics, font, getTooltipLines(translate("flash.tooltip")), x, y);
         } else if (isMouseOver(viewfinder, x, y)) {
             Component controlsKey = translateKey(KeyboardHandler.getCameraControlsKey(), ChatFormatting.GRAY);
             Component middleClick = Config.Client.VIEWFINDER_MIDDLE_CLICK_CONTROLS.get()
@@ -267,22 +268,22 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
                     : Component.empty();
             Component selfieKey = translateKey(Minecrft.options().keyTogglePerspective, ChatFormatting.GRAY);
             Component sprintKey = translateKey(Minecrft.options().keySprint, ChatFormatting.GRAY);
-            guiGraphics.renderTooltip(font, getTooltipLines(
+            Tooltips.renderFormattedTooltip(guiGraphics, font, getTooltipLines(
                     translate("viewfinder.tooltip", controlsKey, middleClick, selfieKey, sprintKey)), x, y);
         } else if (isMouseOver(shutterSpeedKnob, x, y)) {
-            guiGraphics.renderTooltip(font, getTooltipLines(translate("shutter_speed.tooltip")), x, y);
+            Tooltips.renderFormattedTooltip(guiGraphics, font, getTooltipLines(translate("shutter_speed.tooltip")), x, y);
         } else if (isMouseOver(filter, x, y) || isMouseOver(filterOnLens, x, y)) {
-            guiGraphics.renderTooltip(font, getTooltipLines(translate("filter.tooltip")), x, y);
+            Tooltips.renderFormattedTooltip(guiGraphics, font, getTooltipLines(translate("filter.tooltip")), x, y);
         } else if (isMouseOver(lens, x, y) || isMouseOver(lensBuiltIn, x, y)) {
-            guiGraphics.renderTooltip(font, getTooltipLines(translate("lens.tooltip")), x, y);
+            Tooltips.renderFormattedTooltip(guiGraphics, font, getTooltipLines(translate("lens.tooltip")), x, y);
         } else if (isMouseOver(film, x, y)) {
-            guiGraphics.renderTooltip(font, getTooltipLines(translate("film.tooltip")), x, y);
+            Tooltips.renderFormattedTooltip(guiGraphics, font, getTooltipLines(translate("film.tooltip")), x, y);
         } else if (isMouseOver(selfTimer, x, y)) {
             MutableComponent tooltip = translate("self_timer.tooltip");
             if (Config.Server.TIMER_ATTRACTS_MOB_ATTENTION.get()) {
                 tooltip.append(translate("self_timer_attention.tooltip"));
             }
-            guiGraphics.renderTooltip(font, getTooltipLines(tooltip), x, y);
+            Tooltips.renderFormattedTooltip(guiGraphics, font, getTooltipLines(tooltip), x, y);
         } else {
             hoveredOverPart = false;
             super.renderTooltip(guiGraphics, x, y);

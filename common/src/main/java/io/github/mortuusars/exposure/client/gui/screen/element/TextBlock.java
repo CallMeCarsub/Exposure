@@ -1,5 +1,6 @@
 package io.github.mortuusars.exposure.client.gui.screen.element;
 
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.gui.screen.element.textbox.HorizontalAlignment;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -109,7 +110,7 @@ public class TextBlock extends AbstractWidget {
         }
 
         if (!tooltipLines.isEmpty() && isMouseOver(mouseX, mouseY))
-            guiGraphics.renderTooltip(font, tooltipLines, DefaultTooltipPositioner.INSTANCE, mouseX, mouseY);
+            Tooltips.renderFormattedTooltip(guiGraphics, font, tooltipLines, mouseX, mouseY);
     }
 
     public @Nullable Style getClickedComponentStyleAt(double mouseX, double mouseY) {

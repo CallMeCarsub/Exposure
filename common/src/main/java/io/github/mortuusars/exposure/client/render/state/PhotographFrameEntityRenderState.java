@@ -15,7 +15,8 @@ public class PhotographFrameEntityRenderState extends EntityRenderState {
     public int photographBrightness;
     public boolean isGlowing;
     @Nullable
-    public BakedModel itemModel;
+    public
+    BakedModel itemModel;
 
     public PhotographFrameEntityRenderState() {
         this.direction = Direction.NORTH;

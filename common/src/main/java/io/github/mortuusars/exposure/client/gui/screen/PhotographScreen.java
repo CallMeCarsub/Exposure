@@ -7,6 +7,7 @@ import io.github.mortuusars.exposure.Config;
 import io.github.mortuusars.exposure.Exposure;
 import io.github.mortuusars.exposure.ExposureClient;
 import io.github.mortuusars.exposure.client.export.ImageExporter;
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.gui.Widgets;
 import io.github.mortuusars.exposure.client.gui.screen.element.Pager;
 import io.github.mortuusars.exposure.client.gui.component.SteppedZoom;
@@ -219,7 +220,7 @@ public class PhotographScreen extends Screen {
                 }
             });
 
-            guiGraphics.renderTooltip(font, lines, Optional.empty(), mouseX, mouseY + 20);
+            Tooltips.renderTooltip(guiGraphics, font, lines, mouseX, mouseY + 20);
         }
     }
 

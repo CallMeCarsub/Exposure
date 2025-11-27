@@ -5,12 +5,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.mortuusars.exposure.Exposure;
 import io.github.mortuusars.exposure.client.animation.Animation;
 import io.github.mortuusars.exposure.client.animation.EasingFunction;
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.util.Minecrft;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -150,8 +150,8 @@ public class ItemListScreen extends Screen {
     }
 
     protected void renderBg(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // Render BG expanding it according to number of rows
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos, topPos, 0, 0, imageWidth, 17, 256, 256);
@@ -181,7 +181,7 @@ public class ItemListScreen extends Screen {
     }
 
     public static void renderSlotHighlight(GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-        guiGraphics.fillGradient(RenderType.guiOverlay(), x, y, x + 16, y + 16, -2130706433, -2130706433, blitOffset);
+        guiGraphics.fillGradient(x, y, x + 16, y + 16, -2130706433, -2130706433);
     }
 
     protected void renderTooltip(GuiGraphics guiGraphics, int x, int y) {
@@ -192,7 +192,7 @@ public class ItemListScreen extends Screen {
                     ? abstractContainerScreen.getTooltipFromContainerItem(itemStack)
                     : Screen.getTooltipFromItem(Minecrft.get(), itemStack);
 
-            guiGraphics.renderTooltip(font, tooltipLines, itemStack.getTooltipImage(), x, y);
+            Tooltips.renderTooltip(guiGraphics, font, tooltipLines, itemStack.getTooltipImage(), x, y);
         }
     }
 

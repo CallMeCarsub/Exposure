@@ -1,6 +1,7 @@
 package io.github.mortuusars.exposure.client.gui.tooltip;
 
 import io.github.mortuusars.exposure.Config;
+import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.util.Minecrft;
 import io.github.mortuusars.exposure.world.entity.CameraStandEntity;
 import net.minecraft.ChatFormatting;
@@ -31,7 +32,7 @@ public class CameraStandTooltip {
         if (stand.isMalfunctioned()) {
             List<FormattedCharSequence> lines = Minecrft.get().font.split(Component.translatable("gui.exposure.camera_stand.tooltip.malfunctioned")
                     .withStyle(ChatFormatting.RED), 230);
-            guiGraphics.renderTooltip(minecraft.font, lines, x, y + 12);
+            Tooltips.renderFormattedTooltip(guiGraphics, minecraft.font, lines, x, y + 12);
         } else {
             TooltipRenderUtil.renderTooltipBackground(guiGraphics, x, y, 18, 18, null);
 
@@ -41,7 +42,7 @@ public class CameraStandTooltip {
             guiGraphics.pose().popMatrix();
 
             // TODO: rendered weird?
-            guiGraphics.renderTooltip(minecraft.font, stand.getCamera(), x + 16, y + 12);
+            Tooltips.renderTooltip(guiGraphics, minecraft.font, stand.getCamera(), x + 16, y + 12);
         }
     }
 }
