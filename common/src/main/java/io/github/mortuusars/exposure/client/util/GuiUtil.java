@@ -45,12 +45,12 @@ public class GuiUtil {
                              float minX, float maxX, float minY, float maxY, float zOffset,
                              float minU, float maxU, float minV, float maxV) {
         if (texture != null) {
-//            RenderSystem.setShaderTexture(0, texture);
+//            //RenderSystem.setShaderTexture(0, texture);
         }
 
         Matrix4f matrix = poseStack.last().pose();
-//        RenderSystem.setShader(CoreShaders.POSITION);
-//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        //RenderSystem.setShader(CoreShaders.POSITION);
+//        //RenderSystem.setShader(CoreShaders.POSITION_TEX);
         BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferBuilder.addVertex(matrix, minX, maxY, zOffset).setUv(minU, maxV);
         bufferBuilder.addVertex(matrix, maxX, maxY, zOffset).setUv(maxU, maxV);
@@ -83,7 +83,7 @@ public class GuiUtil {
         }
 
 //        Matrix4f matrix = poseStack.last().pose();
-////        RenderSystem.setShader(CoreShaders.POSITION_COLOR);
+////        //RenderSystem.setShader(CoreShaders.POSITION_COLOR);
 //        BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 //        bufferBuilder.addVertex(matrix, minX, maxY, 0).setColor(color);
 //        bufferBuilder.addVertex(matrix, maxX, maxY, 0).setColor(color);

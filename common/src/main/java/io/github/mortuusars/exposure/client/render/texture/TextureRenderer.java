@@ -28,10 +28,10 @@ public class TextureRenderer {
     public static void render(PoseStack poseStack, MultiBufferSource bufferSource, Identifier texture,
                               float minX, float minY, float maxX, float maxY,
                               float minU, float minV, float maxU, float maxV, int packedLight, int r, int g, int b, int a) {
-//        RenderSystem.setShaderTexture(0, texture);
-//        RenderSystem.setShader(CoreShaders.POSITION_COLOR_TEX_LIGHTMAP);
-//        RenderSystem.disableBlend();
-//        RenderSystem.disableDepthTest();
+//        //RenderSystem.setShaderTexture(0, texture);
+//        //RenderSystem.setShader(CoreShaders.POSITION_COLOR_TEX_LIGHTMAP);
+//        //RenderSystem.disableBlend();
+//        //RenderSystem.disableDepthTest();
 
         Matrix4f matrix = poseStack.last().pose();
         VertexConsumer bufferBuilder = bufferSource.getBuffer(RenderType.text(texture));

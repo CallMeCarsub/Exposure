@@ -43,9 +43,9 @@ public class ViewfinderShader {
         if (shaderId != null && active) {
             PostChain shader = Minecrft.get().getShaderManager().getPostChain(shaderId, LevelTargetBundle.MAIN_TARGETS);
             if (shader != null) {
-                RenderSystem.disableBlend();
-                RenderSystem.disableDepthTest();
-                RenderSystem.resetTextureMatrix();
+//                //RenderSystem.disableBlend();
+//                //RenderSystem.disableDepthTest();
+//                //RenderSystem.resetTextureMatrix();
 
                 shader.process(this.minecraft.getMainRenderTarget(), Minecrft.get().gameRenderer.resourcePool);
             } else {

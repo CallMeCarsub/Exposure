@@ -209,8 +209,8 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
         }
 
         if (isInAddingMode()) {
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
+            //RenderSystem.enableBlend();
+            //RenderSystem.defaultBlendFunc();
             for (Slot slot : getMenu().slots) {
                 if (!slot.getItem().isEmpty() && !(slot.getItem().getItem() instanceof PhotographItem)) {
                     guiGraphics.pose().pushMatrix();
@@ -220,7 +220,7 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
                     guiGraphics.pose().popMatrix();
                 }
             }
-            RenderSystem.disableBlend();
+            //RenderSystem.disableBlend();
         }
 
         this.renderTooltip(guiGraphics, mouseX, mouseY);
@@ -303,10 +303,10 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        //RenderSystem.setShader(CoreShaders.POSITION_TEX);
+        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        //RenderSystem.enableBlend();
+        //RenderSystem.defaultBlendFunc();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, AlbumGUI.TEXTURE, leftPos, topPos, 0, 0,
                 imageWidth, imageHeight, 512, 512);
 

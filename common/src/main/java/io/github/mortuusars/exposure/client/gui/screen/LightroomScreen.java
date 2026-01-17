@@ -189,10 +189,10 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
 
     @Override
     protected void renderBg(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
+//        //RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        //RenderSystem.enableBlend();
+//        //RenderSystem.defaultBlendFunc();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, MAIN_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, MAIN_TEXTURE, leftPos - 27, topPos + 35, 0, 209, 28, 31, 256, 256);
 
@@ -223,7 +223,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
         @Nullable Frame centerFrame = getMenu().getFrameByIndex(selectedFrame);
         @Nullable Frame rightFrame = getMenu().getFrameByIndex(selectedFrame + 1);
 
-//        RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
+//        //RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
 
         // Left film part
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, FILM_OVERLAYS_TEXTURE, leftPos + 1, topPos + 15, 0, leftFrame != null ? 68 : 0, 54, 68, 256, 256);
@@ -235,7 +235,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, FILM_OVERLAYS_TEXTURE, leftPos + 119, topPos + 15, 120, hasMoreFrames ? 68 : 0, 56, 68, 256, 256);
         }
 
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         Matrix3x2fStack poseStack = guiGraphics.pose();
 
         if (leftFrame != null)
@@ -245,7 +245,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
         if (rightFrame != null)
             renderFrame(rightFrame, poseStack, leftPos + 116, topPos + 22, FRAME_SIZE, isOverRightFrame(mouseX, mouseY) ? 0.8f : 0.25f, exposureType);
 
-//        RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
+//        //RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
 
         if (getMenu().getBlockEntity().isAdvancingFrameOnPrint()) {
             poseStack.pushMatrix();
@@ -262,7 +262,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
             poseStack.popMatrix();
         }
 
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     private void renderSlotPlaceholders(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {

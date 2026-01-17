@@ -111,7 +111,7 @@ public class LightroomBlock extends Block implements EntityBlock {
             PlatformHelper.openMenu(serverPlayer, lightroomBlockEntity, buffer -> buffer.writeBlockPos(pos));
         }
 
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.CONSUME;
         } else {
             return InteractionResult.SUCCESS;
@@ -120,7 +120,7 @@ public class LightroomBlock extends Block implements EntityBlock {
 
     @Override
     public void neighborChanged(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Block block, @Nullable Orientation orientation, boolean pIsMoving) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (!state.getValue(PRINTING)) {
                 boolean neighborPowered = level.hasNeighborSignal(pos);
                 // this changes mod behavior from 1.21.1, but i don't know how to make it work like it originally did.
@@ -154,7 +154,7 @@ public class LightroomBlock extends Block implements EntityBlock {
     }
 
     public static <T extends BlockEntity> BlockEntityTicker<T> getBlockTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        if (!level.isClientSide && blockEntityType.equals(Exposure.BlockEntityTypes.LIGHTROOM.get()))
+        if (!level.isClientSide() && blockEntityType.equals(Exposure.BlockEntityTypes.LIGHTROOM.get()))
             return LightroomBlockEntity::serverTick;
 
         return null;

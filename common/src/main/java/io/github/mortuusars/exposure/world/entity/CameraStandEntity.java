@@ -516,7 +516,7 @@ public class CameraStandEntity extends Entity implements CameraHolder {
             this.setUnderLavaMovement();
         }
 
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             this.noPhysics = false;
         } else {
             this.noPhysics = !this.level().noCollision(this, this.getBoundingBox().deflate(1.0E-7));
@@ -778,7 +778,7 @@ public class CameraStandEntity extends Entity implements CameraHolder {
     }
 
     public boolean isClientSide() {
-        return level().isClientSide;
+        return level().isClientSide();
     }
 
     @Override

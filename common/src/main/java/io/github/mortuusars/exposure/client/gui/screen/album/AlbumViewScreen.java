@@ -183,10 +183,10 @@ public class AlbumViewScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         renderTransparentBackground(guiGraphics);
-//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
+//        //RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        //RenderSystem.enableBlend();
+//        //RenderSystem.defaultBlendFunc();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, AlbumGUI.TEXTURE, leftPos, topPos, 0, 0,
                 imageWidth, imageHeight, 512, 512);
 

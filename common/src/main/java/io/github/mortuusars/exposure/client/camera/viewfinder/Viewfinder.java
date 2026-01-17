@@ -10,6 +10,7 @@ import io.github.mortuusars.exposure.world.camera.Camera;
 import io.github.mortuusars.exposure.world.item.camera.CameraItem;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -137,22 +138,22 @@ public class Viewfinder {
                 || zoom().keyPressed(key, scanCode, action, modifiers);
     }
 
-    public boolean mouseClicked(int button, int action) {
+    public boolean mouseClicked(MouseButtonEvent event) {
         if (!isLookingThrough()) {
             return false;
         }
 
         if (controlsActive()) return false;
 
-        if (!canAttack() && Minecrft.options().keyAttack.matchesMouse(button))
+        if (!canAttack() && Minecrft.options().keyAttack.matchesMouse(event))
             return true; // Block attacks
 
-        if (KeyboardHandler.getCameraControlsKey().matchesMouse(button)) {
+        if (KeyboardHandler.getCameraControlsKey().matchesMouse(event)) {
             openControlsScreen();
             return false; // Do not cancel the event to keep sneaking
         }
 
-        if (Config.Client.VIEWFINDER_MIDDLE_CLICK_CONTROLS.get() && button == InputConstants.MOUSE_BUTTON_MIDDLE) {
+        if (Config.Client.VIEWFINDER_MIDDLE_CLICK_CONTROLS.get() && event.button() == InputConstants.MOUSE_BUTTON_MIDDLE) {
             openControlsScreen();
             return true;
         }

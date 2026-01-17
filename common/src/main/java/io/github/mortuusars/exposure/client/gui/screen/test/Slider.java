@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.realmsclient.RealmsMainScreen;
 import io.github.mortuusars.exposure.client.util.Minecrft;
 import net.minecraft.client.InputType;
 import net.minecraft.client.Minecraft;
@@ -11,8 +12,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.navigation.CommonInputs;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -124,9 +127,10 @@ public class Slider extends AbstractWidget {
 
     // -- Input
 
+
     @Override
-    public void onClick(double mouseX, double mouseY) {
-        this.setPositionFromMouse(mouseX);
+    public void onClick(MouseButtonEvent event, boolean isDoubleClick) {
+        this.setPositionFromMouse(event.x());
     }
 
     @Override
@@ -147,36 +151,36 @@ public class Slider extends AbstractWidget {
     }
 
     @Override
-    public void onRelease(double mouseX, double mouseY) {
+    public void onRelease(MouseButtonEvent event) {
         super.playDownSound(Minecraft.getInstance().getSoundManager());
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == InputConstants.MOUSE_BUTTON_RIGHT && active && visible && isMouseOver(mouseX, mouseY)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_RIGHT && active && visible && isMouseOver(event.x(), event.y())) {
             resetToDefault();
             playDownSound(Minecrft.get().getSoundManager());
             return true;
         }
-
-        return super.mouseClicked(mouseX, mouseY, button);
+        
+        return super.mouseClicked(event, isDoubleClick);
     }
 
     @Override
-    protected void onDrag(double mouseX, double mouseY, double dragX, double dragY) {
+    protected void onDrag(MouseButtonEvent event, double mouseX, double mouseY) {
         this.setPositionFromMouse(mouseX);
-        super.onDrag(mouseX, mouseY, dragX, dragY);
+        super.onDrag(event, mouseX, mouseY);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (CommonInputs.selected(keyCode)) {
+    public boolean keyPressed(KeyEvent event) {
+        if (event.isSelection()) {
             this.canChangeValue = !this.canChangeValue;
             return true;
         } else {
             if (this.canChangeValue) {
-                boolean bl = keyCode == 263;
-                if (bl || keyCode == 262) {
+                boolean bl = event.key() == 263;
+                if (bl || event.key() == 262) {
                     float f = bl ? -1.0F : 1.0F;
                     this.setPosition(position + (double)(f / (float)(width - HANDLE_WIDTH)));
                     return true;
@@ -186,6 +190,7 @@ public class Slider extends AbstractWidget {
             return false;
         }
     }
+    
 
     // -- Render
 
@@ -193,9 +198,9 @@ public class Slider extends AbstractWidget {
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Minecraft minecraft = Minecraft.getInstance();
 
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.enableDepthTest();
+//        //RenderSystem.enableBlend();
+//        //RenderSystem.defaultBlendFunc();
+//        //RenderSystem.enableDepthTest();
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, getSprite(), getX(), getY(), getWidth(), getHeight(), ARGB.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
 
         if (active && horizontalGradient != null) {

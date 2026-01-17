@@ -24,9 +24,9 @@ public class Shader {
         PostChain shader = Minecrft.get().getShaderManager().getPostChain(shaderId, LevelTargetBundle.MAIN_TARGETS);
 
         if (shader != null) {
-            RenderSystem.disableBlend();
-            RenderSystem.disableDepthTest();
-            RenderSystem.resetTextureMatrix();
+            //RenderSystem.disableBlend();
+            //RenderSystem.disableDepthTest();
+            //RenderSystem.resetTextureMatrix();
             shader.process(renderTarget, Minecraft.getInstance().gameRenderer.resourcePool);
         }
     }

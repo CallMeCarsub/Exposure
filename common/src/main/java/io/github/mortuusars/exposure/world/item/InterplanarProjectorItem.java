@@ -68,7 +68,7 @@ public class InterplanarProjectorItem extends Item {
         if (other.isEmpty() && action == ClickAction.SECONDARY && getProjection(stack).isPresent()) {
             setMode(stack, getMode(stack).cycle());
             slot.setChanged();
-            if (player.level().isClientSide) {
+            if (player.level().isClientSide()) {
                 player.playSound(Exposure.SoundEvents.CAMERA_GENERIC_CLICK.get(), 0.6f, 1f);
             }
             return true;

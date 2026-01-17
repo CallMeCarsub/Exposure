@@ -25,9 +25,9 @@ public class CaptureShader {
 
     public static void process() {
         if (shaderId != null) {
-            RenderSystem.disableBlend();
-            RenderSystem.disableDepthTest();
-            RenderSystem.resetTextureMatrix();
+            //RenderSystem.disableBlend();
+            //RenderSystem.disableDepthTest();
+            //RenderSystem.resetTextureMatrix();
             PostChain postChain = Minecrft.get().getShaderManager().getPostChain(shaderId, LevelTargetBundle.MAIN_TARGETS);
 
             postChain.process(Minecrft.get().getMainRenderTarget(), Minecrft.get().gameRenderer.resourcePool);
@@ -55,9 +55,9 @@ public class CaptureShader {
     public static void process(@NotNull Identifier shaderId, @NotNull RenderTarget renderTarget, @NotNull GraphicsResourceAllocator resourceAllocator) {
         @Nullable PostChain postChain = Minecrft.get().getShaderManager().getPostChain(shaderId, LevelTargetBundle.MAIN_TARGETS);
         if (postChain != null) {
-            RenderSystem.disableBlend();
-            RenderSystem.disableDepthTest();
-            RenderSystem.resetTextureMatrix();
+            //RenderSystem.disableBlend();
+            //RenderSystem.disableDepthTest();
+            //RenderSystem.resetTextureMatrix();
             postChain.process(renderTarget, resourceAllocator);
         }
     }

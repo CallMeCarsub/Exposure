@@ -59,7 +59,7 @@ public class CameraStandItem extends Item {
         }
 
         itemStack.shrink(1);
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.CONSUME;
         } else {
             return InteractionResult.SUCCESS;

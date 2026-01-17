@@ -41,7 +41,7 @@ public class PhotographFrameItem extends Item {
         for (int i = 2; i >= 0; i--) {
             frameEntity.setSize(i);
             if (frameEntity.survives()) {
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     frameEntity.playPlacementSound();
                     level.gameEvent(player, GameEvent.ENTITY_PLACE, frameEntity.position());
                     level.addFreshEntity(frameEntity);
@@ -49,7 +49,7 @@ public class PhotographFrameItem extends Item {
 
                 frameEntity.setFrameItem((player.isCreative() ? itemInHand.copy() : itemInHand).split(1));
 
-                if (level.isClientSide) {
+                if (level.isClientSide()) {
                     return InteractionResult.CONSUME;
                 } else {
                     return InteractionResult.SUCCESS;

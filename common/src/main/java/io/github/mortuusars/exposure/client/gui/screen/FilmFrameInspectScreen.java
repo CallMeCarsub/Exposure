@@ -116,9 +116,9 @@ public class FilmFrameInspectScreen extends Screen {
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         float scale = (float) (zoom.get() * zoomFactor);
 
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.disableDepthTest();
+//        //RenderSystem.enableBlend();
+//        //RenderSystem.defaultBlendFunc();
+//        //RenderSystem.disableDepthTest();
 
         renderTransparentBackground(guiGraphics);
 
@@ -129,16 +129,16 @@ public class FilmFrameInspectScreen extends Screen {
 
         guiGraphics.pose().translate(BG_SIZE / -2f, BG_SIZE / -2f);
 
-//        RenderSystem.setShaderTexture(0, TEXTURE);
+//        //RenderSystem.setShaderTexture(0, TEXTURE);
         GuiUtil.blit(guiGraphics.pose(), 0, 0, BG_SIZE, BG_SIZE, 0, 0, 256, 256, 0);
 
         Frame frame = getCurrentFrame();
         ExposureType filmType = frame.type();
         FilmColor filmColor = filmType.getFilmColor();
 
-//        RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
+//        //RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
         GuiUtil.blit(guiGraphics.pose(), 0, 0, BG_SIZE, BG_SIZE, 0, BG_SIZE, 256, 256, 0);
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         guiGraphics.pose().translate(12, 12, 0);
         RenderableImage image = ExposureClient.renderedExposures().getOrCreate(frame).modifyWith(ImageEffect.NEGATIVE_FILM);

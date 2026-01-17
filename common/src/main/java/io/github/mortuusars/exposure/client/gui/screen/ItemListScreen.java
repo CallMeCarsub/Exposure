@@ -115,7 +115,7 @@ public class ItemListScreen extends Screen {
         guiGraphics.pose().translate(-(width / 2f), -(height / 2f));
 
         renderBg(guiGraphics, mouseX, mouseY, partialTick);
-        //RenderSystem.disableDepthTest();
+        ////RenderSystem.disableDepthTest();
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         {
             guiGraphics.pose().pushMatrix();
@@ -137,7 +137,7 @@ public class ItemListScreen extends Screen {
             this.renderLabels(guiGraphics, mouseX, mouseY);
             guiGraphics.pose().popMatrix();
         }
-        //RenderSystem.enableDepthTest();
+        ////RenderSystem.enableDepthTest();
         guiGraphics.pose().popMatrix();
 
         renderTooltip(guiGraphics, mouseX, mouseY);
@@ -149,8 +149,8 @@ public class ItemListScreen extends Screen {
     }
 
     protected void renderBg(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        //RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // Render BG expanding it according to number of rows
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos, topPos, 0, 0, imageWidth, 17, 256, 256);

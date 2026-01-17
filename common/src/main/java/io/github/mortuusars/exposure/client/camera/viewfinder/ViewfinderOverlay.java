@@ -110,10 +110,10 @@ public class ViewfinderOverlay {
 
         guiGraphics.pose().translate(-width / 2f, -height / 2f, 0);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        //RenderSystem.enableBlend();
+        //RenderSystem.defaultBlendFunc();
+        //RenderSystem.enableDepthTest();
+        //RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
         // -9999 to cover all screen when overlay is scaled down
         // Left
@@ -131,10 +131,10 @@ public class ViewfinderOverlay {
         if (filter.getForReading().getItem() instanceof BrokenInterplanarProjectorItem brokenInterplanarProjector) {
             drawGuide = false;
             renderBSOD(guiGraphics, brokenInterplanarProjector, filter.getForReading());
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.enableDepthTest();
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            //RenderSystem.enableBlend();
+            //RenderSystem.defaultBlendFunc();
+            //RenderSystem.enableDepthTest();
+            //RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         }
 
         drawShutter(guiGraphics);
@@ -151,7 +151,7 @@ public class ViewfinderOverlay {
         }
 
         guiGraphics.pose().popMatrix();
-        RenderSystem.disableDepthTest();
+        //RenderSystem.disableDepthTest();
     }
 
     protected void drawViewfinderTexture(GuiGraphics guiGraphics) {
@@ -281,7 +281,7 @@ public class ViewfinderOverlay {
     }
 
     protected void renderNoFilmIcon(PoseStack poseStack) {
-        RenderSystem.setShaderTexture(0, NO_FILM_ICON_TEXTURE);
+        //RenderSystem.setShaderTexture(0, NO_FILM_ICON_TEXTURE);
         int x = (int) ((opening.x + (opening.width / 2) - 12));
         int y = (int) (opening.y + opening.height - 18);
         GuiUtil.blit(poseStack, x, y, 23, 18, 0, 0, 23, 18, 0);
@@ -292,7 +292,7 @@ public class ViewfinderOverlay {
         int exposedFrames = filmRollItem.getStoredFramesCount(filmStack);
         int remainingFrames = Math.max(0, maxFrames - exposedFrames);
         if (maxFrames > 5 && remainingFrames <= 3) {
-            RenderSystem.setShaderTexture(0, REMAINING_FRAMES_ICON_TEXTURE);
+            //RenderSystem.setShaderTexture(0, REMAINING_FRAMES_ICON_TEXTURE);
             float x = (int) (opening.x + (opening.width / 2) - 17);
             float y = (int) (opening.y + opening.height - 15);
             int vOffset = (remainingFrames - 1) * 15;

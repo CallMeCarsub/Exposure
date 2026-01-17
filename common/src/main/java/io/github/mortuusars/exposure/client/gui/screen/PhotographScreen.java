@@ -151,9 +151,9 @@ public class PhotographScreen extends Screen {
         float zoomFactor = height * 0.8f;
         float scale = (float) (zoom.get() * zoomFactor);
 
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.disableDepthTest();
+//        //RenderSystem.enableBlend();
+//        //RenderSystem.defaultBlendFunc();
+//        //RenderSystem.disableDepthTest();
 
         renderTransparentBackground(guiGraphics);
 

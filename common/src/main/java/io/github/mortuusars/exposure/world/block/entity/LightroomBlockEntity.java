@@ -707,7 +707,7 @@ public class LightroomBlockEntity extends BaseContainerBlockEntity implements Wo
     @Override
     public void setChanged() {
         super.setChanged();
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }

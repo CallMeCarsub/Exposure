@@ -32,7 +32,6 @@ import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -77,7 +76,7 @@ public class PhotographFrameEntity extends HangingEntity {
     @Override
     public boolean shouldRenderAtSqrDistance(double distance) {
         // Return defaults when called on server. Some mods can do that.
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             double d = 64 * getViewScale();
             return distance < d * d;
         }
@@ -108,7 +107,7 @@ public class PhotographFrameEntity extends HangingEntity {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
-        int packedData = (size << 8) | direction.get3DDataValue();
+        int packedData = (size << 8) | this.getDirection().get3DDataValue();
         return new ClientboundAddEntityPacket(this, packedData, this.getPos());
     }
 
@@ -219,7 +218,7 @@ public class PhotographFrameEntity extends HangingEntity {
 
         int sizeX = Math.max(1, getWidth() / 16);
         int sizeY = Math.max(1, getHeight() / 16);
-        BlockPos baseBlockPos = pos.relative(direction.getOpposite());
+        BlockPos baseBlockPos = pos.relative(this.getDirection().getOpposite());
 
         if (getDirection().getAxis().isHorizontal()) {
             Direction direction = getDirection().getCounterClockWise();
@@ -251,10 +250,10 @@ public class PhotographFrameEntity extends HangingEntity {
     protected void setDirection(@NotNull Direction facingDirection) {
         Preconditions.checkNotNull(facingDirection);
 
-        direction = facingDirection;
+        this.setDirectionRaw(facingDirection);
         if (facingDirection.getAxis().isHorizontal()) {
             setXRot(0.0f);
-            setYRot(direction.get2DDataValue() * 90);
+            setYRot(this.getDirection().get2DDataValue() * 90);
         } else {
             setXRot(-90 * facingDirection.getAxisDirection().getStep());
             setYRot(0.0f);
@@ -335,7 +334,7 @@ public class PhotographFrameEntity extends HangingEntity {
         if (itemInHand.is(Items.GLOW_INK_SAC) && !isGlowing()) {
             setGlowing(true);
             itemInHand.shrink(1);
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 playSound(SoundEvents.GLOW_INK_SAC_USE);
                 gameEvent(GameEvent.BLOCK_CHANGE, player);
             }
@@ -343,7 +342,7 @@ public class PhotographFrameEntity extends HangingEntity {
         }
 
         if (!getItem().isEmpty()) {
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 playSound(getRotateSound(), 1.0F, level().getRandom().nextFloat() * 0.2f + 0.9f);
                 setItemRotation(getItemRotation() + 1);
                 gameEvent(GameEvent.BLOCK_CHANGE, player);
@@ -408,7 +407,7 @@ public class PhotographFrameEntity extends HangingEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide && isGlowing() && level().getRandom().nextFloat() < 0.003f) {
+        if (level().isClientSide() && isGlowing() && level().getRandom().nextFloat() < 0.003f) {
             AABB bb = getBoundingBox();
             Vec3i normal = getDirection().getUnitVec3i();
             level().addParticle(ParticleTypes.END_ROD,
