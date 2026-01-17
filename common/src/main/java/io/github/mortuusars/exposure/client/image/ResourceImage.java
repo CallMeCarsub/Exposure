@@ -7,7 +7,7 @@ import io.github.mortuusars.exposure.client.image.renderable.RenderableImageIden
 import io.github.mortuusars.exposure.util.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,11 +19,11 @@ public class ResourceImage extends SimpleTexture implements RenderableImage {
     @Nullable
     protected NativeImage image;
 
-    public ResourceImage(ResourceLocation location) {
+    public ResourceImage(Identifier location) {
         super(location);
     }
 
-    public static @NotNull RenderableImage getOrCreate(ResourceLocation location) {
+    public static @NotNull RenderableImage getOrCreate(Identifier location) {
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
         @Nullable AbstractTexture existingTexture = textureManager.byPath.get(location);
@@ -77,7 +77,7 @@ public class ResourceImage extends SimpleTexture implements RenderableImage {
 
     /*@Override
     public void reset(@NotNull TextureManager textureManager, @NotNull ResourceManager resourceManager,
-                      @NotNull ResourceLocation path, @NotNull Executor executor) {
+                      @NotNull Identifier path, @NotNull Executor executor) {
         super.reset(textureManager, resourceManager, path, executor);
         if (image != null) {
             image.close();

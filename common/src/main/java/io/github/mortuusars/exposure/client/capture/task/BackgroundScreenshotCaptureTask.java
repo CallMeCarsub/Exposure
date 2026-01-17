@@ -14,7 +14,7 @@ import io.github.mortuusars.exposure.util.cycles.task.Result;
 import io.github.mortuusars.exposure.util.cycles.task.Task;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
@@ -68,7 +68,7 @@ public class BackgroundScreenshotCaptureTask extends Task<Result<Image>> {
     }
 
     private void applyShaderEffects(RenderTarget renderTarget) {
-        @Nullable ResourceLocation effect = Minecraft.getInstance().gameRenderer.currentPostEffect();
+        @Nullable Identifier effect = Minecraft.getInstance().gameRenderer.currentPostEffect();
         if (effect != null && Minecraft.getInstance().gameRenderer.effectActive) {
             Shader.process(effect, renderTarget);
         }

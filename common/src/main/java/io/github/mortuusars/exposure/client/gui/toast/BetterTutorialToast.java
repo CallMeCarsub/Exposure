@@ -5,19 +5,18 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
 public class BetterTutorialToast implements Toast {
-    private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/tutorial");
+    private static final Identifier BACKGROUND_SPRITE = Identifier.withDefaultNamespace("toast/tutorial");
     public static final int DEFAULT_SHOW_DURATION_MS = 7000;
 
-    public ResourceLocation backgroundSprite = BACKGROUND_SPRITE;
+    public Identifier backgroundSprite = BACKGROUND_SPRITE;
     public Runnable onHide = () -> { };
 
     protected final ToastIcon icon;

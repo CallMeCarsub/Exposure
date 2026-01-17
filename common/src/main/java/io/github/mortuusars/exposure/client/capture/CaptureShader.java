@@ -7,19 +7,19 @@ import io.github.mortuusars.exposure.client.util.Minecrft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelTargetBundle;
 import net.minecraft.client.renderer.PostChain;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CaptureShader {
     @Nullable
-    private static ResourceLocation shaderId;
+    private static Identifier shaderId;
 
     public static boolean hasShader() {
         return shaderId != null;
     }
 
-    public static void apply(ResourceLocation shaderLocation) {
+    public static void apply(Identifier shaderLocation) {
         shaderId = shaderLocation;
     }
 
@@ -52,7 +52,7 @@ public class CaptureShader {
      * Since this method creates a temp PostChain on every call, this probably should not be used when performance matters.
      * Main use for this is to apply a shader when capturing a photograph.
      */
-    public static void process(@NotNull ResourceLocation shaderId, @NotNull RenderTarget renderTarget, @NotNull GraphicsResourceAllocator resourceAllocator) {
+    public static void process(@NotNull Identifier shaderId, @NotNull RenderTarget renderTarget, @NotNull GraphicsResourceAllocator resourceAllocator) {
         @Nullable PostChain postChain = Minecrft.get().getShaderManager().getPostChain(shaderId, LevelTargetBundle.MAIN_TARGETS);
         if (postChain != null) {
             RenderSystem.disableBlend();

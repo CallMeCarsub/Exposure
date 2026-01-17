@@ -25,7 +25,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
@@ -35,7 +35,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class FilmFrameInspectScreen extends Screen {
-    public static final ResourceLocation TEXTURE = Exposure.resource("textures/gui/film_frame_inspect.png");
+    public static final Identifier TEXTURE = Exposure.resource("textures/gui/film_frame_inspect.png");
 
     public static final int BG_SIZE = 78;
     public static final int FRAME_SIZE = 54;

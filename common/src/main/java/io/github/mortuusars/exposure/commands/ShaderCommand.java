@@ -9,9 +9,9 @@ import io.github.mortuusars.exposure.network.packet.clientbound.ShaderApplyS2CP;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ShaderCommand {
     }
 
     private static int applyShader(CommandContext<CommandSourceStack> context) {
-        ResourceLocation shaderLocation = ResourceLocationArgument.getId(context, "shader_location");
+        Identifier shaderLocation = IdentifierArgument.getId(context, "shader_location");
         for (ServerPlayer targetPlayer : getTargetPlayers(context)) {
             Packets.sendToClient(new ShaderApplyS2CP(shaderLocation), targetPlayer);
         }

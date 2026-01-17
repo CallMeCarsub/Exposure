@@ -30,7 +30,7 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -54,7 +54,7 @@ public class ViewfinderCameraControlsScreen extends Screen {
             Exposure.resource("camera_controls/frame_counter_disabled"),
             Exposure.resource("camera_controls/frame_counter_highlighted"));
 
-    public static final ResourceLocation SEPARATOR_SPRITE = Exposure.resource("camera_controls/button_separator");
+    public static final Identifier SEPARATOR_SPRITE = Exposure.resource("camera_controls/button_separator");
 
     protected static final int SEPARATOR_WIDTH = 1;
     protected static final int BUTTON_HEIGHT = 18;

@@ -15,8 +15,8 @@ import io.github.mortuusars.exposure.world.camera.capture.CaptureType;
 import io.github.mortuusars.exposure.world.photograph.PhotographType;
 import io.github.mortuusars.exposure.util.cycles.Cycles;
 import io.github.mortuusars.exposure.client.ExposureStore;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.resources.Identifier;
 
 public class ExposureClient {
     private static final Cycles CYCLES = new Cycles();
@@ -76,50 +76,50 @@ public class ExposureClient {
     // --
 
     public static class Models {
-        public static final ModelResourceLocation PHOTOGRAPH_FRAME_SMALL =
-                new ModelResourceLocation(Exposure.resource("photograph_frame_small"), "standalone");
-        public static final ModelResourceLocation PHOTOGRAPH_FRAME_MEDIUM =
-                new ModelResourceLocation(Exposure.resource("photograph_frame_medium"), "standalone");
-        public static final ModelResourceLocation PHOTOGRAPH_FRAME_LARGE =
-                new ModelResourceLocation(Exposure.resource("photograph_frame_large"), "standalone");
-        public static final ModelResourceLocation CLEAR_PHOTOGRAPH_FRAME_SMALL =
-                new ModelResourceLocation(Exposure.resource("glass_photograph_frame_small"), "standalone");
-        public static final ModelResourceLocation CLEAR_PHOTOGRAPH_FRAME_MEDIUM =
-                new ModelResourceLocation(Exposure.resource("glass_photograph_frame_medium"), "standalone");
-        public static final ModelResourceLocation CLEAR_PHOTOGRAPH_FRAME_LARGE =
-                new ModelResourceLocation(Exposure.resource("glass_photograph_frame_large"), "standalone");
-        public static final ModelResourceLocation CAMERA_STAND =
-                new ModelResourceLocation(Exposure.resource("camera_stand"), "standalone");
-        public static final ModelResourceLocation CAMERA_STAND_MOUNT =
-                new ModelResourceLocation(Exposure.resource("camera_stand_mount"), "standalone");
+        public static final ModelIdentifier PHOTOGRAPH_FRAME_SMALL =
+                new ModelIdentifier(Exposure.resource("photograph_frame_small"), "standalone");
+        public static final ModelIdentifier PHOTOGRAPH_FRAME_MEDIUM =
+                new ModelIdentifier(Exposure.resource("photograph_frame_medium"), "standalone");
+        public static final ModelIdentifier PHOTOGRAPH_FRAME_LARGE =
+                new ModelIdentifier(Exposure.resource("photograph_frame_large"), "standalone");
+        public static final ModelIdentifier CLEAR_PHOTOGRAPH_FRAME_SMALL =
+                new ModelIdentifier(Exposure.resource("glass_photograph_frame_small"), "standalone");
+        public static final ModelIdentifier CLEAR_PHOTOGRAPH_FRAME_MEDIUM =
+                new ModelIdentifier(Exposure.resource("glass_photograph_frame_medium"), "standalone");
+        public static final ModelIdentifier CLEAR_PHOTOGRAPH_FRAME_LARGE =
+                new ModelIdentifier(Exposure.resource("glass_photograph_frame_large"), "standalone");
+        public static final ModelIdentifier CAMERA_STAND =
+                new ModelIdentifier(Exposure.resource("camera_stand"), "standalone");
+        public static final ModelIdentifier CAMERA_STAND_MOUNT =
+                new ModelIdentifier(Exposure.resource("camera_stand_mount"), "standalone");
     }
 
     public static class SelectProperties {
-        public static final ResourceLocation CAMERA_STATUS = Exposure.resource("camera_status");
-        public static final ResourceLocation CAMERA_ATTACHMENTS = Exposure.resource("camera_attachments");
+        public static final Identifier CAMERA_STATUS = Exposure.resource("camera_status");
+        public static final Identifier CAMERA_ATTACHMENTS = Exposure.resource("camera_attachments");
     }
 
    public static class RangeSelectProperties {
-        public static final ResourceLocation ALBUM_PHOTOS = Exposure.resource("photos");
-        public static final ResourceLocation CHANNELS = Exposure.resource("channels");
-       public static final ResourceLocation COUNT = Exposure.resource("count");
+        public static final Identifier ALBUM_PHOTOS = Exposure.resource("photos");
+        public static final Identifier CHANNELS = Exposure.resource("channels");
+       public static final Identifier COUNT = Exposure.resource("count");
    }
 
    public static class ConditionalProperties {
-        public static final ResourceLocation PROJECTOR_ACTIVE = Exposure.resource("projector_active");
+        public static final Identifier PROJECTOR_ACTIVE = Exposure.resource("projector_active");
    }
 
     public static class Textures {
-        public static final ResourceLocation EMPTY = Exposure.resource("textures/empty.png");
+        public static final Identifier EMPTY = Exposure.resource("textures/empty.png");
 
         public static class Photograph {
-            public static final ResourceLocation REGULAR_PAPER = Exposure.resource("textures/photograph/photograph.png");
-            public static final ResourceLocation REGULAR_ALBUM_PAPER = Exposure.resource("textures/photograph/photograph_album.png");
+            public static final Identifier REGULAR_PAPER = Exposure.resource("textures/photograph/photograph.png");
+            public static final Identifier REGULAR_ALBUM_PAPER = Exposure.resource("textures/photograph/photograph_album.png");
 
-            public static final ResourceLocation AGED_PAPER = Exposure.resource("textures/photograph/aged_photograph.png");
-            public static final ResourceLocation AGED_OVERLAY = Exposure.resource("textures/photograph/aged_photograph_overlay.png");
-            public static final ResourceLocation AGED_ALBUM_PAPER = Exposure.resource("textures/photograph/aged_photograph_album.png");
-            public static final ResourceLocation AGED_ALBUM_OVERLAY = Exposure.resource("textures/photograph/aged_photograph_album_overlay.png");
+            public static final Identifier AGED_PAPER = Exposure.resource("textures/photograph/aged_photograph.png");
+            public static final Identifier AGED_OVERLAY = Exposure.resource("textures/photograph/aged_photograph_overlay.png");
+            public static final Identifier AGED_ALBUM_PAPER = Exposure.resource("textures/photograph/aged_photograph_album.png");
+            public static final Identifier AGED_ALBUM_OVERLAY = Exposure.resource("textures/photograph/aged_photograph_album_overlay.png");
         }
     }
 }

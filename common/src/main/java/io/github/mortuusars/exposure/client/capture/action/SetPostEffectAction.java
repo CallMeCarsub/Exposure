@@ -1,17 +1,17 @@
 package io.github.mortuusars.exposure.client.capture.action;
 
 import io.github.mortuusars.exposure.client.util.Minecrft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public class SetPostEffectAction implements CaptureAction {
     @Nullable
-    private ResourceLocation currentEffect;
+    private Identifier currentEffect;
     private boolean effectActive;
 
-    private final ResourceLocation effect;
+    private final Identifier effect;
 
-    public SetPostEffectAction(ResourceLocation effect) {
+    public SetPostEffectAction(Identifier effect) {
         this.effect = effect;
     }
 

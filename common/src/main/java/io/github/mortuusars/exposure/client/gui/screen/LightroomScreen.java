@@ -41,7 +41,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -55,8 +55,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
-    public static final ResourceLocation MAIN_TEXTURE = Exposure.resource("textures/gui/lightroom.png");
-    public static final ResourceLocation FILM_OVERLAYS_TEXTURE = Exposure.resource("textures/gui/lightroom_film_overlays.png");
+    public static final Identifier MAIN_TEXTURE = Exposure.resource("textures/gui/lightroom.png");
+    public static final Identifier FILM_OVERLAYS_TEXTURE = Exposure.resource("textures/gui/lightroom_film_overlays.png");
 
     public static final WidgetSprites PRINT_BUTTON_SPRITES = new WidgetSprites(
             Exposure.resource("lightroom/print_button"),

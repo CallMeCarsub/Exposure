@@ -15,7 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import net.minecraft.world.level.storage.ValueInput;
@@ -29,7 +29,7 @@ public class ExposureData extends SavedData {
             Codec.INT.fieldOf("width").forGetter(ExposureData::getWidth),
             Codec.INT.fieldOf("height").forGetter(ExposureData::getHeight),
             Codecs.byteArrayCodec(1, 2048 * 2048).fieldOf("pixels").forGetter(ExposureData::getPixels),
-            ResourceLocation.CODEC.optionalFieldOf("palette", ColorPalettes.DEFAULT.location()).forGetter(ExposureData::getPaletteId),
+            Identifier.CODEC.optionalFieldOf("palette", ColorPalettes.DEFAULT.location()).forGetter(ExposureData::getPaletteId),
             Tag.CODEC.optionalFieldOf("tag", Tag.EMPTY).forGetter(ExposureData::getTag)
     ).apply(instance, ExposureData::new));
 
@@ -37,7 +37,7 @@ public class ExposureData extends SavedData {
             ByteBufCodecs.VAR_INT, ExposureData::getWidth,
             ByteBufCodecs.VAR_INT, ExposureData::getHeight,
             ByteBufCodecs.byteArray(2048 * 2048), ExposureData::getPixels,
-            ResourceLocation.STREAM_CODEC, ExposureData::getPaletteId,
+            Identifier.STREAM_CODEC, ExposureData::getPaletteId,
             Tag.STREAM_CODEC, ExposureData::getTag,
             ExposureData::new
     );
@@ -48,10 +48,10 @@ public class ExposureData extends SavedData {
     private final int width;
     private final int height;
     private final byte[] pixels;
-    private final ResourceLocation palette;
+    private final Identifier palette;
     private final Tag tag;
 
-    public ExposureData(int width, int height, byte[] pixels, ResourceLocation paletteId, Tag tag) {
+    public ExposureData(int width, int height, byte[] pixels, Identifier paletteId, Tag tag) {
         Preconditions.checkArgument(width > 0, "Width should be larger than 0. %s", width);
         Preconditions.checkArgument(height > 0, "Height should be larger than 0. %s ", height);
         Preconditions.checkArgument(pixels.length == width * height,
@@ -80,7 +80,7 @@ public class ExposureData extends SavedData {
         return pixels[y * width + x];
     }
 
-    public ResourceLocation getPaletteId() {
+    public Identifier getPaletteId() {
         return palette;
     }
 

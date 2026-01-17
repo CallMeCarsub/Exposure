@@ -16,7 +16,7 @@ import io.github.mortuusars.exposure.world.item.ChromaticSheetItem;
 import io.github.mortuusars.exposure.world.item.DevelopedFilmItem;
 import io.github.mortuusars.exposure.world.item.PhotographItem;
 import io.github.mortuusars.exposure.world.item.StackedPhotographsItem;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;

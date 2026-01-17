@@ -40,7 +40,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -181,7 +181,7 @@ public class CameraItem extends Item {
         return Exposure.SoundEvents.CAMERA_RELEASE_BUTTON_CLICK.get();
     }
 
-    public ResourceLocation getCaptureType(ItemStack stack) {
+    public Identifier getCaptureType(ItemStack stack) {
         return CaptureType.CAMERA;
     }
 
@@ -236,7 +236,7 @@ public class CameraItem extends Item {
         return Attachment.FILTER.map(stack, filter -> Filters.of(registryAccess, filter)).flatMap(Function.identity());
     }
 
-    public Optional<ResourceLocation> getFilterShaderLocation(RegistryAccess registryAccess, ItemStack stack) {
+    public Optional<Identifier> getFilterShaderLocation(RegistryAccess registryAccess, ItemStack stack) {
         return getFilter(registryAccess, stack).map(Filter::shader);
     }
 
@@ -874,7 +874,7 @@ public class CameraItem extends Item {
                 .flatMap(pos -> level.getBiome(pos).unwrapKey().map(ResourceKey::location))
                 .ifPresent(biome -> data.put(Frame.BIOME, biome));
 
-        List<ResourceLocation> structures = positionsInFrame.stream()
+        List<Identifier> structures = positionsInFrame.stream()
                 .map(pos -> LevelUtil.getStructuresAt(level, pos))
                 .flatMap(List::stream)
                 .collect(Collectors.toSet()) // Remove duplicates

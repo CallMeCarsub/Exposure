@@ -14,7 +14,7 @@ accessible field net/minecraft/client/Minecraft cameraEntity Lnet/minecraft/worl
 #accessible field net/minecraft/client/renderer/RenderStateShard LIGHTMAP Lnet/minecraft/client/renderer/RenderStateShard$LightmapStateShard;
 accessible field net/minecraft/client/renderer/texture/TextureManager byPath Ljava/util/Map;
 
-#accessible method net/minecraft/client/renderer/GameRenderer setPostEffect (Lnet/minecraft/resources/ResourceLocation;)V
+#accessible method net/minecraft/client/renderer/GameRenderer setPostEffect (Lnet/minecraft/resources/Identifier;)V
 accessible field net/minecraft/client/renderer/GameRenderer effectActive Z
 accessible field net/minecraft/client/renderer/GameRenderer resourcePool Lcom/mojang/blaze3d/resource/CrossFrameResourcePool;
 accessible method net/minecraft/client/renderer/GameRenderer getFov (Lnet/minecraft/client/Camera;FZ)F

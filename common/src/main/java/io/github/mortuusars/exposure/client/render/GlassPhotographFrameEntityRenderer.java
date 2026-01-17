@@ -3,10 +3,9 @@ package io.github.mortuusars.exposure.client.render;
 import io.github.mortuusars.exposure.ExposureClient;
 import io.github.mortuusars.exposure.client.render.state.PhotographFrameEntityRenderState;
 import io.github.mortuusars.exposure.world.entity.GlassPhotographFrameEntity;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.ModelIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public class GlassPhotographFrameEntityRenderer extends PhotographFrameEntityRenderer<GlassPhotographFrameEntity> {
@@ -15,7 +14,7 @@ public class GlassPhotographFrameEntityRenderer extends PhotographFrameEntityRen
     }
 
     @Override
-    public ModelResourceLocation getModelLocation(PhotographFrameEntityRenderState renderState, int size) {
+    public ModelIdentifier getModelLocation(PhotographFrameEntityRenderState renderState, int size) {
         return switch (size) {
             case 0 -> ExposureClient.Models.CLEAR_PHOTOGRAPH_FRAME_SMALL;
             case 1 -> ExposureClient.Models.CLEAR_PHOTOGRAPH_FRAME_MEDIUM;

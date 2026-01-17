@@ -7,15 +7,14 @@ import io.github.mortuusars.exposure.client.animation.Animation;
 import io.github.mortuusars.exposure.client.animation.EasingFunction;
 import io.github.mortuusars.exposure.client.gui.Tooltips;
 import io.github.mortuusars.exposure.client.util.Minecrft;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemListScreen extends Screen {
-    public static final ResourceLocation TEXTURE = Exposure.resource("textures/gui/item_list.png");
+    public static final Identifier TEXTURE = Exposure.resource("textures/gui/item_list.png");
 
     protected final Screen parent;
     protected final List<ItemStack> items;

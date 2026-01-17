@@ -13,11 +13,10 @@ import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.CommonInputs;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -28,10 +27,10 @@ import java.text.DecimalFormat;
 import java.util.function.Consumer;
 
 public class Slider extends AbstractWidget {
-    public static final ResourceLocation SLIDER_SPRITE = ResourceLocation.withDefaultNamespace("widget/slider");
-    public static final ResourceLocation HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace("widget/slider_highlighted");
-    public static final ResourceLocation SLIDER_HANDLE_SPRITE = ResourceLocation.withDefaultNamespace("widget/slider_handle");
-    public static final ResourceLocation SLIDER_HANDLE_HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace("widget/slider_handle_highlighted");
+    public static final Identifier SLIDER_SPRITE = Identifier.withDefaultNamespace("widget/slider");
+    public static final Identifier HIGHLIGHTED_SPRITE = Identifier.withDefaultNamespace("widget/slider_highlighted");
+    public static final Identifier SLIDER_HANDLE_SPRITE = Identifier.withDefaultNamespace("widget/slider_handle");
+    public static final Identifier SLIDER_HANDLE_HIGHLIGHTED_SPRITE = Identifier.withDefaultNamespace("widget/slider_handle_highlighted");
 
     protected static final int TEXT_MARGIN = 2;
     protected static final int HANDLE_WIDTH = 8;
@@ -78,11 +77,11 @@ public class Slider extends AbstractWidget {
         this.horizontalGradient = null;
     }
 
-    protected ResourceLocation getSprite() {
+    protected Identifier getSprite() {
         return this.isFocused() && !this.canChangeValue ? HIGHLIGHTED_SPRITE : SLIDER_SPRITE;
     }
 
-    protected ResourceLocation getHandleSprite() {
+    protected Identifier getHandleSprite() {
         return !this.isHovered && !this.canChangeValue ? SLIDER_HANDLE_SPRITE : SLIDER_HANDLE_HIGHLIGHTED_SPRITE;
     }
 

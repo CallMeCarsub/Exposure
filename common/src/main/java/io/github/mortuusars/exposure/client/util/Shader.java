@@ -7,7 +7,7 @@ import io.github.mortuusars.exposure.client.capture.CaptureShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelTargetBundle;
 import net.minecraft.client.renderer.PostChain;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class Shader {
@@ -20,7 +20,7 @@ public class Shader {
      * Main use for this is to apply a shader when capturing a photograph.
      */
     @SuppressWarnings("deprecation")
-    public static void process(@NotNull ResourceLocation shaderId, @NotNull RenderTarget renderTarget) {
+    public static void process(@NotNull Identifier shaderId, @NotNull RenderTarget renderTarget) {
         PostChain shader = Minecrft.get().getShaderManager().getPostChain(shaderId, LevelTargetBundle.MAIN_TARGETS);
 
         if (shader != null) {

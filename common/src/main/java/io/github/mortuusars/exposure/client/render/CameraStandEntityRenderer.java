@@ -9,7 +9,6 @@ import io.github.mortuusars.exposure.client.util.Minecrft;
 import io.github.mortuusars.exposure.world.entity.CameraStandEntity;
 import io.github.mortuusars.exposure.world.item.camera.CameraItem;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -80,7 +79,7 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
 
         poseStack.translate(-0.5f, 0f, -0.5f);
 
-        ModelResourceLocation modelLocation = ExposureClient.Models.CAMERA_STAND;
+        ModelIdentifier modelLocation = ExposureClient.Models.CAMERA_STAND;
         BakedModel model = PlatformHelperClient.getModel(modelLocation);
         blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(RenderType.solid()),
                 null, model, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);
@@ -105,7 +104,7 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         }
 
         poseStack.translate(-0.5f, 0f, -0.5f);
-        ModelResourceLocation mountModelLocation = ExposureClient.Models.CAMERA_STAND_MOUNT;
+        ModelIdentifier mountModelLocation = ExposureClient.Models.CAMERA_STAND_MOUNT;
         BakedModel mountModel = PlatformHelperClient.getModel(mountModelLocation);
         blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(RenderType.solid()),
                 null, mountModel, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);

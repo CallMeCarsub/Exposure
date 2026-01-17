@@ -10,13 +10,13 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public record ActiveCameraSetSettingC2SP(CameraSetting<?> setting, byte[] encodedValue) implements Packet {
-    public static final ResourceLocation ID = Exposure.resource("active_camera_set_setting");
+    public static final Identifier ID = Exposure.resource("active_camera_set_setting");
     public static final Type<ActiveCameraSetSettingC2SP> TYPE = new Type<>(ID);
 
     public static final StreamCodec<FriendlyByteBuf, ActiveCameraSetSettingC2SP> STREAM_CODEC = StreamCodec.composite(

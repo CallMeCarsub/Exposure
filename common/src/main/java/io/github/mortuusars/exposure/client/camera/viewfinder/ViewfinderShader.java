@@ -10,7 +10,7 @@ import io.github.mortuusars.exposure.world.item.camera.Attachment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelTargetBundle;
 import net.minecraft.client.renderer.PostChain;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +20,7 @@ public class ViewfinderShader {
     private final Viewfinder viewfinder;
 
     @Nullable
-    private ResourceLocation shaderId;
+    private Identifier shaderId;
     private boolean active;
 
     public ViewfinderShader(Camera camera, Viewfinder viewfinder) {
@@ -30,7 +30,7 @@ public class ViewfinderShader {
         this.update();
     }
 
-    public void apply(ResourceLocation shaderLocation) {
+    public void apply(Identifier shaderLocation) {
         shaderId = shaderLocation;
         active = true;
     }

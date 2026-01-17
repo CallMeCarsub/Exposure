@@ -6,7 +6,7 @@ import io.github.mortuusars.exposure.advancements.predicate.CameraPredicate;
 import io.github.mortuusars.exposure.advancements.predicate.FramePredicate;
 import io.github.mortuusars.exposure.world.camera.frame.Frame;
 import io.github.mortuusars.exposure.world.entity.CameraHolder;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

@@ -11,12 +11,11 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundRenameItemPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class ItemRenameScreen extends AbstractContainerScreen<ItemRenameMenu> {
-    public static final ResourceLocation TEXTURE = Exposure.resource("textures/gui/item_rename.png");
+    public static final Identifier TEXTURE = Exposure.resource("textures/gui/item_rename.png");
 
     protected EditBox name;
 

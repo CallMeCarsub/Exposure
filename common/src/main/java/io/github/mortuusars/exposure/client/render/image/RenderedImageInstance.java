@@ -8,15 +8,14 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import io.github.mortuusars.exposure.Exposure;
 import io.github.mortuusars.exposure.client.image.renderable.RenderableImage;
 import io.github.mortuusars.exposure.util.color.Color;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceMetadata;
 import net.minecraft.util.TriState;
 import org.joml.Matrix4f;
@@ -28,7 +27,7 @@ import java.util.function.Function;
  * And to <a href="https://github.com/bravely-beep">bravely-beep</a> for pointing me to it.
  */
 public class RenderedImageInstance implements AutoCloseable {
-    private static final Function<ResourceLocation, RenderType> TEXT_MIPMAP = Util.memoize(texture -> RenderType.create("exposure_mipmap",
+    private static final Function<Identifier, RenderType> TEXT_MIPMAP = Util.memoize(texture -> RenderType.create("exposure_mipmap",
             DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP,
             VertexFormat.Mode.QUADS,
             786432,
@@ -41,7 +40,7 @@ public class RenderedImageInstance implements AutoCloseable {
                     .setLightmapState(RenderType.LIGHTMAP)
                     .createCompositeState(false)));
 
-    protected final ResourceLocation textureLocation;
+    protected final Identifier textureLocation;
     protected RenderableImage image;
     protected DynamicTexture texture;
     protected final RenderType renderType;
@@ -50,7 +49,7 @@ public class RenderedImageInstance implements AutoCloseable {
     RenderedImageInstance(RenderableImage image) {
         this.image = image;
         this.texture = new DynamicTexture(image.width(), image.height(), true);
-        this.textureLocation = image.getIdentifier().toResourceLocation();
+        this.textureLocation = image.getIdentifier().toIdentifier();
         Minecraft.getInstance().getTextureManager().register(textureLocation, this.texture);
 
         int mipmapLevel = Minecraft.getInstance().options.mipmapLevels().get();

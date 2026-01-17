@@ -23,10 +23,9 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -34,11 +33,11 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public class ViewfinderOverlay {
-    public static final ResourceLocation VIEWFINDER_TEXTURE = Exposure.resource("textures/gui/viewfinder/viewfinder.png");
-    public static final ResourceLocation NO_FILM_ICON_TEXTURE = Exposure.resource("textures/gui/viewfinder/no_film.png");
-    public static final ResourceLocation REMAINING_FRAMES_ICON_TEXTURE = Exposure.resource("textures/gui/viewfinder/remaining_frames.png");
-    public static final ResourceLocation BSOD_SAD_FACE_TEXTURE = Exposure.resource("textures/gui/viewfinder/bsod_sad_face.png");
-    public static final ResourceLocation BSOD_QR_CODE_TEXTURE = Exposure.resource("textures/gui/viewfinder/bsod_qr_code.png");
+    public static final Identifier VIEWFINDER_TEXTURE = Exposure.resource("textures/gui/viewfinder/viewfinder.png");
+    public static final Identifier NO_FILM_ICON_TEXTURE = Exposure.resource("textures/gui/viewfinder/no_film.png");
+    public static final Identifier REMAINING_FRAMES_ICON_TEXTURE = Exposure.resource("textures/gui/viewfinder/remaining_frames.png");
+    public static final Identifier BSOD_SAD_FACE_TEXTURE = Exposure.resource("textures/gui/viewfinder/bsod_sad_face.png");
+    public static final Identifier BSOD_QR_CODE_TEXTURE = Exposure.resource("textures/gui/viewfinder/bsod_qr_code.png");
 
     protected final LocalPlayer player;
     protected final Camera camera;
@@ -74,8 +73,8 @@ public class ViewfinderOverlay {
         this.initialScale = 0.5f;
         this.scale = 0.5f; // Start small to animate expanding
 
-        this.xRot = Minecrft.get().gameRenderer.getMainCamera().getXRot();
-        this.yRot = Minecrft.get().gameRenderer.getMainCamera().getYRot();
+        this.xRot = Minecrft.get().gameRenderer.getMainCamera().xRot();
+        this.yRot = Minecrft.get().gameRenderer.getMainCamera().yRot();
         this.xRot0 = xRot;
         this.yRot0 = yRot;
     }
@@ -143,7 +142,7 @@ public class ViewfinderOverlay {
 
         // Guide
         if (drawGuide) {
-            ResourceLocation guideTexture = CameraSettings.COMPOSITION_GUIDE.getOrDefault(camera.getItemStack()).overlayTextureLocation();
+            Identifier guideTexture = CameraSettings.COMPOSITION_GUIDE.getOrDefault(camera.getItemStack()).overlayTextureLocation();
             GuiUtil.blit(guideTexture, guiGraphics.pose(), opening, 0, 0, (int) opening.width, (int) opening.height, 0);
         }
 

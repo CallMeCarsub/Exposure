@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.*;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.function.TriConsumer;
@@ -151,9 +151,9 @@ public class ExtraData extends CompoundTag {
                     });
         }
 
-        public static Type<ResourceLocation> resourceLocation(String key) {
+        public static Type<Identifier> Identifier(String key) {
             return new Type<>(key,
-                    (data, k) -> ResourceLocation.parse(data.getString(k).orElseThrow()),
+                    (data, k) -> Identifier.parse(data.getString(k).orElseThrow()),
                     (data, k, value) -> data.putString(k, value.toString()));
         }
 

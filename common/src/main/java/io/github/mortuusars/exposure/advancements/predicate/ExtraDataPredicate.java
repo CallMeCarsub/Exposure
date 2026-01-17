@@ -9,7 +9,7 @@ import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * We cannot use {@link net.minecraft.advancements.critereon.NbtPredicate} as it checks against CompoundTag.class.
+ * We cannot use {@link net.minecraft.advancements.criterion.NbtPredicate} as it checks against CompoundTag.class.
  * This is basically a copy of its functionality to make ExtraData work.
  */
 public record ExtraDataPredicate(ExtraData data) {

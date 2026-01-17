@@ -41,8 +41,8 @@ import io.github.mortuusars.exposure.world.item.crafting.recipe.PhotographAgingR
 import io.github.mortuusars.exposure.world.item.crafting.recipe.PhotographCopyingRecipe;
 import io.github.mortuusars.exposure.world.item.crafting.recipe.serializer.ComponentTransferringRecipeSerializer;
 import io.github.mortuusars.exposure.world.item.util.ItemAndStack;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
-import net.minecraft.advancements.critereon.PlayerTrigger;
+import net.minecraft.advancements.criterion.ItemSubPredicate;
+import net.minecraft.advancements.criterion.PlayerTrigger;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Registry;
@@ -52,7 +52,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.StatFormatter;
@@ -109,8 +109,8 @@ public class Exposure {
     /**
      * Creates resource location in the mod namespace with the given filePath.
      */
-    public static ResourceLocation resource(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ID, path);
+    public static Identifier resource(String path) {
+        return Identifier.fromNamespaceAndPath(ID, path);
     }
 
     public static class Blocks {
@@ -345,8 +345,8 @@ public class Exposure {
         public static final DataComponentType<FilmStyle> FILM_STYLE = Register.dataComponentType("film_style",
                 arg -> arg.persistent(FilmStyle.CODEC).networkSynchronized(FilmStyle.STREAM_CODEC));
 
-        public static final DataComponentType<ResourceLocation> FILM_COLOR_PALETTE = Register.dataComponentType("film_color_palette",
-                arg -> arg.persistent(ResourceLocation.CODEC).networkSynchronized(ResourceLocation.STREAM_CODEC));
+        public static final DataComponentType<Identifier> FILM_COLOR_PALETTE = Register.dataComponentType("film_color_palette",
+                arg -> arg.persistent(Identifier.CODEC).networkSynchronized(Identifier.STREAM_CODEC));
 
         public static final DataComponentType<DitherMode> FILM_DITHER_MODE = Register.dataComponentType("film_dither_mode",
                 arg -> arg.persistent(DitherMode.CODEC).networkSynchronized(DitherMode.STREAM_CODEC));
@@ -510,17 +510,17 @@ public class Exposure {
     }
 
     public static class Stats {
-        public static final Map<ResourceLocation, StatFormatter> STATS = new HashMap<>();
+        public static final Map<Identifier, StatFormatter> STATS = new HashMap<>();
 
-        public static final ResourceLocation INTERACT_WITH_LIGHTROOM =
+        public static final Identifier INTERACT_WITH_LIGHTROOM =
                 register(Exposure.resource("interact_with_lightroom"), StatFormatter.DEFAULT);
-        public static final ResourceLocation FILM_FRAMES_EXPOSED =
+        public static final Identifier FILM_FRAMES_EXPOSED =
                 register(Exposure.resource("film_frames_exposed"), StatFormatter.DEFAULT);
-        public static final ResourceLocation FLASHES_TRIGGERED =
+        public static final Identifier FLASHES_TRIGGERED =
                 register(Exposure.resource("flashes_triggered"), StatFormatter.DEFAULT);
 
         @SuppressWarnings("SameParameterValue")
-        private static ResourceLocation register(ResourceLocation location, StatFormatter formatter) {
+        private static Identifier register(Identifier location, StatFormatter formatter) {
             STATS.put(location, formatter);
             return location;
         }

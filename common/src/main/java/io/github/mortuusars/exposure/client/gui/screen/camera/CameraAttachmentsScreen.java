@@ -17,7 +17,7 @@ import io.github.mortuusars.exposure.data.Filters;
 import io.github.mortuusars.exposure.world.inventory.AbstractCameraAttachmentsMenu;
 import io.github.mortuusars.exposure.world.inventory.CameraInHandAttachmentsMenu;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -26,12 +26,11 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
@@ -46,7 +45,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCameraAttachmentsMenu> {
-    public static final ResourceLocation TEXTURE = Exposure.resource("textures/gui/camera_attachments.png");
+    public static final Identifier TEXTURE = Exposure.resource("textures/gui/camera_attachments.png");
 
     protected final Player player;
 
@@ -222,7 +221,7 @@ public class CameraAttachmentsScreen extends AbstractContainerScreen<AbstractCam
 
         int color = ARGB.colorFromFloat(1.0F, r, g, b);
 
-        ResourceLocation filterTexture = filter.attachmentTexture();
+        Identifier filterTexture = filter.attachmentTexture();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, filterTexture, leftPos + filterX, topPos + filterY, 0, 0, 32, 32, 32, 32, color);
     }
 

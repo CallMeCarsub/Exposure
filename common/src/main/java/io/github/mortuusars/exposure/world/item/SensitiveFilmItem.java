@@ -8,7 +8,7 @@ import io.github.mortuusars.exposure.world.camera.film.properties.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +26,7 @@ public interface SensitiveFilmItem extends FilmItem {
     }
 
     default ResourceKey<ColorPalette> getColorPalette(ItemStack stack) {
-        @Nullable ResourceLocation location = stack.get(Exposure.DataComponents.FILM_COLOR_PALETTE);
+        @Nullable Identifier location = stack.get(Exposure.DataComponents.FILM_COLOR_PALETTE);
         if (location != null) return ColorPalettes.createKey(location);
         return ColorPalettes.DEFAULT;
     }

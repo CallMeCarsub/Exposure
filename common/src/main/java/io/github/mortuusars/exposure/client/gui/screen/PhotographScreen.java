@@ -24,14 +24,14 @@ import io.github.mortuusars.exposure.world.item.PhotographItem;
 import io.github.mortuusars.exposure.world.item.util.ItemAndStack;
 import io.github.mortuusars.exposure.util.PagingDirection;
 import io.github.mortuusars.exposure.world.sound.SoundEffect;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.ItemStack;
@@ -204,7 +204,7 @@ public class PhotographScreen extends Screen {
         guiGraphics.drawString(font, "?", width - font.width("?") - 10, 10, 0xFFFFFFFF);
 
         if (mouseX > width - 20 && mouseX < width && mouseY < 20) {
-            String exposureName = frame.identifier().map(id -> id, ResourceLocation::toString);
+            String exposureName = frame.identifier().map(id -> id, Identifier::toString);
 
             List<Component> lines = new ArrayList<>();
 
@@ -284,7 +284,7 @@ public class PhotographScreen extends Screen {
         if (!Minecrft.player().isCreative() || frame.equals(Frame.EMPTY)) {
             return false;
         }
-        String text = frame.identifier().map(id -> id, ResourceLocation::toString);
+        String text = frame.identifier().map(id -> id, Identifier::toString);
         Minecrft.get().keyboardHandler.setClipboard(text);
         Minecrft.player().displayClientMessage(
                 Component.translatable("gui.exposure.photograph_screen.copied_message", text), false);

@@ -3,11 +3,11 @@ package io.github.mortuusars.exposure.client.util;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import io.github.mortuusars.exposure.util.Rect2f;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
@@ -19,7 +19,7 @@ public class GuiUtil {
         blit(null, poseStack, rect, u, v, textureWidth, textureHeight, zOffset);
     }
 
-    public static void blit(@Nullable ResourceLocation texture, PoseStack poseStack, Rect2f rect,
+    public static void blit(@Nullable Identifier texture, PoseStack poseStack, Rect2f rect,
                             int u, int v, int textureWidth, int textureHeight, float zOffset) {
         blit(texture, poseStack, rect.x, rect.y, rect.width, rect.height, u, v, textureWidth, textureHeight, zOffset);
     }
@@ -29,7 +29,7 @@ public class GuiUtil {
         blit(null, poseStack, x, y, width, height, u, v, textureWidth, textureHeight, zOffset);
     }
 
-    public static void blit(@Nullable ResourceLocation texture, PoseStack poseStack, float x, float y, float width, float height,
+    public static void blit(@Nullable Identifier texture, PoseStack poseStack, float x, float y, float width, float height,
                             int u, int v, int textureWidth, int textureHeight, float zOffset) {
         blit(texture, poseStack, x, x + width, y, y + height, zOffset,
                 u / (float)textureWidth, (u + width) / (float)textureWidth,
@@ -41,7 +41,7 @@ public class GuiUtil {
         blit(null, poseStack, minX, maxX, minY, maxY, zOffset, minU, maxU, minV, maxV);
     }
 
-    private static void blit(@Nullable ResourceLocation texture, PoseStack poseStack,
+    private static void blit(@Nullable Identifier texture, PoseStack poseStack,
                              float minX, float maxX, float minY, float maxY, float zOffset,
                              float minU, float maxU, float minV, float maxV) {
         if (texture != null) {
