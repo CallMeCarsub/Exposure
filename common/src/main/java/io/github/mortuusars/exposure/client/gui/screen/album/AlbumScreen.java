@@ -213,11 +213,11 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             //RenderSystem.defaultBlendFunc();
             for (Slot slot : getMenu().slots) {
                 if (!slot.getItem().isEmpty() && !(slot.getItem().getItem() instanceof PhotographItem)) {
-                    guiGraphics.pose().pushMatrix();
+                    guiGraphics.pose().pushPose();
                     guiGraphics.pose().translate(0.0f, 0.0f, 350.0f);
                     guiGraphics.blit(RenderPipelines.GUI_TEXTURED, AlbumGUI.TEXTURE, leftPos + slot.x - 1, topPos + slot.y - 1, 176, 188,
                             18, 18, 512, 512);
-                    guiGraphics.pose().popMatrix();
+                    guiGraphics.pose().popPose();
                 }
             }
             //RenderSystem.disableBlend();
@@ -248,11 +248,11 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0, 0, 15);
         super.renderLabels(guiGraphics, mouseX, mouseY);
 
-        guiGraphics.pose().popMatrix();
+        guiGraphics.pose().popPose();
     }
 
     @Override
@@ -322,10 +322,10 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             AlbumPlayerInventorySlot firstSlot = getMenu().getPlayerInventorySlots().getFirst();
             int x = firstSlot.x - 8;
             int y = firstSlot.y - 18;
-            guiGraphics.pose().pushMatrix();
+            guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(0.0f, 0.0f);
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, AlbumGUI.TEXTURE, leftPos + x, topPos + y, 0, 188, 176, 100, 512, 512);
-            guiGraphics.pose().popMatrix();
+            guiGraphics.pose().popPose();
 
             @Nullable Side pageBeingAddedTo = getMenu().getSideBeingAddedTo();
             for (Page page : pages) {

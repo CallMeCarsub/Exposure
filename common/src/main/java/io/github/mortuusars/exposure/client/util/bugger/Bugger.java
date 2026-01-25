@@ -86,13 +86,13 @@ public class Bugger {
     public static void renderMainPage(GuiGraphics guiGraphics) {
         float scale = (zoom + 100) / 100f;
 
-        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(scale, scale, scale);
         List<String> leftLines = collectLeftLines().stream().skip(scroll).toList();
         ((BuggerScreenRenderLinesInvoker) Minecraft.getInstance().getDebugOverlay()).drawLines(guiGraphics, leftLines, true);
         List<String> rightLines = collectRightLines().stream().skip(scroll).toList();
         ((BuggerScreenRenderLinesInvoker) Minecraft.getInstance().getDebugOverlay()).drawLines(guiGraphics, rightLines, false);
-        guiGraphics.pose().popMatrix();
+        guiGraphics.pose().popPose();
     }
 
     private static List<String> collectLeftLines() {
@@ -134,10 +134,10 @@ public class Bugger {
 
         float scale = (zoom + 100) / 100f;
 
-        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(scale, scale, scale);
         ((BuggerScreenRenderLinesInvoker) Minecrft.get().getDebugOverlay()).drawLines(guiGraphics, lines, true);
-        guiGraphics.pose().popMatrix();
+        guiGraphics.pose().popPose();
     }
 
     private static @NotNull List<String> getTagPageLines() {

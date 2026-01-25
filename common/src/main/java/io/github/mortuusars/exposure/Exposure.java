@@ -41,7 +41,6 @@ import io.github.mortuusars.exposure.world.item.crafting.recipe.PhotographAgingR
 import io.github.mortuusars.exposure.world.item.crafting.recipe.PhotographCopyingRecipe;
 import io.github.mortuusars.exposure.world.item.crafting.recipe.serializer.ComponentTransferringRecipeSerializer;
 import io.github.mortuusars.exposure.world.item.util.ItemAndStack;
-import net.minecraft.advancements.criterion.ItemSubPredicate;
 import net.minecraft.advancements.criterion.PlayerTrigger;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
@@ -94,8 +93,8 @@ public class Exposure {
         CreativeTabs.init();
         DataComponents.init();
         CriteriaTriggers.init();
-        ItemSubPredicates.init();
-        EntitySubPredicates.init();
+//        ItemSubPredicates.init();
+//        EntitySubPredicates.init();
         MenuTypes.init();
         RecipeSerializers.init();
         SoundEvents.init();
@@ -128,7 +127,7 @@ public class Exposure {
                         .noLootTable()
                         .mapColor(MapColor.NONE)
                         .noOcclusion()
-                        .noCollission()
+                        .noCollision()
                         .lightLevel(state -> 15));
 
         static void init() {
@@ -543,20 +542,20 @@ public class Exposure {
         }
     }
 
-    public static class ItemSubPredicates {
-        public static Supplier<ItemSubPredicate.Type<FramePredicate>> FRAME = Register.itemSubPredicate("frame",
-                () -> new ItemSubPredicate.Type<>(FramePredicate.CODEC));
-
-        public static void init() {
-        }
-    }
-
-    public static class EntitySubPredicates {
-        public static final Supplier<MapCodec<TamedPredicate>> TAMED = Register.entitySubPredicate("tamed", () -> TamedPredicate.CODEC);
-
-        public static void init() {
-        }
-    }
+//    public static class ItemSubPredicates {
+//        public static Supplier<ItemSubPredicate.Type<FramePredicate>> FRAME = Register.itemSubPredicate("frame",
+//                () -> new ItemSubPredicate.Type<>(FramePredicate.CODEC));
+//
+//        public static void init() {
+//        }
+//    }
+//
+//    public static class EntitySubPredicates {
+//        public static final Supplier<MapCodec<TamedPredicate>> TAMED = Register.entitySubPredicate("tamed", () -> TamedPredicate.CODEC);
+//
+//        public static void init() {
+//        }
+//    }
 
     public static class LootTables {
         public static final ResourceKey<LootTable> SIMPLE_DUNGEON_INJECT =

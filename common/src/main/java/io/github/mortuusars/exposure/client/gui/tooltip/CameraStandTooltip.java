@@ -36,10 +36,10 @@ public class CameraStandTooltip {
         } else {
             TooltipRenderUtil.renderTooltipBackground(guiGraphics, x, y, 18, 18, null);
 
-            guiGraphics.pose().pushMatrix();
+            guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(0, 0);
             guiGraphics.renderItem(stand.getCamera(), x + 1, y + 1);
-            guiGraphics.pose().popMatrix();
+            guiGraphics.pose().popPose();
 
             // TODO: rendered weird?
             Tooltips.renderTooltip(guiGraphics, minecraft.font, stand.getCamera(), x + 16, y + 12);

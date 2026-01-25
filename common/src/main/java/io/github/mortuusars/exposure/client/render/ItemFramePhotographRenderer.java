@@ -19,7 +19,7 @@ public class ItemFramePhotographRenderer {
 
         PhotographRenderState photographRenderState = ((HasPhotographRenderState) renderState).getPhotographRenderState();
 
-        poseStack.pushMatrix();
+        poseStack.pushPose();
 
         // should maybe fix this, but quark isn't even on 1.21.1 yet,
         // and they seem to only follow popular modding versions,
@@ -45,6 +45,6 @@ public class ItemFramePhotographRenderer {
         ExposureClient.photographRenderer().renderPhotograph(poseStack, bufferSource, style, frame,
                 false, false, packedLight, 255, 255, 255, 255);
 
-        poseStack.popMatrix();
+        poseStack.popPose();
     }
 }

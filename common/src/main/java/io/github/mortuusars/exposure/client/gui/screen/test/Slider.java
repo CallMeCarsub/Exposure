@@ -208,13 +208,13 @@ public class Slider extends AbstractWidget {
                     getY() + getHeight() - 1, horizontalGradient.getFirst(), horizontalGradient.getSecond());
         }
 
-        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0, 0);
 
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, getHandleSprite(), getX() + (int)(position * (double)(width - HANDLE_WIDTH)), getY(), HANDLE_WIDTH, getHeight());
         int textColor = (active ? 0xFFFFFF : 0xA0A0A0) | Mth.ceil(alpha * 255.0F) << 24;
         renderScrollingString(guiGraphics, minecraft.font, TEXT_MARGIN, textColor);
-        guiGraphics.pose().popMatrix();
+        guiGraphics.pose().popPose();
     }
 
     private void fillHorizontalGradient(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int colorFrom, int colorTo) {

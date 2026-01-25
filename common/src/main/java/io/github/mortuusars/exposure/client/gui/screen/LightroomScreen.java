@@ -248,7 +248,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
 //        //RenderSystem.setShaderColor(filmColor.r(), filmColor.g(), filmColor.b(), filmColor.a());
 
         if (getMenu().getBlockEntity().isAdvancingFrameOnPrint()) {
-            poseStack.pushMatrix();
+            poseStack.pushPose();
             poseStack.translate(0, 0);
 
             if (selectedFrame < getMenu().getTotalFramesCount() - 1) {
@@ -259,7 +259,7 @@ public class LightroomScreen extends AbstractContainerScreen<LightroomMenu> {
                 guiGraphics.blit(RenderPipelines.GUI_TEXTURED, MAIN_TEXTURE, leftPos + 111, topPos + 44, 210, 0, 10, 10, 256, 256);
             }
 
-            poseStack.popMatrix();
+            poseStack.popPose();
         }
 
 //        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

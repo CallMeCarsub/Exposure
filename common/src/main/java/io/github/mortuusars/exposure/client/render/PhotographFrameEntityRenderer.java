@@ -19,12 +19,13 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -79,17 +80,18 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
     }
 
     @Override
-    public void render(@NotNull PhotographFrameEntityRenderState state, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
+    public void submit(PhotographFrameEntityRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
         Direction direction = state.direction;
         int size = state.size;
 
-        poseStack.pushMatrix();
+        poseStack.pushPose();
         // Offsets name tag rendering to be like item frame:
         poseStack.translate(direction.getStepX() * 0.3f, direction.getStepY() * 0.3f, direction.getStepZ() * 0.3f);
-        super.render(state, poseStack, bufferSource, packedLight);
-        poseStack.popMatrix();
+        //super.render(state, poseStack, bufferSource, packedLight);
+        super.submit(state, poseStack, nodeCollector, cameraRenderState);
+        poseStack.popPose();
 
-        poseStack.pushMatrix();
+        poseStack.pushPose();
 
         // thickness of the frame is 1px (0.5 - (1/16 * 0.5)) (0.5 is because we are offsetting from the center)
         // stripped frame is thin, so 1/16 becomes 0.15/16 (thickness of the backplate)
@@ -113,13 +115,13 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
             boolean photographRendered = renderPhotograph(state, poseStack, bufferSource, packedLight, item, size);
 
             if (!photographRendered) {
-                poseStack.pushMatrix();
+                poseStack.pushPose();
                 float scale = 0.65f + state.size * 0.5f;
                 poseStack.translate(0, 0, 0.46875);
                 poseStack.scale(scale, scale, scale * 0.75f);
                 poseStack.mulPose(Axis.ZP.rotationDegrees((state.rotation * 360.0F / 4.0F)));
                 Minecrft.get().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, bufferSource, null, 0);
-                poseStack.popMatrix();
+                poseStack.popPose();
             }
         }
 
@@ -127,23 +129,30 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
             renderFrame(state, poseStack, bufferSource, packedLight, size);
         }
 
-        poseStack.popMatrix();
+        poseStack.popPose();
+        
+        
+    }
+
+    @Override
+    public void render(@NotNull PhotographFrameEntityRenderState state, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
+        
     }
 
     protected void renderFrame(@NotNull PhotographFrameEntityRenderState state, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource,
                              int packedLight, int size) {
-        poseStack.pushMatrix();
+        poseStack.pushPose();
         poseStack.translate(-0.5f, -0.5f, -0.5f);
         ModelIdentifier modelLocation = getModelLocation(state, size);
         BakedModel model = PlatformHelperClient.getModel(modelLocation);
         blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(getRenderType()),
                 null, model, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);
-        poseStack.popMatrix();
+        poseStack.popPose();
     }
 
     protected boolean renderPhotograph(@NotNull PhotographFrameEntityRenderState state, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource,
                                   int packedLight, ItemStack item, int size) {
-        poseStack.pushMatrix();
+        poseStack.pushPose();
 
         boolean frameInvisible = state.isInvisible;
 
@@ -188,7 +197,7 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
                     poseStack, bufferSource, packedLight, brightness, brightness, brightness, 255);
         }
 
-        poseStack.popMatrix();
+        poseStack.popPose();
 
         return photographRendered;
     }
@@ -216,7 +225,7 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
             Vec3 vec3 = state.nameTagAttachment;
             if (vec3 != null) {
                 boolean bl = !state.isDiscrete;
-                poseStack.pushMatrix();
+                poseStack.pushPose();
 
                 double yOffset = state.direction.getAxis().isHorizontal()
                         ? vec3.y - 0.2 + state.size * 0.5
@@ -239,7 +248,7 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
                     font.drawInBatch(displayName, g, 0, -1, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
                 }
 
-                poseStack.popMatrix();
+                poseStack.popPose();
             }
         }
     }

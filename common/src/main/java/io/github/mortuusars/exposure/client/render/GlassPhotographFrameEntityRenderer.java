@@ -5,6 +5,7 @@ import io.github.mortuusars.exposure.client.render.state.PhotographFrameEntityRe
 import io.github.mortuusars.exposure.world.entity.GlassPhotographFrameEntity;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.resources.model.ModelIdentifier;
 import org.jetbrains.annotations.NotNull;
 

@@ -92,7 +92,7 @@ public class PhotographSlotWidget extends AbstractWidget {
                     getX(), getY(), 0, 0, width, height, width, height);
 
             // Exposure
-            guiGraphics.pose().pushMatrix();
+            guiGraphics.pose().pushPose();
             float scale = 96;
             guiGraphics.pose().translate(getX() + 6, getY() + 6);
             guiGraphics.pose().scale(scale, scale);
@@ -100,15 +100,15 @@ public class PhotographSlotWidget extends AbstractWidget {
             ExposureClient.photographRenderer().render(photograph, false, false,
                     guiGraphics.pose(), bufferSource, LightTexture.FULL_BRIGHT);
             bufferSource.endBatch();
-            guiGraphics.pose().popMatrix();
+            guiGraphics.pose().popPose();
 
             // Paper overlay
             if (photographStyle.hasAlbumOverlayTexture()) {
-                guiGraphics.pose().pushMatrix();
+                guiGraphics.pose().pushPose();
                 guiGraphics.pose().translate(0, 0);
                 guiGraphics.blit(RenderPipelines.GUI_TEXTURED, photographStyle.albumOverlayTexture(),
                         getX(), getY(), 0, 0, width, height, width, height);
-                guiGraphics.pose().popMatrix();
+                guiGraphics.pose().popPose();
             }
         }
         else {
