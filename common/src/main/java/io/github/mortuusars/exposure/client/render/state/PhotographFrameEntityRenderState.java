@@ -1,8 +1,8 @@
 package io.github.mortuusars.exposure.client.render.state;
 
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.state.MapRenderState;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +16,7 @@ public class PhotographFrameEntityRenderState extends EntityRenderState {
     public boolean isGlowing;
     @Nullable
     public
-    BakedModel itemModel;
+    ItemModel itemModel;
 
     public PhotographFrameEntityRenderState() {
         this.direction = Direction.NORTH;

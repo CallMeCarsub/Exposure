@@ -15,7 +15,6 @@ import io.github.mortuusars.exposure.world.camera.capture.CaptureType;
 import io.github.mortuusars.exposure.world.photograph.PhotographType;
 import io.github.mortuusars.exposure.util.cycles.Cycles;
 import io.github.mortuusars.exposure.client.ExposureStore;
-import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.resources.Identifier;
 
 public class ExposureClient {
@@ -76,22 +75,22 @@ public class ExposureClient {
     // --
 
     public static class Models {
-        public static final ModelIdentifier PHOTOGRAPH_FRAME_SMALL =
-                new ModelIdentifier(Exposure.resource("photograph_frame_small"), "standalone");
-        public static final ModelIdentifier PHOTOGRAPH_FRAME_MEDIUM =
-                new ModelIdentifier(Exposure.resource("photograph_frame_medium"), "standalone");
-        public static final ModelIdentifier PHOTOGRAPH_FRAME_LARGE =
-                new ModelIdentifier(Exposure.resource("photograph_frame_large"), "standalone");
-        public static final ModelIdentifier CLEAR_PHOTOGRAPH_FRAME_SMALL =
-                new ModelIdentifier(Exposure.resource("glass_photograph_frame_small"), "standalone");
-        public static final ModelIdentifier CLEAR_PHOTOGRAPH_FRAME_MEDIUM =
-                new ModelIdentifier(Exposure.resource("glass_photograph_frame_medium"), "standalone");
-        public static final ModelIdentifier CLEAR_PHOTOGRAPH_FRAME_LARGE =
-                new ModelIdentifier(Exposure.resource("glass_photograph_frame_large"), "standalone");
-        public static final ModelIdentifier CAMERA_STAND =
-                new ModelIdentifier(Exposure.resource("camera_stand"), "standalone");
-        public static final ModelIdentifier CAMERA_STAND_MOUNT =
-                new ModelIdentifier(Exposure.resource("camera_stand_mount"), "standalone");
+        public static final Identifier PHOTOGRAPH_FRAME_SMALL =
+                Exposure.resource("photograph_frame_small");
+        public static final Identifier PHOTOGRAPH_FRAME_MEDIUM =
+                Exposure.resource("photograph_frame_medium");
+        public static final Identifier PHOTOGRAPH_FRAME_LARGE =
+               Exposure.resource("photograph_frame_large");
+        public static final Identifier CLEAR_PHOTOGRAPH_FRAME_SMALL =
+                Exposure.resource("glass_photograph_frame_small");
+        public static final Identifier CLEAR_PHOTOGRAPH_FRAME_MEDIUM =
+                Exposure.resource("glass_photograph_frame_medium");
+        public static final Identifier CLEAR_PHOTOGRAPH_FRAME_LARGE =
+                Exposure.resource("glass_photograph_frame_large");
+        public static final Identifier CAMERA_STAND =
+                Exposure.resource("camera_stand");
+        public static final Identifier CAMERA_STAND_MOUNT =
+                Exposure.resource("camera_stand_mount");
     }
 
     public static class SelectProperties {

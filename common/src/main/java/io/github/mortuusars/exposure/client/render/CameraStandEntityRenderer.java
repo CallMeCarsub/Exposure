@@ -9,25 +9,35 @@ import io.github.mortuusars.exposure.client.util.Minecrft;
 import io.github.mortuusars.exposure.world.entity.CameraStandEntity;
 import io.github.mortuusars.exposure.world.item.camera.CameraItem;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class CameraStandEntityRenderer <T extends CameraStandEntity> extends EntityRenderer<T, CameraStandEntityRenderState> {
     public static final float MOUNT_SCALE = 0.9f;
 
     protected final BlockRenderDispatcher blockRenderer;
+    protected final ItemModelResolver itemResolver;
 
     public CameraStandEntityRenderer(EntityRendererProvider.Context context) {
         super(context);
         this.blockRenderer = context.getBlockRenderDispatcher();
+        this.itemResolver = context.getItemModelResolver();
     }
 
     @Override
@@ -48,6 +58,7 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         if (reusedState.inVehicle) {
             reusedState.vehicleRot = Mth.lerp(partialTick, entity.getVehicle().yRotO, entity.getVehicle().getYRot());
         }
+
     }
 
     @Override
@@ -70,7 +81,7 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         }
     }
 
-    private void renderStand(CameraStandEntityRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    private void renderStand(CameraStandEntityRenderState state, PoseStack poseStack, SubmitNodeCollector bufferSource, int packedLight) {
         poseStack.pushPose();
 
         if (state.inVehicle) {
@@ -79,14 +90,13 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
 
         poseStack.translate(-0.5f, 0f, -0.5f);
 
-        ModelIdentifier modelLocation = ExposureClient.Models.CAMERA_STAND;
-        BakedModel model = PlatformHelperClient.getModel(modelLocation);
-        blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(RenderType.solid()),
-                null, model, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);
+        Identifier modelLocation = ExposureClient.Models.CAMERA_STAND;
+        BlockStateModel model = PlatformHelperClient.getModel(modelLocation);
+        bufferSource.submitBlockModel(poseStack, RenderTypes.solidMovingBlock(), model, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY, 0xffffff);
         poseStack.popPose();
     }
 
-    private void renderMount(CameraStandEntityRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    private void renderMount(CameraStandEntityRenderState state, PoseStack poseStack, SubmitNodeCollector bufferSource, int packedLight) {
         poseStack.pushPose();
         poseStack.translate(0, 1.125, 0);
         float scale = MOUNT_SCALE;
@@ -104,14 +114,13 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         }
 
         poseStack.translate(-0.5f, 0f, -0.5f);
-        ModelIdentifier mountModelLocation = ExposureClient.Models.CAMERA_STAND_MOUNT;
-        BakedModel mountModel = PlatformHelperClient.getModel(mountModelLocation);
-        blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(RenderType.solid()),
-                null, mountModel, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);
+        Identifier mountModelLocation = ExposureClient.Models.CAMERA_STAND_MOUNT;
+        BlockStateModel mountModel = PlatformHelperClient.getModel(mountModelLocation);
+        bufferSource.submitBlockModel(poseStack, RenderTypes.solidMovingBlock(), mountModel, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY, 0xffffff);
         poseStack.popPose();
     }
 
-    private void renderCamera(CameraStandEntityRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    private void renderCamera(CameraStandEntityRenderState state, PoseStack poseStack, SubmitNodeCollector bufferSource, int packedLight) {
         poseStack.pushPose();
 
         float entityYaw = state.entityYaw;
@@ -132,7 +141,8 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         poseStack.scale(scale, scale, scale);
         poseStack.translate(0, 0.5, 0);
 
-        Minecrft.get().getItemRenderer().renderStatic(camera, ItemDisplayContext.NONE, packedLight, OverlayTexture.NO_OVERLAY, poseStack, bufferSource, null, 0);
+        
+
         poseStack.popPose();
     }
 }

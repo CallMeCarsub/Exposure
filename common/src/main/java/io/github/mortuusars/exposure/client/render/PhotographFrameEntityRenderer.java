@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -29,6 +30,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LightLayer;
@@ -50,7 +52,7 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
         return new PhotographFrameEntityRenderState();
     }
 
-    public ModelIdentifier getModelLocation(PhotographFrameEntityRenderState state, int size) {
+    public Identifier getModelLocation(PhotographFrameEntityRenderState state, int size) {
         return switch (size) {
             case 0 -> ExposureClient.Models.PHOTOGRAPH_FRAME_SMALL;
             case 1 -> ExposureClient.Models.PHOTOGRAPH_FRAME_MEDIUM;
@@ -143,8 +145,8 @@ public class PhotographFrameEntityRenderer<T extends PhotographFrameEntity> exte
                              int packedLight, int size) {
         poseStack.pushPose();
         poseStack.translate(-0.5f, -0.5f, -0.5f);
-        ModelIdentifier modelLocation = getModelLocation(state, size);
-        BakedModel model = PlatformHelperClient.getModel(modelLocation);
+        Identifier modelLocation = getModelLocation(state, size);
+        BlockStateModel model = PlatformHelperClient.getModel(modelLocation);
         blockRenderer.getModelRenderer().renderModel(poseStack.last(), bufferSource.getBuffer(getRenderType()),
                 null, model, 1.0f, 1.0f, 1.0f, packedLight, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
