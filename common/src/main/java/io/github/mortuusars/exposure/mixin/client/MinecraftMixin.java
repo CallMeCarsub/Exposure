@@ -9,7 +9,6 @@ import io.github.mortuusars.exposure.network.Packets;
 import io.github.mortuusars.exposure.network.packet.serverbound.ActiveCameraReleaseC2SP;
 import io.github.mortuusars.exposure.world.camera.CameraOnStand;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -54,7 +53,7 @@ public abstract class MinecraftMixin {
     }
 
     @Inject(method = "setLevel", at = @At("HEAD"))
-    void onLevelUnload(ClientLevel newLevel, ReceivingLevelScreen.Reason reason, CallbackInfo ci) {
+    void onLevelUnload(ClientLevel newLevel, CallbackInfo ci) {
         if (level != null) {
             ClientEvents.levelUnloaded();
         }
@@ -67,8 +66,8 @@ public abstract class MinecraftMixin {
         }
     }
 
-    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetData()V", shift = At.Shift.AFTER))
-    void disconnect(Screen nextScreen, boolean keepResourcePacks, CallbackInfo ci) {
+    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;ZZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetData()V", shift = At.Shift.AFTER))
+    void disconnect(Screen nextScreen, boolean keepResourcePacks, boolean stopSounds, CallbackInfo ci) {
         ClientEvents.disconnect();
     }
 }

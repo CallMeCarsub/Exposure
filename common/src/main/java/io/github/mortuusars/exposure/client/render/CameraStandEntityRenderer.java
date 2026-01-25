@@ -141,7 +141,7 @@ public class CameraStandEntityRenderer <T extends CameraStandEntity> extends Ent
         poseStack.scale(scale, scale, scale);
         poseStack.translate(0, 0.5, 0);
 
-        
+        //todo: render an item?
 
         poseStack.popPose();
     }

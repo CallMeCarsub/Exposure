@@ -3,12 +3,12 @@ package io.github.mortuusars.exposure.mixin.client;
 import io.github.mortuusars.exposure.client.render.state.CameraOperatorRenderState;
 import io.github.mortuusars.exposure.world.camera.Camera;
 import io.github.mortuusars.exposure.world.camera.CameraInHand;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(PlayerRenderState.class)
+@Mixin(AvatarRenderState.class)
 public abstract class PlayerRenderStateMixin implements CameraOperatorRenderState {
     @Unique
     @Nullable
